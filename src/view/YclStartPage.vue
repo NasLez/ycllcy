@@ -160,7 +160,9 @@ export default {
             this.$message({
               message: "登录成功！",
               type: 'success'
-            })
+            },
+            this.$router.push({path: '/HomePage',query:{ email: this.$data.formLabelAlign.email}})
+            )
             axios.get(`mu/getUsernames/${this.$data.formLabelAlign.email}`, {
               email: this.$data.formLabelAlign.email
             }).then(res1 => {
