@@ -1,22 +1,36 @@
 <template>
-  <div>
-    <YclStartPage/>
+  <div id="app">
+    <router-view/>
   </div>
 </template>
+
 <script>
-import YclStartPage from "@/YclPage/YclStartPage";
+
 export default {
-  name: 'App',
-  components: {
-    YclStartPage
+  name: 'app',
+  el: '#components-demo',
+
+  data() {
+    return {
+
+    }
   },
+  computed:{
+
+  },
+  methods:{
+
+  }
 }
 </script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 </style>
