@@ -7,12 +7,12 @@
             <div class="user">
               <img src="../../assets/HomePage/user0.jpg" alt="" class="user-head">
               <div class="user-info">
-                <div class="user-nickname">昵称</div>
-                <div class="user-mane">真实姓名</div>
-                <div class="user-access">权限</div>
-                <div class="user-phone">电话号码</div>
-                <div class="user-email">{{ email }}</div>
-                <div class="user-school">学校</div>
+                <div class="user-nickname">{{ userinfo.username }}</div>
+                <div class="user-name">{{ userinfo.name }}</div>
+                <div class="user-access">{{ userinfo.isAdmin }}</div>
+                <div class="user-phone">{{ userinfo.phone }}</div>
+                <div class="user-email">{{ userinfo.email }}</div>
+                <div class="user-school">{{ userinfo.school }}</div>
               </div>
             </div>
           </el-card>
@@ -29,32 +29,42 @@ export default {
   name: "HomePage",
   data() {
     return {
-      email: "null",
-      password: "null",
+      userinfo: {
+        "username": "",
+        "phone": "",
+        "email": "",
+        "school": "",
+        "password": "",
+        "isAdmin": "",
+        "code": "",
+        "name": ""
+      },
     }
   },
-  mounted: function () {
-    this.$data.email = this.$route.query.email;
-    console.log(this.$data.email);
-    this.GetUser(this.$data.email);
+  created: function () {
+    let that = this;
+    console.log(this.$route.query.email)
+    this.$data.userinfo.email = this.$route.query.email;
+    console.log(this.$data.userinfo.email);
+    GetUser(this.$data.userinfo.email);
+    function GetUser(MyEmail){
+      axios.get(`mu/getUsernames/${MyEmail}`, {
+        email: MyEmail,
+      }).then(res => {
+        console.log(res.data);
+        // that.$data.userinfo.isAdmin = res.data.isAdmin;
+        that.$data.userinfo.isAdmin = res.data.isAdmin;
+        that.$data.userinfo.username = res.data.username;
+        that.$data.userinfo.name = res.data.name;
+        that.$data.userinfo.phone = res.data.phone;
+        that.$data.userinfo.email = res.data.email;
+        that.$data.userinfo.school = res.data.school;
+        that.$data.userinfo.password = res.data.password;
+        that.$data.userinfo.code = res.data.code;
+          });
+    }
   },
-  GetUser(MyEmail){
-    console.log("传参成功");
-    let myemail = MyEmail;
-    axios.get(`mu/getUsernames/${myemail}`, {
-      email: MyEmail,
-    }).then(res1 => {
-      this.$message({
-        message: res1.data,
-        type: 'success'
-      })
-    }, res2 => {
-      this.$message({
-        message: res2.data,
-        type: 'error'
-      })
-    })
-  },
+
 }
 </script>
 
@@ -75,7 +85,7 @@ export default {
       font-size: 20px;
       font-weight: bold;
     }
-    .user-mane{
+    .user-name{
       font-size: 16px;
       font-weight: bold;
     }
