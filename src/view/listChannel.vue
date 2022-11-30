@@ -1,12 +1,12 @@
 <template>
   <div>
     <el-tabs  v-model="activeName" style="" stretch @tab-click="handleClick">
-      <el-tab-pane label="论文" >
+      <el-tab-pane label="论文" name="thesis">
         <el-table :data="tableData" stripe style="width: 100%" @row-click="clickData" >
           <el-table-column prop="name" ></el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="项目">论文</el-tab-pane>
+      <el-tab-pane label="项目" name="project">论文</el-tab-pane>
     </el-tabs>
   </div>
 
@@ -19,7 +19,7 @@ export default {
   name: "listChannel",
   data() {
     return {
-      activeName:"",
+      activeName:'',
       tableData: [],
       thesisName: [],
       tabPosition: 'left'
@@ -46,6 +46,10 @@ export default {
       // })
       this.isAdmin=this.$route.query.isAdmin
       if(this.isAdmin==="1"){
+        this.$message({
+          message:"11",
+          type:'success'
+        })
         this.$router.push({path: '/updateChannel',query:{row:row}})
       }
     },
