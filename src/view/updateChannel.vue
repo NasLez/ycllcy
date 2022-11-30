@@ -2,7 +2,7 @@
   <div>
     <el-button type="primary" @click="lookChannel" style="position: absolute;right: 100px;top: 10px;">获取通道信息
     </el-button>
-    <el-tabs v-model="activeName" @tab-click="handleClick" style="" stretch>
+    <el-tabs v-model="activeName" @tab-click="handleClick" style="width: 400px;position:absolute;left: 400px" stretch>
       <el-tab-pane label="修改通道信息" name="update">
         <el-form :label-position="labelPosition" label-width="120px" :model="updateChannel">
 
@@ -41,7 +41,8 @@
             <el-date-picker
                 v-model="updateChannel.due"
                 type="datetime"
-                placeholder="请选择新的通道截止时间">
+                placeholder="请选择新的通道截止时间"
+                value-format="yyyy-MM-dd HH:mm:ss">
             </el-date-picker>
           </el-form-item>
 
@@ -71,7 +72,8 @@ export default {
         creatorEmail: '',
         score: '',
         due: '',
-      }, options: [{
+      },
+      options: [{
         value: 'Thesis',
         label: '论文'
       }, {
@@ -124,6 +126,12 @@ export default {
           type: 'warning'
         })
       } else {
+
+        this.due=this.$data.updateChannel.due.toString()
+        this.$message({
+          message:this.due,
+          type:'success'
+        })
         axios.post(`mu/updateChannel?name=${this.$data.updateChannel.name}&type=${this.$data.updateChannel.type}&creator=${this.$data.updateChannel.creator}&creatorEmail=${this.$data.updateChannel.creatorEmail}&score=${this.$data.updateChannel.score}&due=${this.$data.updateChannel.due}`).then(res => {
           if (res.status === 400) {
             this.$message({
@@ -135,7 +143,7 @@ export default {
               message: "Unauthorized",
               type: 'warning'
             })
-          } else if (res.status === 410) {
+          } else if (res.status === 404) {
             this.$message({
               message: "Name Not Found",
               type: 'warning'
@@ -143,7 +151,7 @@ export default {
           } else if (res.status === 200) {
             this.$message({
               message: res.data,
-              type: 'warning'
+              type: 'success'
             })
           }
         })
