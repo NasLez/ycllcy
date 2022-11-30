@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import MyLogin from "../view/YclStartPage.vue"
 import HomePage from "@/view/HomePage";
 import ListChannel from "@/view/listChannel";
+import updateChannel from "@/view/updateChannel";
 Vue.use(VueRouter)
 
 const routes = [
@@ -17,6 +18,10 @@ const routes = [
     {
         path: '/listChannel',
         component: ListChannel
+    },
+    {
+        path: '/updateChannel',
+        component: updateChannel
     }
 ]
 const router = new VueRouter({

@@ -19,22 +19,7 @@
         </el-col>
       </el-row>
     </dev>
-    <el-button type="primary" @click="listChannel">获取通道信息</el-button>
     <el-button type="primary" @click="lookXmlw">查看项目论文</el-button>
-    <el-tabs style="height: 200px;" stretch>
-      <el-tab-pane label="项目">
-        <el-table :data="tableData" stripe style="width: 100%">
-          <el-table-column label="id" prop="id"></el-table-column>
-          <el-table-column label="name" prop="name"></el-table-column>
-          <el-table-column label="type" prop="type"></el-table-column>
-          <el-table-column label="creator" prop="creator"></el-table-column>
-          <el-table-column label="creatorEmail" prop="creatorEmail"></el-table-column>
-          <el-table-column label="score" prop="score"></el-table-column>
-          <el-table-column label="due" prop="due"></el-table-column>
-        </el-table>
-      </el-tab-pane>
-      <el-tab-pane label="论文">论文</el-tab-pane>
-    </el-tabs>
   </div>
 </template>
 
@@ -45,7 +30,6 @@ export default {
   name: "HomePage",
   data() {
     return {
-      tableData: [],
       userinfo: {
         "username": "",
         "phone": "",
@@ -91,15 +75,15 @@ export default {
       })
       this.$router.push({path: '/'})
     },
-    listChannel() {
-      axios.get((`mu/listChannel`)).then(res => {
-        console.log(res.data);
-        this.tableData = res.data;
-        console.log(this.tableData);
-      })
-    },
     lookXmlw(){
-      this.$router.push({path: '/listChannel'})
+      this.email1 = this.$route.query.email;
+      axios.get(`mu/getUsernames/email=${this.email1}`, {
+        email: this.email1,
+      }).then(res => {
+        console.log(res.data);
+        this.isAdmin=res.data.isAdmin
+        this.$router.push({path: '/listChannel',query:{isAdmin:this.isAdmin}})
+      });
     }
   }
 }

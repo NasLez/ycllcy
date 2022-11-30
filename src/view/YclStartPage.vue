@@ -15,7 +15,6 @@
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="login">登录</el-button>
-            <el-button type="primary" @click="logout">注销登录</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -115,15 +114,6 @@ export default {
   methods: {
     handleClick(tab, event) {
       console.log(tab, event);
-    },
-    logout() {
-      axios.get('mu/logout').then(res => {
-        this.$message({
-          message: "注销登录成功！",
-          type: 'success'
-        })
-        return res;
-      })
     },
     login() {
       if (this.formLabelAlign.email == '') {//验证当用户输入的手机号为空或者不正确时不能进行获取验证码
