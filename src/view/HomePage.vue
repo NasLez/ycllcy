@@ -1,15 +1,14 @@
 <template>
   <div>
     <dev>
-      <el-button type="primary" @click="logout" style="position: absolute;left: 1180px;top: 0px">注销登录</el-button>
       <el-row>
         <el-col :span="8">
-          <el-card class="box-card">
-            <div class="user">
+          <el-card class="box-card" style="position: absolute;left: 400px">
+            <div class="user" >
               <div class="user-info">
                 <a class="user-nickname">真实姓名：{{ userinfo.username }}</a><br>
                 <a class="user-name">用户名：{{ userinfo.name }}</a><br>
-                <a class="user-access">管理员权限：{{ userinfo.isAdmin }}</a><br>
+                <a class="user-access">身份：{{ userinfo.isAdmin }}</a><br>
                 <a class="user-phone">电话号码：{{ userinfo.phone }}</a><br>
                 <a class="user-email">邮箱地址：{{ userinfo.email }}</a><br>
                 <a class="user-school">学校：{{ userinfo.school }}</a><br>
@@ -19,7 +18,12 @@
         </el-col>
       </el-row>
     </dev>
-    <el-button type="primary" @click="lookXmlw">查看项目论文</el-button>
+    <br><br>
+    <div style="position: absolute;left: 400px;top: 250px">
+      <el-button type="primary" @click="lookXmlw" >查看项目论文</el-button>
+      <el-button type="primary" @click="logout" >注销登录</el-button>
+    </div>
+
   </div>
 </template>
 
@@ -53,7 +57,11 @@ export default {
         email: MyEmail,
       }).then(res => {
         console.log(res.data);
-        that.$data.userinfo.isAdmin = res.data.isAdmin;
+        if(res.data.isAdmin==="1"){
+          that.$data.userinfo.isAdmin = "管理员";
+        }else{
+          that.$data.userinfo.isAdmin = "用户";
+        }
         that.$data.userinfo.username = res.data.username;
         that.$data.userinfo.name = res.data.name;
         that.$data.userinfo.phone = res.data.phone;

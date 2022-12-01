@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import MyLogin from "../view/YclStartPage.vue"
 import HomePage from "@/view/HomePage";
-import ListChannel from "@/view/listChannel";
+import ListChannel from "@/view/adminLook";
 import updateChannel from "@/view/updateChannel";
 Vue.use(VueRouter)
 
