@@ -90,7 +90,12 @@ export default {
       }).then(res => {
         console.log(res.data);
         this.isAdmin=res.data.isAdmin
-        this.$router.push({path: '/listChannel',query:{isAdmin:this.isAdmin}})
+        if(this.isAdmin==="1"){
+          this.$router.push({path: '/adminLook',query:{isAdmin:this.isAdmin}})
+        }else if(this.isAdmin==="0"){
+          this.$router.push({path: '/userLook',query:{isAdmin:this.isAdmin}})
+        }
+
       });
     }
   }

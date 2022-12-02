@@ -2,6 +2,8 @@
   <div>
     <el-button type="primary" @click="lookChannel" style="position: absolute;right: 100px;top: 10px;">获取通道信息
     </el-button>
+    <el-button type="primary" @click="lookTime" style="position: absolute;right: 100px;top: 40px;">获取时间
+    </el-button>
     <el-tabs v-model="activeName" @tab-click="handleClick" style="width: 400px;" stretch>
       <el-tab-pane label="通道信息" name="look">
         <div>
@@ -96,6 +98,9 @@ export default {
     }
   },
   methods: {
+    lookTime(){
+
+    },
     handleClick(tab, event) {
       console.log(tab, event);
       this.look = this.$route.query.row

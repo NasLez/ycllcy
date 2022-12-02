@@ -13,6 +13,46 @@
       </el-tab-pane>
       <el-tab-pane label="添加通道" name="'add" >
 
+        <el-form :label-position="labelPosition" label-width="120px" :model="addChannel">
+          <el-form-item label="通道名称">
+            <el-input type="string" v-model="addChannel.name" style="width:225px"
+                      placeholder="请输入通道名称"></el-input>
+          </el-form-item>
+          <el-form-item label="通道类型">
+            <el-select v-model="addChannel.type" placeholder="请选择通道类型">
+              <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="通道创建者">
+            <el-input type="string" v-model="addChannel.creator" style="width:225px"
+                      placeholder="请输入通道创建者"></el-input>
+          </el-form-item>
+          <el-form-item label="通道创建者邮箱">
+            <el-input type="email" v-model="addChannel.creatorEmail" style="width:225px"
+                      placeholder="请输入通道创建者邮箱"></el-input>
+          </el-form-item>
+          <el-form-item label="通道得分">
+            <el-input type="string" v-model="addChannel.score" style="width:225px"
+                      placeholder="请输入通道得分"></el-input>
+          </el-form-item>
+          <el-form-item label="通道截止时间">
+            <el-date-picker
+                v-model="addChannel.due"
+                type="datetime"
+                placeholder="请选择通道截止时间"
+                value-format="yyyy-MM-dd HH:mm:ss">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="add">添加通道信息</el-button>
+            <el-button type="primary" @click="pack">打包数据</el-button>
+          </el-form-item>
+        </el-form>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -26,15 +66,93 @@ export default {
   name: "listChannel",
   data() {
     return {
+      labelPosition:'right',
       activeName:'',
       projectData: [],
       projectData1:[],
       thesisData1: [],
       thesisData:[],
-      tabPosition: 'left'
+      tabPosition: 'left',
+      addChannel:{
+        name:'',
+        type:'',
+        creator:'',
+        creatorEmail:'',
+        score:'',
+        due:'',
+      },
+      options: [{
+        value: 'Thesis',
+        label: '论文'
+      }, {
+        value: 'Project',
+        label: '项目'
+      }],
+      value: ''
     };
   },
   methods: {
+    pack(){
+      this.package=JSON.stringify(this.addChannel)
+      this.$message({
+        message:this.package,
+        type:'success'
+      })
+    },
+    add(){
+      if (this.$data.addChannel.name === '') {
+        this.$message({
+          message: "请输入新的通道名称！",
+          type: 'warning'
+        })
+      } else if (this.$data.addChannel.type === '') {
+        this.$message({
+          message: "请输入新的通道类型！",
+          type: 'warning'
+        })
+      } else if (this.$data.addChannel.creator === '') {
+        this.$message({
+          message: "请输入新的通道创建者！",
+          type: 'warning'
+        })
+      } else if (this.$data.addChannel.creatorEmail === '') {
+        this.$message({
+          message: "请输入新的通道创建者邮箱！",
+          type: 'warning'
+        })
+      } else if (this.$data.addChannel.score === '') {
+        this.$message({
+          message: "请输入新的通道分数！",
+          type: 'warning'
+        })
+      } else if (this.$data.addChannel.due === '') {
+        this.$message({
+          message: "请输入新的通道截止日期！",
+          type: 'warning'
+        })
+      } else {
+        this.look = this.$route.query.row
+        this.due = this.$data.addChannel.due.toString()
+        axios.put(`mu/addChannel?name=${this.$data.addChannel.name}&type=${this.$data.addChannel.type}&creator=${this.$data.addChannel.creator}&creatorEmail=${this.$data.addChannel.creatorEmail}&score=${this.$data.addChannel.score}&due=${this.$data.addChannel.due}`).then(res => {
+          if (res.status === 400) {
+            this.$message({
+              message: "serve error",
+              type: 'warning'
+            })
+          } else if (res.status === 403) {
+            this.$message({
+              message: "Unauthorized",
+              type: 'warning'
+            })
+          }else if (res.status === 200) {
+            this.$message({
+              message: "OK",
+              type: 'success'
+            })
+          }
+        })
+      }
+    },
     handleClick(tab, event) {
       console.log(tab, event);
       axios.get((`mu/listChannel`)).then(res => {
