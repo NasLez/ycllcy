@@ -22,25 +22,27 @@
       <el-button type="primary" @click="lookCode">查看未被使用的注册码</el-button>
 
       <el-table :data="code_data" stripe
-                 style="width: 100%" @row-click="clickData">
+                style="width: 100%" @row-click="clickData">
         <el-table-column label="注册码" prop="code"></el-table-column>
         <el-table-column label="姓名" prop="name">
         </el-table-column>
         <el-table-column label="权限" prop="isAdmin"></el-table-column>
-        <el-table-column><template slot="header" slot-scope="scope">
-          <el-input
-              v-model="codesearch"
-              size="mini"
-              placeholder="输入真实姓名搜索邀请码"/>
-        </template></el-table-column>
+        <el-table-column>
+          <template slot="header" slot-scope="scope">
+            <el-input
+                v-model="codesearch"
+                size="mini"
+                placeholder="输入真实姓名搜索邀请码"/>
+          </template>
+        </el-table-column>
       </el-table>
       <div class="pagination">
         <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
+            @size-change="handleSizeChangeCode"
+            @current-change="handleCurrentChangeCode"
+            :current-page.sync="currentPageCode"
             :page-sizes="[5, 10, 20]"
-            :page-size="pagesize"
+            :page-size="pagesizeCode"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total">
         </el-pagination>
@@ -74,11 +76,11 @@
       </el-table>
       <div class="pagination">
         <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page.sync="currentPage"
+            @size-change="handleSizeChangeUser"
+            @current-change="handleCurrentChangeUSer"
+            :current-page.sync="currentPageUser"
             :page-sizes="[5, 10, 20]"
-            :page-size="pagesize"
+            :page-size="pagesizeUser"
             layout="total, sizes, prev, pager, next, jumper"
             :total="UserTotal">
         </el-pagination>
@@ -102,54 +104,54 @@ export default {
       },
       codeData: [],
       userData: [],
-      codesearch:'',
-      usersearch:'',
-      currentPage:1,
-      pagesize:5,
-      total:0,
-      UserTotal:0
+      codesearch: '',
+      usersearch: '',
+      currentPageCode: 1,
+      pagesizeCode: 5,
+      currentPageUser: 1,
+      pagesizeUser: 5,
+      total: 0,
+      UserTotal: 0
     };
   },
   computed: {
     code_data() {
       let search = this.codesearch;
       // 搜索功能
-      if (search){
-        let list =this.codeData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase())|| data.name.toLowerCase().includes(search.toLowerCase()));
+      if (search) {
+        let list = this.codeData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()) || data.name.toLowerCase().includes(search.toLowerCase()));
         // let fenYe = list.slice((this.currentPage-1)*this.pagesize,this.currentPage*this.pagesize);
         return list
-      }
-      else {
-        let fenYe = this.codeData.slice((this.currentPage-1)*this.pagesize,this.currentPage*this.pagesize)
+      } else {
+        let fenYe = this.codeData.slice((this.currentPageCode - 1) * this.pagesizeCode, this.currentPageCode * this.pagesizeCode)
         return fenYe
       }
     },
-    user_data(){
+    user_data() {
       let search = this.usersearch;
       // 搜索功能
-      if (search){
-        let list =this.userData.filter(data => !search || data.username.toLowerCase().includes(search.toLowerCase())|| data.username.toLowerCase().includes(search.toLowerCase()));
+      if (search) {
+        let list = this.userData.filter(data => !search || data.username.toLowerCase().includes(search.toLowerCase()) || data.username.toLowerCase().includes(search.toLowerCase()));
         // let fenYe = list.slice((this.currentPage-1)*this.pagesize,this.currentPage*this.pagesize);
         return list
-      }
-      else {
-        let fenYe = this.userData.slice((this.currentPage-1)*this.pagesize,this.currentPage*this.pagesize)
+      } else {
+        let fenYe = this.userData.slice((this.currentPageUser - 1) * this.pagesizeUser, this.currentPageUser * this.pagesizeUser)
         return fenYe
       }
     }
   },
-  created: function (){
-  axios.get(`mu/showActivationCode`).then(res => {
-    if (res.status === 403) {
-      this.$message({
-        message: 'Unauthorized',
-        type: 'warning'
-      })
-    } else if (res.status === 200) {
-      this.codeData = res.data
-      this.total=this.codeData.length
-    }
-  })
+  created: function () {
+    axios.get(`mu/showActivationCode`).then(res => {
+      if (res.status === 403) {
+        this.$message({
+          message: 'Unauthorized',
+          type: 'warning'
+        })
+      } else if (res.status === 200) {
+        this.codeData = res.data
+        this.total = this.codeData.length
+      }
+    })
     axios.get(`mu/showAllUser`).then(res => {
       if (res.status === 403) {
         this.$message({
@@ -158,15 +160,15 @@ export default {
         })
       } else if (res.status === 200) {
         this.userData = res.data
-        this.UserTotal=this.userData.length
+        this.UserTotal = this.userData.length
       }
     })
-},
+  },
   name: "UserManagement",
 
   methods: {
-    handleSizeChange(val) {
-      this.pagesize=val;
+    handleSizeChangeCode(val) {
+      this.pagesizeCode = val;
       axios.get(`mu/showActivationCode`).then(res => {
         if (res.status === 403) {
           this.$message({
@@ -178,8 +180,36 @@ export default {
         }
       })
     },
-    handleCurrentChange(val) {
-      this.currentPage = val;
+    handleSizeChangeUser(val) {
+      this.pagesizeUser = val;
+      axios.get(`mu/showAllUser`).then(res => {
+        if (res.status === 403) {
+          this.$message({
+            message: 'Unauthorized',
+            type: 'warning'
+          })
+        } else if (res.status === 200) {
+          this.userData = res.data
+          this.UserTotal = this.userData.length
+        }
+      })
+    },
+    handleCurrentChangeUSer(val) {
+      this.currentPageUser = val;
+      axios.get(`mu/showAllUser`).then(res => {
+        if (res.status === 403) {
+          this.$message({
+            message: 'Unauthorized',
+            type: 'warning'
+          })
+        } else if (res.status === 200) {
+          this.userData = res.data
+          this.UserTotal = this.userData.length
+        }
+      })
+    },
+    handleCurrentChangeCode(val) {
+      this.currentPageCode = val;
       axios.get(`mu/showActivationCode`).then(res => {
         if (res.status === 403) {
           this.$message({
@@ -216,7 +246,7 @@ export default {
               })
             } else if (res.status === 200) {
               this.userData = res.data
-              this.UserTotal=this.userData.length
+              this.UserTotal = this.userData.length
             }
           })
         }
@@ -285,6 +315,7 @@ export default {
                 })
               } else if (res.status === 200) {
                 this.codeData = res.data
+                this.total = this.codeData.length
               }
             })
           }
