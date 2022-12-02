@@ -1,5 +1,6 @@
 <template>
   <div>
+    <a style="color: dodgerblue;">通道管理组件</a>
     <el-tabs  v-model="activeName" style="width: 500px" stretch @tab-click="handleClick" ref="tabs">
       <el-tab-pane label="论文" name="thesis">
         <el-table :data="thesisData" stripe style="width: 100%" @row-click="clickData" >
@@ -63,7 +64,7 @@
 import axios from "axios";
 
 export default {
-  name: "listChannel",
+  name: "ChannelManagement",
   data() {
     return {
       labelPosition:'right',

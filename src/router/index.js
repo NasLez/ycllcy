@@ -1,32 +1,42 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import MyLogin from "../view/YclStartPage.vue"
+import LogInAndRegister from "../view/LogInAndRegister.vue"
 import HomePage from "@/view/HomePage";
-import adminLook from "@/view/adminLook";
-import updateChannel from "@/view/updateChannel";
-import userLook from "@/view/userLook";
+import ChannelManagement from "@/view/ChannelManagement";
+import updateChannel from "@/view/UpdateChannel";
+import SubmitProjectsAndPapers from "@/view/SubmitProjectsAndPapers";
+import ResetPassword from "@/view/ResetPassword";
+import UserManagement from "@/view/UserManagement";
 Vue.use(VueRouter)
 
 const routes = [
     {
         path: '/',
-        component: MyLogin,
+        component: LogInAndRegister,
     },
     {
         path: '/homepage',
         component: HomePage,
     },
     {
-        path: '/adminLook',
-        component: adminLook
+        path: '/ChannelManagement',
+        component: ChannelManagement
     },
     {
         path: '/updateChannel',
         component: updateChannel
     },
     {
-        path:'/userLook',
-        component: userLook
+        path:'/SubmitProjectsAndPapers',
+        component: SubmitProjectsAndPapers
+    },
+    {
+        path: '/ResetPassword',
+        component: ResetPassword
+    },
+    {
+        path: '/UserManagement',
+        component: UserManagement
     }
 ]
 const router = new VueRouter({

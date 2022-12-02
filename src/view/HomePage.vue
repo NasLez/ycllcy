@@ -20,7 +20,11 @@
     </dev>
     <br><br>
     <div style="position: absolute;left: 400px;top: 250px">
-      <el-button type="primary" @click="lookXmlw" >查看项目论文</el-button>
+      <el-button type="primary" @click="lookXmlw" >
+        用户-查看项目/论文；
+        管理-员提交通道管理
+      </el-button>
+      <el-button type="primary" @click="usermanagement">管理员-用户管理</el-button>
       <el-button type="primary" @click="logout" >注销登录</el-button>
     </div>
 
@@ -73,6 +77,16 @@ export default {
     }
   },
   methods: {
+    usermanagement(){
+      if(this.$data.userinfo.isAdmin === "管理员"){
+        this.$router.push({path:'/UserManagement'})
+      }else{
+        this.$message({
+          message:"没有权限！",
+          type:'warning'
+        })
+      }
+    },
     logout() {
       axios.get('mu/logout').then(res => {
         this.$message({
@@ -91,9 +105,9 @@ export default {
         console.log(res.data);
         this.isAdmin=res.data.isAdmin
         if(this.isAdmin==="1"){
-          this.$router.push({path: '/adminLook',query:{isAdmin:this.isAdmin}})
+          this.$router.push({path: '/ChannelManagement',query:{isAdmin:this.isAdmin}})
         }else if(this.isAdmin==="0"){
-          this.$router.push({path: '/userLook',query:{isAdmin:this.isAdmin}})
+          this.$router.push({path: '/SubmitProjectsAndPapers',query:{isAdmin:this.isAdmin}})
         }
 
       });

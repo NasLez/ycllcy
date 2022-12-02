@@ -1,5 +1,6 @@
 <template>
   <div>
+    <a style="color:dodgerblue">提交项目/论文</a>
     <el-tabs  v-model="activeName" style="width: 500px" stretch @tab-click="handleClick" ref="tabs">
       <el-tab-pane label="论文" name="thesis">
         <el-table :data="thesisData" stripe style="width: 100%" @row-click="clickData" >
@@ -19,7 +20,7 @@
 import axios from "axios";
 
 export default {
-  name: "userLook",
+  name: "SubmitProjectsAndPapers",
   data() {
     return {
       activeName:'',
@@ -73,7 +74,7 @@ export default {
           })
         }else{
           this.$message({
-            message:'欢迎用户！不允许进入！',
+            message:'欢迎用户！超过截止时间不允许进入！',
             type:'warning'
           })
         }
