@@ -14,6 +14,42 @@
                 <a class="user-school">学校：{{ userinfo.school }}</a><br>
               </div>
             </div>
+            <template>
+              <el-button size="small" type="primary" icon="el-icon-edit" round @click="showEditDialog()"></el-button>
+            </template>
+          </el-card>
+          <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
+            <el-dialog
+                title="修改用户"
+                :visible.sync="editDialogVisible"
+                width="50%" @close="editDialogClosed">
+              <el-form :model="userinfo" :rules="editFormRules" ref="editFormRef" label-width="70px" >
+                <!--     disabled表示禁用状态     -->
+
+                <el-form-item label="真实姓名" prop="name">
+                  <el-input v-model="userinfo.name" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="身份" prop="isAdmin">
+                  <el-input v-model="userinfo.isAdmin" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="邮箱" prop="email">
+                  <el-input v-model="userinfo.email" disabled></el-input>
+                </el-form-item>
+                <el-form-item label="用户名" prop="username" >
+                  <el-input v-model="userinfo.username"></el-input>
+                </el-form-item>
+                <el-form-item label="电话号码" prop="phone">
+                  <el-input v-model="userinfo.phone"></el-input>
+                </el-form-item>
+                <el-form-item label="学校" prop="school">
+                  <el-input v-model="userinfo.school"></el-input>
+                </el-form-item>
+              </el-form>
+              <span slot="footer" class="dialog-footer">
+                <el-button @click="editDialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="editUserInfo">确 定</el-button>
+              </span>
+            </el-dialog>
           </el-card>
         </el-col>
       </el-row>
@@ -38,6 +74,7 @@ export default {
   name: "HomePage",
   data() {
     return {
+      editDialogVisible: false,
       userinfo: {
         "username": "",
         "phone": "",
@@ -47,7 +84,19 @@ export default {
         "isAdmin": "",
         "code": "",
         "name": ""
-      }
+      },
+      editFormRules: {
+        email: [
+          {
+            required: true,
+            message: '请输入邮箱',
+            trigger: 'blur'
+          },
+          {
+            trigger: 'blur'
+          }
+        ],
+      },
     }
   },
   created: function () {
@@ -77,6 +126,50 @@ export default {
     }
   },
   methods: {
+    GetUser(MyEmail) {
+      let that = this;
+      axios.get(`mu/getUsernames/email=${MyEmail}`, {
+        email: MyEmail,
+      }).then(res => {
+        console.log(res.data);
+        if(res.data.isAdmin==="1"){
+          that.$data.userinfo.isAdmin = "管理员";
+        }else{
+          that.$data.userinfo.isAdmin = "用户";
+        }
+        that.$data.userinfo.username = res.data.username;
+        that.$data.userinfo.name = res.data.name;
+        that.$data.userinfo.phone = res.data.phone;
+        that.$data.userinfo.email = res.data.email;
+        that.$data.userinfo.school = res.data.school;
+        that.$data.userinfo.password = res.data.password;
+        that.$data.userinfo.code = res.data.code;
+      });
+    },
+    showEditDialog(){
+      this.editDialogVisible = true;
+    },
+    editDialogClosed(){
+      this.$refs.editFormRef.resetFields()
+    },
+    editUserInfo(){
+      this.$refs.editFormRef.validate( async valid =>{
+        if (!valid) return
+        // 将修改数据传送到后端，并接收修改后的返回数据
+        console.log(this.userinfo)
+        const {data:res}=await this.$http.post('updateUser/',this.userinfo)
+        // 判断是否修改成功
+        if (res.meta.status !== 200) {
+          return this.$message.error('更改用户信息失败！')
+        }
+        //关闭会话框
+        this.editDialogVisible = false
+        //重新获取列表
+        this.GetUser(this.userinfo.email);
+        //提示修改成功
+        this.$message.success('修改数据成功')
+      })
+    },
     usermanagement(){
       if(this.$data.userinfo.isAdmin === "管理员"){
         this.$router.push({path:'/UserManagement'})
