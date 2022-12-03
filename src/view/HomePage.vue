@@ -8,7 +8,7 @@
               <div class="user-info">
                 <a class="user-nickname">真实姓名：{{ userinfo.username }}</a><br>
                 <a class="user-name">用户名：{{ userinfo.name }}</a><br>
-                <a class="user-access">身份：{{ userinfo.isAdmin }}</a><br>
+                <a class="user-access">身份：{{ showAdmin }}</a><br>
                 <a class="user-phone">电话号码：{{ userinfo.phone }}</a><br>
                 <a class="user-email">邮箱地址：{{ userinfo.email }}</a><br>
                 <a class="user-school">学校：{{ userinfo.school }}</a><br>
@@ -75,7 +75,9 @@ export default {
   data() {
     return {
       editDialogVisible: false,
+      showAdmin: "",
       userinfo: {
+        "id":"",
         "username": "",
         "phone": "",
         "email": "",
@@ -111,11 +113,13 @@ export default {
       }).then(res => {
         console.log(res.data);
         if(res.data.isAdmin==="1"){
-          that.$data.userinfo.isAdmin = "管理员";
+          that.$data.showAdmin = "管理员";
         }else{
-          that.$data.userinfo.isAdmin = "用户";
+          that.$data.showAdmin = "用户";
         }
+        that.$data.userinfo.id=res.data.id;
         that.$data.userinfo.username = res.data.username;
+        that.$data.userinfo.isAdmin = res.data.isAdmin;
         that.$data.userinfo.name = res.data.name;
         that.$data.userinfo.phone = res.data.phone;
         that.$data.userinfo.email = res.data.email;
@@ -133,11 +137,13 @@ export default {
       }).then(res => {
         console.log(res.data);
         if(res.data.isAdmin==="1"){
-          that.$data.userinfo.isAdmin = "管理员";
+          that.$data.showAdmin = "管理员";
         }else{
-          that.$data.userinfo.isAdmin = "用户";
+          that.$data.showAdmin = "用户";
         }
+        that.$data.userinfo.id=res.data.id;
         that.$data.userinfo.username = res.data.username;
+        that.$data.userinfo.isAdmin = res.data.isAdmin;
         that.$data.userinfo.name = res.data.name;
         that.$data.userinfo.phone = res.data.phone;
         that.$data.userinfo.email = res.data.email;
@@ -153,22 +159,47 @@ export default {
       this.$refs.editFormRef.resetFields()
     },
     editUserInfo(){
-      this.$refs.editFormRef.validate( async valid =>{
-        if (!valid) return
         // 将修改数据传送到后端，并接收修改后的返回数据
-        console.log(this.userinfo)
-        const {data:res}=await this.$http.post('updateUser/',this.userinfo)
-        // 判断是否修改成功
-        if (res.meta.status !== 200) {
-          return this.$message.error('更改用户信息失败！')
-        }
+      console.log("正在修改用户信息")
+      let fulluser = this.$data.userinfo;
+      console.log(fulluser);
+      axios({
+        method:'post',
+        url:`mu/updateUser`,
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        data: fulluser,
+      }) .then( res=> {
+        console.log(res);
+      })
+      // axios.post(`mu/updateUser`, {
+      //   headers: {
+      //     'content-type': 'application/json'
+      //   },
+      //   data:{
+      //     id: this.$data.userinfo.id,
+      //     username: this.$data.userinfo.username,
+      //     phone: this.$data.userinfo.phone,
+      //     email: this.$data.userinfo.email,
+      //     school: this.$data.userinfo.school,
+      //     password: this.$data.userinfo.password,
+      //     isAdmin: this.$data.userinfo.isAdmin,
+      //     code: this.$data.userinfo.code,
+      //     name: this.$data.userinfo.name
+      //   }
+      // }).then(res => {
+      //   console.log(res.data);
+      // });
+
+      // console.log("修改用户信息成功")
         //关闭会话框
         this.editDialogVisible = false
         //重新获取列表
         this.GetUser(this.userinfo.email);
         //提示修改成功
         this.$message.success('修改数据成功')
-      })
+      // })
     },
     usermanagement(){
       if(this.$data.userinfo.isAdmin === "管理员"){
@@ -202,7 +233,6 @@ export default {
         }else if(this.isAdmin==="0"){
           this.$router.push({path: '/SubmitProjectsAndPapers',query:{isAdmin:this.isAdmin}})
         }
-
       });
     }
   }
