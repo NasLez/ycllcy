@@ -173,26 +173,6 @@ export default {
       }) .then( res=> {
         console.log(res);
       })
-      // axios.post(`mu/updateUser`, {
-      //   headers: {
-      //     'content-type': 'application/json'
-      //   },
-      //   data:{
-      //     id: this.$data.userinfo.id,
-      //     username: this.$data.userinfo.username,
-      //     phone: this.$data.userinfo.phone,
-      //     email: this.$data.userinfo.email,
-      //     school: this.$data.userinfo.school,
-      //     password: this.$data.userinfo.password,
-      //     isAdmin: this.$data.userinfo.isAdmin,
-      //     code: this.$data.userinfo.code,
-      //     name: this.$data.userinfo.name
-      //   }
-      // }).then(res => {
-      //   console.log(res.data);
-      // });
-
-      // console.log("修改用户信息成功")
         //关闭会话框
         this.editDialogVisible = false
         //重新获取列表

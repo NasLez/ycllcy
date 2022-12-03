@@ -7,6 +7,9 @@ import updateChannel from "@/view/UpdateChannel";
 import SubmitProjectsAndPapers from "@/view/SubmitProjectsAndPapers";
 import ResetPassword from "@/view/ResetPassword";
 import UserManagement from "@/view/UserManagement";
+import ProjectDetail from "@/view/ProjectDetail";
+import ProjectEdit from "@/view/ProjectEdit";
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -37,6 +40,14 @@ const routes = [
     {
         path: '/UserManagement',
         component: UserManagement
+    },
+    {
+        path: '/ProjectDetail',
+        component: ProjectDetail
+    },
+    {
+        path: '/ProjectEdit',
+        component: ProjectEdit
     }
 ]
 const router = new VueRouter({
