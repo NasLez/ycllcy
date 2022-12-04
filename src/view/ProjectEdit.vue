@@ -42,12 +42,12 @@
       <el-upload
           action=""
           :auto-upload="false"
-          accept=".rar"
+          accept=".zip"
           :on-change="handleChangezip"
           :headers="headers"
           :file-list="fileListzip">
         <el-button size="small" type="primary">上传压缩包</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传zip文件，且不超过4G</div>
+        <div slot="tip" class="el-upload__tip">只能上传zip文件，且不超过50M</div>
       </el-upload>
     </el-form-item>
     <el-form-item>
@@ -79,6 +79,7 @@ export default {
       },
       imageUrl: '',
       project: {
+        id: "",
         name: '',
         uploaderEmail: '',
         maintainer: '',
@@ -177,7 +178,7 @@ export default {
           }
         }
       }]
-      newAxios.put(`mu/project/upload/?name=${this.$data.project.name}&uploaderEmail=${this.$route.query.email}&maintainer=${this.$data.project.maintainer}&channelId=${this.$data.project.channelId}&description=${this.$data.project.description}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&setYear=${this.$data.project.setYear}`
+      newAxios.put(`mu/project/upload/?name=${this.$data.project.name}&uploaderEmail=${this.$route.query.email}&maintainer=${this.$data.project.maintainer}&channelId=${this.$data.project.channelId}&description=${this.$data.project.description}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&startYear=${this.$data.project.setYear}`
           , param
       ).then(res => {
         console.log(res.data);
@@ -190,6 +191,7 @@ export default {
         } else {
           this.$message.warning("others")
         }
+        // this.$router.push({path: '/ProjectDetail', query: {email: this.$data.project.email, projectId: res.data.id}})
       })
     }
   }
