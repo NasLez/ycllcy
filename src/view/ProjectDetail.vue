@@ -7,9 +7,9 @@
       <el-tag size="small">{{ project.channelId }}</el-tag>
     </el-descriptions-item>
     <el-descriptions-item label="负责单位">{{ project.company }}</el-descriptions-item>
-    <el-descriptions-item label="起止年份">{{project.setTime}}</el-descriptions-item>
-    <el-descriptions-item label="金额"></el-descriptions-item>
-    <el-descriptions-item label="上传时间"></el-descriptions-item>
+    <el-descriptions-item label="开始年份">{{project.setYear}}</el-descriptions-item>
+    <el-descriptions-item label="金额">{{project.money}}</el-descriptions-item>
+    <el-descriptions-item label="上传时间">{{project.setTime}}</el-descriptions-item>
 
     <el-form-item>
       <el-button type="primary" @click="onSubmit">上传项目</el-button>

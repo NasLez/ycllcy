@@ -79,7 +79,6 @@ export default {
       },
       imageUrl: '',
       project: {
-        id: "",
         name: '',
         uploaderEmail: '',
         maintainer: '',
