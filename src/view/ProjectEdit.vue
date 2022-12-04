@@ -25,7 +25,9 @@
     <el-form-item label="金额">
       <el-input v-model="project.money"></el-input>
     </el-form-item>
-
+    <el-form-item label="开始年份">
+      <el-input v-model="project.setYear"></el-input>
+    </el-form-item>
     <el-form-item>
       <el-upload
           action=""
@@ -65,25 +67,27 @@ export default {
       fileListjpg: [],
       fileListzip: [],
       userinfo: {
-        "id": "",
-        "name": "",
-        "type": "",
-        "creator": "",
+        "id":"",
+        "username": "",
+        "phone": "",
         "email": "",
-        "score": "",
-        "due": "",
+        "school": "",
+        "password": "",
+        "isAdmin": "",
+        "code": "",
+        "name": ""
       },
       imageUrl: '',
       project: {
         name: '',
         uploaderEmail: '',
         maintainer: '',
-        channelId: '1',
+        channelId: '',
         description: '',
         company: '',
         money: '',
         setTime: '',
-        setYear: '2022'
+        setYear: ''
       },
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -93,8 +97,10 @@ export default {
   created() {
     //  待添加获得参数的接口
     let that = this;
-    this.$data.project.channelId = this.$route.query.chaanelId
+    this.$data.project.channelId = this.$route.query.channelId
+    console.log(this.$route.query.channelId)
     this.$data.userinfo.email = this.$route.query.email
+    console.log(this.$route.query.email)
     getChannelAndUser(this.$data.project.channelId, this.$data.userinfo.email);
 
     function getChannelAndUser(channel, email) {
@@ -102,6 +108,7 @@ export default {
         email: email,
       }).then(res => {
         console.log(res.data);
+        console.log("打印用户信息");
         that.$data.userinfo.id = res.data.id;
         that.$data.userinfo.username = res.data.username;
         that.$data.userinfo.isAdmin = res.data.isAdmin;
@@ -113,10 +120,11 @@ export default {
         that.$data.userinfo.code = res.data.code;
         that.$data.project.uploaderEmail = res.data.email;
       });
-      axios.get(`mu/getChannelById?id=${this.$data.project.channelId}`, {
+      axios.get(`mu/getChannelById?id=${channel}`, {
         id: channel
       }).then(res => {
         console.log(res.data);
+        console.log("打印通道信息")
         that.$data.project.channelId = res.data.id;
         that.$data.showChannel = res.data.name;
       })
@@ -169,7 +177,7 @@ export default {
           }
         }
       }]
-      newAxios.put(`mu/project/upload/?name=${this.$data.project.name}&uploaderEmail=${this.$route.query.email}&maintainer=${this.$data.project.maintainer}&channelId=5&description=${this.$data.project.description}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&startYear=2022`
+      newAxios.put(`mu/project/upload/?name=${this.$data.project.name}&uploaderEmail=${this.$route.query.email}&maintainer=${this.$data.project.maintainer}&channelId=${this.$data.project.channelId}&description=${this.$data.project.description}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&setYear=${this.$data.project.setYear}`
           , param
       ).then(res => {
         console.log(res.data);

@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "ProjectDetail",
 
@@ -30,31 +32,64 @@ export default {
         "id":"",
         "username": "",
         "phone": "",
-        "email": "1730808730@qq.com",
+        "email": "",
         "school": "",
         "password": "",
         "isAdmin": "",
         "code": "",
         "name": ""
       },
-      project:{
-        name:'',
-        uploaderEmail:'',
-        maintainer:'',
-        channelId:'1',
-        description:'',
-        company:'',
-        money:'',
-        setTime:'',
+      imageUrl: '',
+      project: {
+        name: '',
+        uploaderEmail: '',
+        maintainer: '',
+        channelId: '',
+        description: '',
+        company: '',
+        money: '',
+        setTime: '',
+        setYear: ''
       },
     }
   },
-  // created() {
-  //   getChannelAndUser(this.$data.project.channelId,this.$data.userinfo.email);
-  //   function getChannelAndUser(channel,email){
-  //
-  //   }
-  // },
+  created() {
+    let that = this;
+    // this.$data.project.channelId = this.$route.query.channelId
+    this.$data.project.channelId =5
+    console.log(this.$route.query.channelId)
+    // this.$data.userinfo.email = this.$route.query.email
+    this.$data.userinfo.email ="10204500101@stu.ecnu.edu.cn"
+    console.log(this.$route.query.email)
+    getChannelAndUser(this.$data.project.channelId, this.$data.userinfo.email);
+
+    function getChannelAndUser(channel, email) {
+      axios.get(`mu/getUsernames/email=${email}`, {
+        email: email,
+      }).then(res => {
+        console.log(res.data);
+        console.log("打印用户信息");
+        that.$data.userinfo.id = res.data.id;
+        that.$data.userinfo.username = res.data.username;
+        that.$data.userinfo.isAdmin = res.data.isAdmin;
+        that.$data.userinfo.name = res.data.name;
+        that.$data.userinfo.phone = res.data.phone;
+        that.$data.userinfo.email = res.data.email;
+        that.$data.userinfo.school = res.data.school;
+        that.$data.userinfo.password = res.data.password;
+        that.$data.userinfo.code = res.data.code;
+        that.$data.project.uploaderEmail = res.data.email;
+      });
+      axios.get(`mu/getChannelById?id=${channel}`, {
+        id: channel
+      }).then(res => {
+        console.log(res.data);
+        console.log("打印通道信息")
+        that.$data.project.channelId = res.data.id;
+        that.$data.showChannel = res.data.name;
+      })
+    }
+  },
   methods: {
     onSubmit() {
       console.log('submit!');

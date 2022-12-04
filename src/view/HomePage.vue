@@ -30,7 +30,7 @@
                   <el-input v-model="userinfo.name" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="身份" prop="isAdmin">
-                  <el-input v-model="userinfo.isAdmin" disabled></el-input>
+                  <el-input v-model="showAdmin" disabled></el-input>
                 </el-form-item>
                 <el-form-item label="邮箱" prop="email">
                   <el-input v-model="userinfo.email" disabled></el-input>
@@ -61,6 +61,7 @@
         管理-员提交通道管理
       </el-button>
       <el-button type="primary" @click="usermanagement">管理员-用户管理</el-button>
+<!--      <el-button type="primary" @click="usermanagement">用户-编辑</el-button>-->
       <el-button type="primary" @click="logout" >注销登录</el-button>
     </div>
 
@@ -172,13 +173,13 @@ export default {
         data: fulluser,
       }) .then( res=> {
         console.log(res);
+        console.log("修改成功");
       })
         //关闭会话框
         this.editDialogVisible = false
         //重新获取列表
-        this.GetUser(this.userinfo.email);
+        this.methods.GetUser(this.userinfo.email);
         //提示修改成功
-        this.$message.success('修改数据成功')
       // })
     },
     usermanagement(){
