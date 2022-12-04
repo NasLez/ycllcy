@@ -182,7 +182,7 @@ export default {
       // })
     },
     usermanagement(){
-      if(this.$data.userinfo.isAdmin === "管理员"){
+      if(this.$data.userinfo.isAdmin === "1"){
         this.$router.push({path:'/UserManagement'})
       }else{
         this.$message({
@@ -209,9 +209,9 @@ export default {
         console.log(res.data);
         this.isAdmin=res.data.isAdmin
         if(this.isAdmin==="1"){
-          this.$router.push({path: '/ChannelManagement',query:{isAdmin:this.isAdmin}})
+          this.$router.push({path: '/ChannelManagement',query:{isAdmin:this.isAdmin ,user:res.data}})
         }else if(this.isAdmin==="0"){
-          this.$router.push({path: '/SubmitProjectsAndPapers',query:{isAdmin:this.isAdmin}})
+          this.$router.push({path: '/SubmitProjectsAndPapers',query:{isAdmin:this.isAdmin,user:res.data}})
         }
       });
     }
