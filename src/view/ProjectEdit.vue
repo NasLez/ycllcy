@@ -26,7 +26,7 @@
       <el-input v-model="project.money"></el-input>
     </el-form-item>
     <el-form-item label="开始年份">
-      <el-input v-model="project.setYear"></el-input>
+      <el-input v-model="project.startYear"></el-input>
     </el-form-item>
     <el-form-item>
       <el-upload
@@ -87,7 +87,7 @@ export default {
         company: '',
         money: '',
         setTime: '',
-        setYear: ''
+        startYear: ''
       },
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -177,7 +177,7 @@ export default {
           }
         }
       }]
-      newAxios.put(`mu/project/upload/?name=${this.$data.project.name}&uploaderEmail=${this.$route.query.email}&maintainer=${this.$data.project.maintainer}&channelId=${this.$data.project.channelId}&description=${this.$data.project.description}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&startYear=${this.$data.project.setYear}`
+      newAxios.put(`mu/project/upload/?name=${this.$data.project.name}&uploaderEmail=${this.$route.query.email}&maintainer=${this.$data.project.maintainer}&channelId=${this.$data.project.channelId}&description=${this.$data.project.description}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&startYear=${this.$data.project.startYear}`
           , param
       ).then(res => {
         console.log(res.data);
