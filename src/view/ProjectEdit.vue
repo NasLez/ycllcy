@@ -64,7 +64,6 @@ export default {
       showChannel: "",
       fileListjpg: [],
       fileListzip: [],
-      formdata:"",
       userinfo: {
         "id": "",
         "name": "",
@@ -84,7 +83,7 @@ export default {
         company: '',
         money: '',
         setTime: '',
-        setYear:'2022'
+        setYear: '2022'
       },
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -124,29 +123,6 @@ export default {
     }
   },
   methods: {
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
-    },
-    handlePreview(file) {
-      console.log(file);
-    },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`);
-    },
-    beforeAvatarUploadjpg(file) {
-      const isLt2M = file.size / 1024 / 1024 < 16;
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 16MB!');
-      }
-      return  isLt2M;
-    },
-    beforeAvatarUploadzip(file) {
-      const isLt2M = file.size / 1024 / 1024 /1024< 4;
-      if (!isLt2M) {
-        this.$message.error('上传压缩包大小不能超过 4GB!');
-      }
-      return  isLt2M;
-    },
     handleChangezip(file, fileList) { //文件数量改变
       this.fileListzip = fileList;
     },
@@ -172,21 +148,6 @@ export default {
       // let that = this;
       let setTime = this.GetDateTime();
       console.log(setTime);
-      this.$message.success(setTime)
-      // let formdata = new FormData();
-
-      //下面数据是我自己设置的数据,可自行添加数据到formData(使用键值对方式存储)
-      // formdata.append("name",this.$data.project.name)
-      // formdata.append("uploaderEmail",this.$data.project.uploaderEmail)
-      // formdata.append("maintainer",this.$data.project.maintainer)
-      // formdata.append("channelId",this.$data.project.channelId)
-      // formdata.append("description",this.$data.project.description)
-      // formdata.append("company",this.$data.project.company)
-      // formdata.append("money",this.$data.project.money)
-      // formdata.append("setTime",setTime)
-      // formdata.append("setYear","2022")
-      // formdata.append("fig", this.fileListjpg[0]);//拿到存在fileList的文件存放到formData中
-      // formdata.append("zip", this.fileListzip[0]);//拿到存在fileList的文件存放到formData中
       const param = new FormData();
       this.fileListzip.forEach(
           (val, index) => {
@@ -195,34 +156,21 @@ export default {
       );
       this.fileListjpg.forEach(
           (val, index) => {
-            param.append("fig", val.raw);
+            param.append("zip", val.raw);
           }
       );
       axios.put(`mu/project/upload/?name=${this.$data.project.name}&uploaderEmail=${this.$route.query.email}&maintainer=${this.$data.project.maintainer}&channelId=5&description=${this.$data.project.description}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&startYear=2022`
-          ,param,{
-        // name: that.$data.project.name,
-        // uploaderEmail: that.$data.project.uploaderEmail,
-        // maintainer: that.$data.project.maintainer,
-        // channelId: Number(that.$data.project.channelId),
-        // description: that.$data.project.description,
-        // company: that.$data.project.company,
-        // money: Number(that.$data.project.money),
-        // setTime: setTime,
-        // // setYear:this.$data.project.setYear
-        //     "Content-Type": "multipart/form-data;charset=utf-8",
-      }
+          , param
       ).then(res => {
         console.log(res.data);
-        if (res.data.code === 200) {
-          this.$message({
-            message: '创建成功',
-            type: 'success'
-          });
+        if (res.status === 200) {
+          this.$message.success("创建成功")
+        } else if (res.status === 400) {
+          this.$message.warning("serve error")
+        } else if (res.status === 403) {
+          this.$message.warning("Unauthorized")
         } else {
-          this.$message({
-            message: '创建失败',
-            type: 'error'
-          });
+          this.$message.warning("others")
         }
       })
     }
