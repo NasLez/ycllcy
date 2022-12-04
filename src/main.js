@@ -10,6 +10,7 @@ Vue.prototype.$http = axios;
 Vue.config.productionTip = false;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=utf-8';
 axios.defaults.withCredentials = true;//允许跨域携带cookie信息
+
 new Vue({
   router,
   render:h=>h(App),

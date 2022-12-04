@@ -40,7 +40,7 @@
       <el-upload
           action=""
           :auto-upload="false"
-          accept=".zip"
+          accept=".rar"
           :on-change="handleChangezip"
           :headers="headers"
           :file-list="fileListzip">
@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     handleChangezip(file, fileList) { //文件数量改变
-      this.fileListzip = fileList;
+      this.fileListzip= fileList;
     },
     handleChangejpg(file, fileList) { //文件数量改变
       this.fileListjpg = fileList;
@@ -150,16 +150,26 @@ export default {
       console.log(setTime);
       const param = new FormData();
       this.fileListzip.forEach(
-          (val, index) => {
+          val => {
             param.append("fig", val.raw);
           }
       );
       this.fileListjpg.forEach(
-          (val, index) => {
+          val=> {
             param.append("zip", val.raw);
           }
       );
-      axios.put(`mu/project/upload/?name=${this.$data.project.name}&uploaderEmail=${this.$route.query.email}&maintainer=${this.$data.project.maintainer}&channelId=5&description=${this.$data.project.description}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&startYear=2022`
+      let newAxios = axios.create({
+        headers: {'Content-Type': 'multipart/form-data;charset=utf-8'}
+      });
+      newAxios.defaults.transformRequest = [function (data, config) {
+        switch (config['Content-Type'].toLowerCase()) {
+          case 'multipart/form-data;charset=utf-8':{
+            return data;
+          }
+        }
+      }]
+      newAxios.put(`mu/project/upload/?name=${this.$data.project.name}&uploaderEmail=${this.$route.query.email}&maintainer=${this.$data.project.maintainer}&channelId=5&description=${this.$data.project.description}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&startYear=2022`
           , param
       ).then(res => {
         console.log(res.data);
