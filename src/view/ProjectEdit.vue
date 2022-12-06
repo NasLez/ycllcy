@@ -157,27 +157,17 @@ export default {
       let setTime = this.GetDateTime();
       console.log(setTime);
       const param = new FormData();
-      this.fileListzip.forEach(
+      this.fileListjpg.forEach(
           val => {
             param.append("fig", val.raw);
           }
       );
-      this.fileListjpg.forEach(
+      this.fileListzip.forEach(
           val=> {
             param.append("zip", val.raw);
           }
       );
-      let newAxios = axios.create({
-        headers: {'Content-Type': 'multipart/form-data;charset=utf-8'}
-      });
-      newAxios.defaults.transformRequest = [function (data, config) {
-        switch (config['Content-Type'].toLowerCase()) {
-          case 'multipart/form-data;charset=utf-8':{
-            return data;
-          }
-        }
-      }]
-      newAxios.put(`mu/project/upload/?name=${this.$data.project.name}&uploaderEmail=${this.$route.query.email}&maintainer=${this.$data.project.maintainer}&channelId=${this.$data.project.channelId}&description=${this.$data.project.description}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&startYear=${this.$data.project.startYear}`
+      axios.put(`mu/project/upload/?name=${this.$data.project.name}&uploaderEmail=${this.$route.query.email}&maintainer=${this.$data.project.maintainer}&channelId=${this.$data.project.channelId}&description=${this.$data.project.description}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&startYear=${this.$data.project.startYear}`
           , param
       ).then(res => {
         console.log(res.data);
@@ -190,7 +180,7 @@ export default {
         } else {
           this.$message.warning("others")
         }
-        // this.$router.push({path: '/ProjectDetail', query: {email: this.$data.project.email, projectId: res.data.id}})
+        this.$router.push({path: '/UserViewProjectsAndPapers', query: {email: this.userinfo.email, isAdmin: this.userinfo.isAdmin}})
       })
     }
   }

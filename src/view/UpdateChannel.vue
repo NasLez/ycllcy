@@ -2,8 +2,6 @@
   <div>
     <el-button type="primary" @click="lookChannel" style="position: absolute;right: 100px;top: 10px;">获取通道信息
     </el-button>
-    <el-button type="primary" @click="lookTime" style="position: absolute;right: 100px;top: 40px;">获取时间
-    </el-button>
     <el-tabs v-model="activeName" @tab-click="handleClick" style="width: 400px;" stretch>
       <el-tab-pane label="通道信息" name="look">
         <div>
@@ -13,7 +11,7 @@
           通道创建者：<a>{{ userinfo.creator }}</a><br>
           通道创建者邮箱：<a>{{ userinfo.creatorEmail }}</a><br>
           通道分数：<a>{{ userinfo.score }}</a><br>
-          通道截止日期：<a value-format="yyyy-MM-dd HH:mm:ss">{{ userinfo.due }}</a><br>
+          通道截止日期：<a value-format="yyyy-MM-dd HH:mm:ss">{{ parseTime(userinfo.due) }}</a><br>
         </div>
       </el-tab-pane>
       <el-tab-pane label="修改通道信息" name="update">
@@ -53,7 +51,7 @@
             </el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="updatechannel">修改通道信息</el-button>
+            <el-button type="primary" @click="updateChannel">修改通道信息</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -63,6 +61,7 @@
 
 <script>
 import axios from "axios";
+
 
 export default {
   name: "updateChannel",
@@ -97,28 +96,61 @@ export default {
       value: ''
     }
   },
+  created: function (){
+    this.look = this.$route.query.row
+    axios.get(`mu/getChannelById?id=${this.look.id}`, {
+      id: this.look.id
+    }).then(res => {
+      this.userinfo.id = res.data.id
+      this.userinfo.name = res.data.name
+      if (res.data.type === "Thesis") {
+        this.userinfo.type = "论文"
+      } else if (res.data.type === "Project") {
+        this.userinfo.type = "项目"
+      }
+      this.userinfo.creator = res.data.creator
+      this.userinfo.creatorEmail = res.data.creatorEmail
+      this.userinfo.score = res.data.score
+      this.userinfo.due = res.data.due
+    })
+  },
   methods: {
-    lookTime(){
-
+    parseTime(time, cFormat) {
+      if (arguments.length === 0) {
+        return null
+      }
+      const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
+      let date
+      if (typeof time === 'object') {
+        date = time
+      } else {
+        if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
+          time = parseInt(time)
+        }
+        if ((typeof time === 'number') && (time.toString().length === 10)) {
+          time = time * 1000
+        }
+        date = new Date(time)
+      }
+      const formatObj = {
+        y: date.getFullYear(),
+        m: date.getMonth() + 1,
+        d: date.getDate(),
+        h: date.getHours(),
+        i: date.getMinutes(),
+        s: date.getSeconds(),
+        a: date.getDay()
+      }
+      const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
+        const value = formatObj[key]
+        // Note: getDay() returns 0 on Sunday
+        if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
+        return value.toString().padStart(2, '0')
+      })
+      return time_str
     },
     handleClick(tab, event) {
       console.log(tab, event);
-      this.look = this.$route.query.row
-      axios.get(`mu/getChannelById?id=${this.look.id}`, {
-        id: this.look.id
-      }).then(res => {
-        this.userinfo.id = res.data.id
-        this.userinfo.name = res.data.name
-        if (res.data.type === "Thesis") {
-          this.userinfo.type = "论文"
-        } else if (res.data.type === "Project") {
-          this.userinfo.type = "项目"
-        }
-        this.userinfo.creator = res.data.creator
-        this.userinfo.creatorEmail = res.data.creatorEmail
-        this.userinfo.score = res.data.score
-        this.userinfo.due = res.data.due
-      })
     },
     lookChannel() {
       this.look = this.$route.query.row
@@ -127,7 +159,7 @@ export default {
         type: 'success'
       })
     },
-    updatechannel() {
+    updateChannel() {
       if (this.$data.updateChannel.name === '') {
         this.$message({
           message: "请输入新的通道名称！",

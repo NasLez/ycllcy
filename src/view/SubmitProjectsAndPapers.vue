@@ -54,10 +54,6 @@ export default {
     },
     clickData(row, event, column) {
       console.log(row,  event,  column)
-      // this.$message({
-      //   message:row,
-      //   type:'success'
-      // })
       this.isAdmin=this.$route.query.isAdmin
       if(this.isAdmin==="1"){
         this.$message({
@@ -67,27 +63,13 @@ export default {
         this.$router.push({path: '/updateChannel',query:{row:row}})
       }else if(this.isAdmin==="0"){
         let newData = Date.parse(new Date());
-        // this.$message({
-        //   message:row.id,
-        //   type:'success'
-        // })
-        this.$message.success(newData)
+        // this.$message.success(newData)
         this.email=this.$route.query.user.email
-        // this.$message({
-        //   message:this.email,
-        //   type:'success'
-        // })
         if(newData<=row.due){
-          // this.$message({
-          //   message:'欢迎用户！允许进入！',
-          //   type:'success'
-          // })
+          this.$message.success("欢迎用户！")
           this.$router.push({path:'/ProjectEdit',query:{channelId:row.id,email:this.email}})
         }else{
-          // this.$message({
-          //   message:'欢迎用户！超过截止时间不允许进入！',
-          //   type:'warning'
-          // })
+          this.$message.error("超过截止时间！禁止提交！")
         }
       }
     },

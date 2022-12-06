@@ -6,8 +6,8 @@
           <el-card class="box-card" style="position: absolute;left: 400px">
             <div class="user" >
               <div class="user-info">
-                <a class="user-nickname">真实姓名：{{ userinfo.username }}</a><br>
-                <a class="user-name">用户名：{{ userinfo.name }}</a><br>
+                <a class="user-nickname">用户名：{{ userinfo.username }}</a><br>
+                <a class="user-name">真实姓名：{{ userinfo.name }}</a><br>
                 <a class="user-access">身份：{{ showAdmin }}</a><br>
                 <a class="user-phone">电话号码：{{ userinfo.phone }}</a><br>
                 <a class="user-email">邮箱地址：{{ userinfo.email }}</a><br>
@@ -56,12 +56,10 @@
     </dev>
     <br><br>
     <div style="position: absolute;left: 400px;top: 250px">
-      <el-button type="primary" @click="lookXmlw" >
-        用户-查看项目/论文；
-        管理-员提交通道管理
-      </el-button>
+      <el-button type="primary" @click="lookXmlw" >提交项目/论文</el-button>
+      <el-button type="primary" @click="ViewProjectsAndPapers" >查看项目/论文</el-button>
       <el-button type="primary" @click="usermanagement">管理员-用户管理</el-button>
-<!--      <el-button type="primary" @click="usermanagement">用户-编辑</el-button>-->
+      <!--      <el-button type="primary" @click="usermanagement">用户-编辑</el-button>-->
       <el-button type="primary" @click="logout" >注销登录</el-button>
     </div>
 
@@ -131,6 +129,9 @@ export default {
     }
   },
   methods: {
+    ViewProjectsAndPapers(){
+      this.$router.push({path:'/UserViewProjectsAndPapers',query:{email:this.$route.query.email,isAdmin:this.userinfo.isAdmin}})
+    },
     GetUser(MyEmail) {
       let that = this;
       axios.get(`mu/getUsernames/email=${MyEmail}`, {
@@ -160,7 +161,7 @@ export default {
       this.$refs.editFormRef.resetFields()
     },
     editUserInfo(){
-        // 将修改数据传送到后端，并接收修改后的返回数据
+      // 将修改数据传送到后端，并接收修改后的返回数据
       console.log("正在修改用户信息")
       let fulluser = this.$data.userinfo;
       console.log(fulluser);
@@ -175,11 +176,11 @@ export default {
         console.log(res);
         console.log("修改成功");
       })
-        //关闭会话框
-        this.editDialogVisible = false
-        //重新获取列表
-        this.methods.GetUser(this.userinfo.email);
-        //提示修改成功
+      //关闭会话框
+      this.editDialogVisible = false
+      //重新获取列表
+      this.methods.GetUser(this.userinfo.email);
+      //提示修改成功
       // })
     },
     usermanagement(){

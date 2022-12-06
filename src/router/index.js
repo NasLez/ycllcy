@@ -9,6 +9,7 @@ import ResetPassword from "@/view/ResetPassword";
 import UserManagement from "@/view/UserManagement";
 import ProjectDetail from "@/view/ProjectDetail";
 import ProjectEdit from "@/view/ProjectEdit";
+import UserViewProjectsAndPapers from "@/view/UserViewProjectsAndPapers";
 
 Vue.use(VueRouter)
 
@@ -48,6 +49,10 @@ const routes = [
     {
         path: '/ProjectEdit',
         component: ProjectEdit
+    },
+    {
+        path: '/UserViewProjectsAndPapers',
+        component: UserViewProjectsAndPapers
     }
 ]
 const router = new VueRouter({

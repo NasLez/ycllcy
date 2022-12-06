@@ -79,13 +79,13 @@ export default {
   },
   created() {
     let that = this;
-    this.$data.project.id = this.$route.query.id
+    this.project.id = this.$route.query.id
     // this.$data.project.Id = 5
     console.log(this.$data.project.id)
-    this.$data.userinfo.email = this.$route.query.email
+    this.userinfo.email = this.$route.query.email
     // this.$data.userinfo.email ="1730808730@qq.com"
     console.log(this.$data.userinfo.email)
-    getUSerAndProject(this.$data.userinfo.email, this.$data.project.Id);
+    getUSerAndProject(this.$data.userinfo.email, this.$data.project.id);
 
     function getUSerAndProject(email, id) {
       axios.get(`mu/getUsernames/email=${email}`, {
@@ -118,7 +118,7 @@ export default {
         that.$data.project.money = res.data.money;
         that.$data.project.setTime = res.data.setTime;
         that.$data.project.status = res.data.status;
-        that.$data.project.startYear = res.data.startTime;
+        that.$data.project.startYear = res.data.startYear;
         axios.get(`mu/getChannelById?id=${that.$data.project.channelId}`, {
           id: that.$data.project.channelId
         }).then(res => {
@@ -139,7 +139,7 @@ export default {
     changeStatus(){
       let that = this;
       axios.post(`mu/project/changeStatus?id=${that.$data.project.id}&status=${that.$data.editStatus}`, {
-        id: that.$data.project.Id,
+        id: that.$data.project.id,
         status: that.$data.editStatus
       }).then(res => {
         console.log("修改状态成功")
