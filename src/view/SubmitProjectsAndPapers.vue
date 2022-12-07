@@ -18,9 +18,10 @@
 
 <script>
 import axios from "axios";
-
+import store from "@/vuex/store";
 export default {
   name: "SubmitProjectsAndPapers",
+  store,
   data() {
     return {
       activeName:'',
@@ -54,23 +55,14 @@ export default {
     },
     clickData(row, event, column) {
       console.log(row,  event,  column)
-      this.isAdmin=this.$route.query.isAdmin
-      if(this.isAdmin==="1"){
-        this.$message({
-          message:"欢迎管理员！",
-          type:'success'
-        })
-        this.$router.push({path: '/updateChannel',query:{row:row}})
-      }else if(this.isAdmin==="0"){
-        let newData = Date.parse(new Date());
-        // this.$message.success(newData)
-        this.email=this.$route.query.user.email
-        if(newData<=row.due){
-          this.$message.success("欢迎用户！")
-          this.$router.push({path:'/ProjectEdit',query:{channelId:row.id,email:this.email}})
-        }else{
-          this.$message.error("超过截止时间！禁止提交！")
-        }
+      let newData = Date.parse(new Date());
+      if(newData<=row.due){
+        this.$message.success("欢迎用户！")
+        this.$store.state.channel.id=row.id
+        this.$store.state.project.channelId=row.id
+        this.$router.push({path:'/ProjectEdit'})
+      }else{
+        this.$message.error("超过截止时间！禁止提交！")
       }
     },
     listChannel() {

@@ -20,7 +20,7 @@
       </el-descriptions-item>
     </el-descriptions>
 
-    <el-button @click="showEditDialog" v-if="userinfo.isAdmin == 0">审核</el-button>
+    <el-button @click="showEditDialog" v-if="userinfo.isAdmin == 1">审核</el-button>
 
     <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
       <el-dialog
@@ -42,10 +42,10 @@
 
 <script>
 import axios from "axios";
-
+import store from "@/vuex/store.js";
 export default {
   name: "ProjectDetail",
-
+  store,
   data(){
     return{
       showChannel:"",
@@ -79,13 +79,15 @@ export default {
   },
   created() {
     let that = this;
-    this.project.id = this.$route.query.id
-    // this.$data.project.Id = 5
-    console.log(this.$data.project.id)
-    this.userinfo.email = this.$route.query.email
-    // this.$data.userinfo.email ="1730808730@qq.com"
-    console.log(this.$data.userinfo.email)
-    getUSerAndProject(this.$data.userinfo.email, this.$data.project.id);
+    // this.project.id = this.$route.query.id
+    this.project.id=this.$store.state.project.id
+    console.log(this.project.id)
+    // this.userinfo.email = this.$route.query.email
+    this.userinfo.email=this.$store.state.userinfo.email
+    console.log(this.userinfo.email)
+    console.log("到达详情页面")
+
+    getUSerAndProject(this.userinfo.email, this.project.id);
 
     function getUSerAndProject(email, id) {
       axios.get(`mu/getUsernames/email=${email}`, {

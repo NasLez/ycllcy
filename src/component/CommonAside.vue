@@ -38,7 +38,7 @@
 <!--          </el-menu-item-group>-->
 <!--          </el-submenu>-->
 
-        <el-menu-item index="4" @click="SkipToPage('/ChannelManagement')">
+        <el-menu-item index="4" @click="SkipToPage(isAdmin == '1'?'/ChannelManagement':'/SubmitProjectsAndPapers')">
           <i class="el-icon-s-marketing"></i>
           <span slot="title" v-if="isAdmin == true">通道管理</span>
           <span slot="title" v-else>查看通道</span>

@@ -3,13 +3,14 @@ import VueRouter from 'vue-router'
 import LogInAndRegister from "../view/LogInAndRegister.vue"
 import HomePage from "@/view/HomePage";
 import ChannelManagement from "@/view/ChannelManagement";
-import updateChannel from "@/view/UpdateChannel";
+import updateChannel from "@/view/updateChannel";
 import SubmitProjectsAndPapers from "@/view/SubmitProjectsAndPapers";
 import ResetPassword from "@/view/ResetPassword";
 import UserManagement from "@/view/UserManagement";
 import ProjectDetail from "@/view/ProjectDetail";
 import ProjectEdit from "@/view/ProjectEdit";
 import UserViewProjectsAndPapers from "@/view/UserViewProjectsAndPapers";
+import StatisticalSubmissionInformation from "@/component/StatisticalSubmissionInformation";
 
 Vue.use(VueRouter)
 
@@ -53,6 +54,10 @@ const routes = [
     {
         path: '/UserViewProjectsAndPapers',
         component: UserViewProjectsAndPapers
+    },
+    {
+        path: '/StatisticalSubmissionInformation',
+        component: StatisticalSubmissionInformation
     }
 ]
 const router = new VueRouter({

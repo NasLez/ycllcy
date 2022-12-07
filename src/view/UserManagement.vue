@@ -54,7 +54,8 @@
                 stripe="true"
                 border="true"
                 height="400"
-                style="width: 1000px" :default-sort="{prop: 'date', order: 'ascending'}">
+                style="width: 1000px"
+                :default-sort="{prop: 'id', order: 'ascending'}">
         <el-table-column prop="date" label="用户头像" align="center">
         </el-table-column>
         <el-table-column prop="name" label="姓名" align="center">
@@ -103,9 +104,10 @@
 
 <script>
 import axios from "axios";
-
+import store from "@/vuex/store";
 export default {
   //搜索数据
+  store,
   data() {
     return {
       labelPosition: 'right',

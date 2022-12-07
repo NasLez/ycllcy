@@ -59,8 +59,9 @@
 <script>
 
 import axios from "axios";
-
+import store from "@/vuex/store";
 export default {
+  store,
   data() {
     return {
       showChannel: "",
@@ -97,10 +98,13 @@ export default {
   created() {
     //  待添加获得参数的接口
     let that = this;
-    this.$data.project.channelId = this.$route.query.channelId
-    console.log(this.$route.query.channelId)
-    this.$data.userinfo.email = this.$route.query.email
+    // this.$data.project.channelId = this.$route.query.channelId
+    this.$data.project.channelId = this.$store.state.channel.id
+    console.log(this.$data.project.channelId)
+    // this.$data.userinfo.email = this.$route.query.email
+    this.$data.userinfo.email = this.$store.state.user.email
     console.log(this.$route.query.email)
+
     getChannelAndUser(this.$data.project.channelId, this.$data.userinfo.email);
 
     function getChannelAndUser(channel, email) {
@@ -180,7 +184,8 @@ export default {
         } else {
           this.$message.warning("others")
         }
-        this.$router.push({path: '/UserViewProjectsAndPapers', query: {email: this.userinfo.email, isAdmin: this.userinfo.isAdmin}})
+        // this.$router.push({path: '/UserViewProjectsAndPapers', query: {email: this.userinfo.email, isAdmin: this.userinfo.isAdmin}})
+        this.$router.push({path: '/UserViewProjectsAndPapers'})
       })
     }
   }

@@ -62,9 +62,10 @@
 
 <script>
 import axios from "axios";
-
+import store from "@/vuex/store";
 export default {
   name: "ChannelManagement",
+  store,
   data() {
     return {
       labelPosition:'right',
@@ -176,18 +177,8 @@ export default {
     },
     clickData(row, event, column) {
       console.log(row,  event,  column)
-      // this.$message({
-      //   message:row,
-      //   type:'success'
-      // })
-      this.isAdmin=this.$route.query.isAdmin
-      if(this.isAdmin==="1"){
-        this.$message({
-          message:"欢迎管理员！",
-          type:'success'
-        })
-        this.$router.push({path: '/updateChannel',query:{row:row}})
-      }
+      this.$store.state.channel.id=row.id
+      this.$router.push({path: '/updateChannel'})
     },
     listChannel() {
       axios.get((`mu/listChannel`)).then(res => {
