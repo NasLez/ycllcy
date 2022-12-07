@@ -59,14 +59,12 @@
           </el-form-item>
         </el-form>
       </el-tab-pane>
-
-
     </el-tabs>
   </div>
 </template>
 <script>
 import axios from "axios";
-
+import store from "../vuex/store.js";
 export default {
   name: "LogInAndRegister",
   data() {
@@ -89,6 +87,7 @@ export default {
       }
     }
   },
+  store,
   methods: {
     ResetPassword(){
       this.$router.push({path:'/ResetPassword'})
@@ -132,7 +131,9 @@ export default {
               message: "登录成功！",
               type: 'success'
             }),
-            this.$router.push({path: '/HomePage', query: {email: this.$data.formLabelAlign.email}})
+            // this.$router.push({path: '/HomePage', query: {email: this.$data.formLabelAlign.email}})
+            this.$store.state.userinfo.email= this.$data.formLabelAlign.email,
+            this.$router.push({path: '/HomePage'})
             // axios.get(`mu/getUsernames/email=${this.$data.formLabelAlign.email}`).then(res1 => {
             //   this.$message({
             //     message: res1.data,
