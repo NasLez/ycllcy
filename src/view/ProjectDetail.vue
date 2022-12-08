@@ -17,6 +17,8 @@
       <el-descriptions-item label="下载">
         <el-button @click="downloadProfile">点击下载项目文件</el-button>
         <el-button @click="downloadPic">点击下载图片凭证</el-button>
+        <el-button @click="deleteProject">删除项目</el-button>
+        <el-button @click="edit">编辑项目</el-button>
       </el-descriptions-item>
     </el-descriptions>
 
@@ -37,7 +39,7 @@
     </el-card>
   </div>
 
-<!--  <el-button @click="updateProject" v-else>修改论文</el-button>-->
+  <!--  <el-button @click="updateProject" v-else>修改论文</el-button>-->
 </template>
 
 <script>
@@ -132,6 +134,17 @@ export default {
     }
   },
   methods: {
+    edit(){
+      this.$router.push({path:'/ProjectEdit'})
+    },
+    deleteProject(){
+      axios.delete(`mu/project/delete?id=${this.project.id}`).then(res=>{
+        if(res.status===200){
+          this.$message.success("删除成功")
+          this.$router.push({path: '/UserViewProjectsAndPapers'})
+        }
+      })
+    },
     showEditDialog(){
       this.$data.editDialogVisible = true;
     },

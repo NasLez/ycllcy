@@ -131,24 +131,19 @@ export default {
             this.$message({
               message: "登录成功！",
               type: 'success'
-            }),
+            })
+            console.log("正在修改权限")
             // this.$router.push({path: '/HomePage', query: {email: this.$data.formLabelAlign.email}})
-            that.$store.state.userinfo.email= that.$data.formLabelAlign.email,
-                axios.get(`mu/getUsernames/email=${that.$store.state.userinfo.email}`, {
-                  email: that.$store.state.userinfo.email,
-                }).then(res => {
-                  console.log(res.data);
-                  that.$store.state.userinfo.isAdmin = res.data.userinfo.isAdmin;
-                });
-            console.log(this.$store.state.userinfo.isAdmin)
-            console.log("权限修改成功")
-            this.$router.push({path: '/HomePage'})
-            // axios.get(`mu/getUsernames/email=${this.$data.formLabelAlign.email}`).then(res1 => {
-            //   this.$message({
-            //     message: res1.data,
-            //     type: 'success'
-            //   })
-            // })
+            that.$store.state.userinfo.email= that.$data.formLabelAlign.email
+            axios.get(`mu/getUsernames/email=${that.$data.formLabelAlign.email}`, {
+              email: that.$data.formLabelAlign.email,
+            }).then(res => {
+              console.log(res.data);
+              that.$store.state.userinfo.isAdmin = res.data.isAdmin;
+              console.log("权限修改成功")
+              that.$router.push({path: '/HomePage'})
+            });
+            // console.log(that.$store.state.userinfo.isAdmin)
           }
         })
       }

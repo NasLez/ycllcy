@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
+
         userinfo: {
             "id":"",
             "username": "",
@@ -15,6 +16,18 @@ const store = new Vuex.Store({
             "isAdmin": "",
             "code": "",
             "name": ""
+        },
+        thesis: {
+            id: '0',
+            name: '',
+            uploaderEmail: '',
+            maintainer: '',
+            channelId: '',
+            description: '',
+            company: '',
+            money: '',
+            setTime: '',
+            startYear: ''
         },
         project: {
             id: "",

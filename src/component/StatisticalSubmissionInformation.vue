@@ -1,19 +1,7 @@
 <template>
   <div>
 
-    <el-descriptions  :column="2" border >
-      <el-descriptions-item
-          label="用户名"
-          label-class-name="my-label"
-          content-class-name="my-content">
-        {{ userData.name }}
-      </el-descriptions-item>
-      <el-descriptions-item label="手机号" >
-        {{ userData.phone }}
-      </el-descriptions-item>
-      <el-descriptions-item label="邮箱">
-        {{ userData.email }}
-      </el-descriptions-item>
+    <el-descriptions  :column="1" border >
       <el-descriptions-item
           content-class-name="my-content"
           label="上传总分数">
@@ -34,7 +22,7 @@
     </el-descriptions>
     <br>
     <br>
-    <div style="width: 700px;height: 500px" id="main">
+    <div style="width: 700px;height: 300px" id="main">
     </div>
 
   </div>

@@ -5,8 +5,8 @@
       <el-tab-pane label="论文" name="thesis">
         <el-table
             :data="thesisData"
-            stripe="true"
-            border="true"
+            stripe
+            border
             height="400"
             style="width: 100%"
             @row-click="clickThesis"
@@ -18,7 +18,7 @@
               prop="submitTime">
             <template slot-scope="scope">
             <span v-if="scope.row.submitTime!= null">
-              {{ parseTime(scope.row.submitTime ) }}
+              {{ parseTime(scope.row.submitTime) }}
             </span>
             </template>
           </el-table-column>
@@ -49,8 +49,8 @@
       <el-tab-pane label="项目" name="project">
         <el-table
             :data="projectData"
-            stripe="true"
-            border="true"
+            stripe
+            border
             height="400"
             style="width: 100%"
             @row-click="clickProject"
@@ -92,6 +92,7 @@
 <script>
 import axios from "axios";
 import store from "@/vuex/store";
+
 export default {
   name: "UserViewProjectsAndPapers",
   store,
@@ -210,7 +211,9 @@ export default {
       const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
         const value = formatObj[key]
         // Note: getDay() returns 0 on Sunday
-        if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
+        if (key === 'a') {
+          return ['日', '一', '二', '三', '四', '五', '六'][value]
+        }
         return value.toString().padStart(2, '0')
       })
       return time_str
@@ -225,11 +228,13 @@ export default {
     },
     clickThesis(row, event, column) {
       console.log(row, event, column)
-      this.$message.success(row.name)
+      this.$store.state.thesis.id = row.id
+      this.$message.success(this.$store.state.thesis.id)
+      this.$router.push({path: '/PaperDetail'})
     },
     clickProject(row, event, column) {
       console.log(row, event, column)
-      this.$message.success("id=" + row.id + ",uploaderEmail=" + row.uploaderEmail)
+      // this.$message.success("id=" + row.id + ",uploaderEmail=" + row.uploaderEmail)
       this.$store.state.project.id = row.id
       console.log(this.$store.state.project.id)
       console.log(this.$store.state.userinfo.email)

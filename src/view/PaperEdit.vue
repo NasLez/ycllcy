@@ -1,31 +1,19 @@
 <template>
-  <el-form ref="form" :model="project" label-width="80px">
-    <el-form-item label="项目名称">
-      <el-input v-model="project.name"></el-input>
+  <el-form ref="form" :model="thesis" label-width="80px">
+    <el-form-item label="论文名称">
+      <el-input v-model="thesis.name"></el-input>
     </el-form-item>
-
-    <el-form-item label="项目简介">
-      <el-input v-model="project.description"></el-input>
+    <el-form-item label="论文描述">
+      <el-input v-model="thesis.description"></el-input>
     </el-form-item>
     <el-form-item label="负责人">
-      <el-input v-model="project.maintainer"></el-input>
+      <el-input v-model="thesis.maintainer"></el-input>
     </el-form-item>
-    <el-form-item label="项目类别">
+    <el-form-item label="论文类别">
       {{ showChannel }}
     </el-form-item>
     <el-form-item label="负责单位">
-      <el-input v-model="project.company"></el-input>
-    </el-form-item>
-    <!--    <el-form-item label="起止年份">-->
-    <!--      <el-col>-->
-    <!--        <el-date-picker type="date" placeholder="选择开始日期" v-model="project.setTime" style="width: 100%;"></el-date-picker>-->
-    <!--      </el-col>-->
-    <!--    </el-form-item>-->
-    <el-form-item label="金额">
-      <el-input v-model="project.money"></el-input>
-    </el-form-item>
-    <el-form-item label="开始年份">
-      <el-input v-model="project.startYear"></el-input>
+      <el-input v-model="thesis.company"></el-input>
     </el-form-item>
     <el-form-item>
       <el-upload
@@ -50,8 +38,8 @@
       </el-upload>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="onSubmit" v-if="this.$store.state.project.id==='0'">立即创建</el-button>
-      <el-button type="primary" @click="edit" v-if="this.$store.state.project.id!=='0'">立即修改</el-button>
+      <el-button type="primary" @click="onSubmit" v-if="this.$store.state.thesis.id==='0'">立即创建</el-button>
+      <el-button type="primary" @click="edit" v-if="this.$store.state.thesis.id!=='0'">立即修改</el-button>
       <el-button>取消</el-button>
     </el-form-item>
   </el-form>
@@ -79,16 +67,14 @@ export default {
         "name": ""
       },
       imageUrl: '',
-      project: {
+      thesis: {
         name: '',
         uploaderEmail: '',
         maintainer: '',
         channelId: '',
         description: '',
         company: '',
-        money: '',
         setTime: '',
-        startYear: ''
       },
       headers: {
         'Content-Type': 'multipart/form-data'
@@ -98,24 +84,20 @@ export default {
   created:function () {
     //  待添加获得参数的接口
     let that = this;
-    this.$data.project.channelId = this.$store.state.channel.id
-    console.log(this.$data.project.channelId)
+    this.$data.thesis.channelId = this.$store.state.channel.id
+    console.log(this.$data.thesis.channelId)
     this.$data.userinfo.email = this.$store.state.userinfo.email
-    console.log(this.$store.state.project.id)
-    if(this.$store.state.project.id!=='0'){
-      axios.get(`mu/project/queryById?id=${this.$store.state.project.id}`).then(res => {
+    console.log(this.$store.state.thesis.id)
+    if(this.$store.state.thesis.id!=='0'){
+      axios.get(`mu/thesis/queryById?id=${this.$store.state.thesis.id}`).then(res => {
         console.log(res.data);
         console.log("项目信息")
-        that.$data.project.id = res.data.id;
-        that.$data.project.channelId=res.data.channelId;
-        that.$data.project.name = res.data.name;
-        that.$data.project.maintainer = res.data.maintainer;
-        that.$data.project.description = res.data.description;
-        that.$data.project.company = res.data.company;
-        that.$data.project.money = res.data.money;
-        that.$data.project.setTime = res.data.setTime;
-        that.$data.project.status = res.data.status;
-        that.$data.project.startYear = res.data.startYear;
+        that.$data.thesis.id = res.data.id;
+        that.$data.thesis.channelId=res.data.channelId;
+        that.$data.thesis.name = res.data.name;
+        that.$data.thesis.maintainer = res.data.maintainer;
+        that.$data.thesis.description = res.data.description;
+        that.$data.thesis.company = res.data.company;
         axios.get(`mu/getChannelById?id=${that.$data.project.channelId}`, {
           id: that.$data.project.channelId
         }).then(res => {
@@ -125,8 +107,7 @@ export default {
         })
       })
     }
-    getChannelAndUser(this.$data.project.channelId, this.$data.userinfo.email);
-
+    getChannelAndUser(this.$data.thesis.channelId, this.$data.userinfo.email);
     function getChannelAndUser(channel, email) {
       axios.get(`mu/getUsernames/email=${email}`).then(res => {
         console.log(res.data);
@@ -145,7 +126,7 @@ export default {
       axios.get(`mu/getChannelById?id=${channel}`).then(res => {
         console.log(res.data);
         console.log("打印通道信息")
-        that.$data.project.channelId = res.data.id;
+        that.$data.thesis.channelId = res.data.id;
         that.$data.showChannel = res.data.name;
       })
     }
@@ -165,7 +146,7 @@ export default {
             param.append("zip", val.raw);
           }
       );
-      axios.post(`mu/project/update?id=${this.$store.state.project.id}&name=${this.$data.project.name}&uploaderEmail=${this.$store.state.userinfo.email}&maintainer=${this.$data.project.maintainer}&description=${this.$data.project.description}&channelId=${this.$data.project.channelId}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&startYear=${this.$data.project.startYear}`
+      axios.post(`mu/thesis/update?thesisId=${this.$store.state.thesis.id}&name=${this.thesis.name}&uploaderEmail=${this.$store.state.userinfo.email}&maintainer=${this.thesis.maintainer}&channelId=${this.thesis.channelId}&description=${this.thesis.description}&company=${this.thesis.company}&uploadTime=${setTime}`
           , param
       ).then(res => {
         console.log(res.data);
@@ -217,7 +198,7 @@ export default {
             param.append("zip", val.raw);
           }
       );
-      axios.put(`mu/project/upload/?name=${this.$data.project.name}&uploaderEmail=${this.$store.state.userinfo.email}&maintainer=${this.$data.project.maintainer}&channelId=${this.$data.project.channelId}&description=${this.$data.project.description}&company=${this.$data.project.company}&money=${this.$data.project.money}&setTime=${setTime}&startYear=${this.$data.project.startYear}`
+      axios.put(`mu/thesis/upload?name=${this.$data.thesis.name}&uploaderEmail=${this.$store.state.userinfo.email}&maintainer=${this.$data.thesis.maintainer}&channelId=${this.$data.thesis.channelId}&description=${this.$data.thesis.description}&company=${this.$data.thesis.company}&uploadTime=${setTime}`
           , param
       ).then(res => {
         console.log(res.data);
@@ -236,3 +217,4 @@ export default {
   }
 }
 </script>
+

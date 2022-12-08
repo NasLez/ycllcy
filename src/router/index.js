@@ -11,6 +11,8 @@ import ProjectDetail from "@/view/ProjectDetail";
 import ProjectEdit from "@/view/ProjectEdit";
 import UserViewProjectsAndPapers from "@/view/UserViewProjectsAndPapers";
 import StatisticalSubmissionInformation from "@/component/StatisticalSubmissionInformation";
+import PaperEdit from "@/view/PaperEdit";
+import PaperDetail from "@/view/PaperDetail";
 
 Vue.use(VueRouter)
 
@@ -58,6 +60,14 @@ const routes = [
     {
         path: '/StatisticalSubmissionInformation',
         component: StatisticalSubmissionInformation
+    },
+    {
+        path: '/PaperEdit',
+        component: PaperEdit
+    },
+    {
+        path: '/PaperDetail',
+        component: PaperDetail
     }
 ]
 const router = new VueRouter({
