@@ -1,101 +1,123 @@
 <template>
-  <div>
-    <a style="color:dodgerblue">查看项目/论文</a>
-    <el-tabs v-model="activeName" style="width: 1000px" stretch @tab-click="handleClick">
-      <el-tab-pane label="论文" name="thesis">
-        <el-table
-            :data="thesisData"
-            stripe
-            border
-            height="400"
-            style="width: 100%"
-            @row-click="clickThesis"
-            :default-sort="{prop: 'submitTime', order: 'descending'}">
-          <el-table-column
-              label="提交时间"
-              sortable
-              align="center"
-              prop="submitTime">
-            <template slot-scope="scope">
+  <el-container>
+    <el-header>
+      <CommonHeader/>
+    </el-header>
+    <el-container>
+      <el-aside width="200px">
+        <CommonAside/>
+      </el-aside>
+      <el-main>
+        <div>
+          <el-breadcrumb>
+            <el-breadcrumb-item :to="{ path: '/UserViewProjectsAndPapers' }">查看提交</el-breadcrumb-item>
+            <el-breadcrumb-item v-if="activeName == 'thesis'">论文提交</el-breadcrumb-item>
+            <el-breadcrumb-item v-else-if="activeName == 'project'">项目提交</el-breadcrumb-item>
+          </el-breadcrumb>
+          <el-tabs v-model="activeName" style="width: 1000px" stretch @tab-click="handleClick">
+            <el-tab-pane label="论文" name="thesis">
+              <el-table
+                  :data="thesisData"
+                  stripe
+                  border
+                  height="400"
+                  style="width: 100%"
+                  @row-click="clickThesis"
+                  :default-sort="{prop: 'submitTime', order: 'descending'}">
+                <el-table-column
+                    label="提交时间"
+                    sortable
+                    align="center"
+                    prop="submitTime">
+                  <template slot-scope="scope">
             <span v-if="scope.row.submitTime!= null">
               {{ parseTime(scope.row.submitTime) }}
             </span>
-            </template>
-          </el-table-column>
-          <el-table-column
-              align="center"
-              label="题目"
-              prop="name">
-          </el-table-column>
-          <el-table-column
-              align="center"
-              label="负责人"
-              prop="maintainer">
-          </el-table-column>
-          <el-table-column
-              align="center"
-              label="所属研究方向"
-              prop="channelName">
-          </el-table-column>
-          <el-table-column
-              align="center"
-              label="审核状态"
-              :filters="[{text:'审核中',value:'Waiting'},{text:'审核通过',value:'Accept'},{text:'审核不通过',value:'Reject'},]"
-              :filter-method="filterStatus"
-              prop="status">
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-      <el-tab-pane label="项目" name="project">
-        <el-table
-            :data="projectData"
-            stripe
-            border
-            height="400"
-            style="width: 100%"
-            @row-click="clickProject"
-            :default-sort="{prop: 'setTime', order: 'descending'}">
-          <el-table-column
-              align="center"
-              label="提交时间"
-              prop="setTime"
-              sortable>
-          </el-table-column>
-          <el-table-column
-              align="center"
-              label="名称"
-              prop="name">
-          </el-table-column>
-          <el-table-column
-              align="center"
-              label="负责人"
-              prop="maintainer">
-          </el-table-column>
-          <el-table-column
-              align="center"
-              label="项目类别"
-              prop="channelName">
-          </el-table-column>
-          <el-table-column
-              align="center"
-              label="审核状态"
-              prop="status"
-              :filters="[{text:'审核中',value:'Waiting'},{text:'审核通过',value:'Accept'},{text:'审核不通过',value:'Reject'},]"
-              :filter-method="filterStatus">
-          </el-table-column>
-        </el-table>
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                    align="center"
+                    label="题目"
+                    prop="name">
+                </el-table-column>
+                <el-table-column
+                    align="center"
+                    label="负责人"
+                    prop="maintainer">
+                </el-table-column>
+                <el-table-column
+                    align="center"
+                    label="所属研究方向"
+                    prop="channelName">
+                </el-table-column>
+                <el-table-column
+                    align="center"
+                    label="审核状态"
+                    :filters="[{text:'审核中',value:'Waiting'},{text:'审核通过',value:'Accept'},{text:'审核不通过',value:'Reject'},]"
+                    :filter-method="filterStatus"
+                    prop="status">
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+            <el-tab-pane label="项目" name="project">
+              <el-table
+                  :data="projectData"
+                  stripe
+                  border
+                  height="400"
+                  style="width: 100%"
+                  @row-click="clickProject"
+                  :default-sort="{prop: 'setTime', order: 'descending'}">
+                <el-table-column
+                    align="center"
+                    label="提交时间"
+                    prop="setTime"
+                    sortable>
+                </el-table-column>
+                <el-table-column
+                    align="center"
+                    label="名称"
+                    prop="name">
+                </el-table-column>
+                <el-table-column
+                    align="center"
+                    label="负责人"
+                    prop="maintainer">
+                </el-table-column>
+                <el-table-column
+                    align="center"
+                    label="项目类别"
+                    prop="channelName">
+                </el-table-column>
+                <el-table-column
+                    align="center"
+                    label="审核状态"
+                    prop="status"
+                    :filters="[{text:'审核中',value:'Waiting'},{text:'审核通过',value:'Accept'},{text:'审核不通过',value:'Reject'},]"
+                    :filter-method="filterStatus">
+                </el-table-column>
+              </el-table>
+            </el-tab-pane>
+          </el-tabs>
+        </div>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 
 <script>
 import axios from "axios";
 import store from "@/vuex/store";
+import CommonAside from "../component/CommonAside"
+import CommonHeader from "@/component/CommonHeader";
 
 export default {
   name: "UserViewProjectsAndPapers",
   store,
+  components: {
+    CommonAside,
+    CommonHeader
+  },
   data() {
     return {
       activeName: '',
@@ -245,4 +267,20 @@ export default {
 </script>
 
 <style scoped>
+.el-aside {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 60px;
+  bottom: 0;
+}
+
+.el-main {
+  position: absolute;
+  left: 200px;
+  right: 0;
+  top: 60px;
+  bottom: 0;
+  overflow-y: scroll;
+}
 </style>

@@ -1,57 +1,89 @@
 <template>
-  <el-form ref="form" :model="thesis" label-width="80px">
-    <el-form-item label="论文名称">
-      <el-input v-model="thesis.name"></el-input>
-    </el-form-item>
-    <el-form-item label="论文描述">
-      <el-input v-model="thesis.description"></el-input>
-    </el-form-item>
-    <el-form-item label="负责人">
-      <el-input v-model="thesis.maintainer"></el-input>
-    </el-form-item>
-    <el-form-item label="论文类别">
-      {{ showChannel }}
-    </el-form-item>
-    <el-form-item label="负责单位">
-      <el-input v-model="thesis.company"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-upload
-          action=""
-          accept=".jpg"
-          :on-change="handleChangejpg"
-          :auto-upload="false"
-          :headers="headers"
-          :file-list="fileListjpg">
-        <el-button size="small" type="primary">上传截图</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg文件，且不超过16MB</div>
-      </el-upload>
-      <el-upload
-          action=""
-          :auto-upload="false"
-          accept=".zip"
-          :on-change="handleChangezip"
-          :headers="headers"
-          :file-list="fileListzip">
-        <el-button size="small" type="primary">上传压缩包</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传zip文件，且不超过50M</div>
-      </el-upload>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit" v-if="this.$store.state.thesis.id==='0'">立即创建</el-button>
-      <el-button type="primary" @click="edit" v-if="this.$store.state.thesis.id!=='0'">立即修改</el-button>
-      <el-button>取消</el-button>
-    </el-form-item>
-  </el-form>
+  <el-container>
+    <el-header>
+      <CommonHeader/>
+    </el-header>
+    <el-container>
+      <el-aside width="200px">
+        <CommonAside/>
+      </el-aside>
+      <el-main>
+        <el-breadcrumb separator="/" v-if="showType == '0'">
+          <el-breadcrumb-item>查看通道</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/SubmitProjectsAndPapers' }">论文通道</el-breadcrumb-item>
+          <el-breadcrumb-item>编辑论文</el-breadcrumb-item>
+        </el-breadcrumb>
+        <el-breadcrumb separator="/" v-else>
+          <el-breadcrumb-item :to="{ path: '/UserViewProjectsAndPapers' }">查看提交</el-breadcrumb-item>
+          <el-breadcrumb-item>论文提交</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/ProjectDetail' }">论文详情</el-breadcrumb-item>
+          <el-breadcrumb-item>编辑论文</el-breadcrumb-item>
+        </el-breadcrumb>
+        <br>
+        <el-form ref="form" :model="thesis" label-width="80px">
+          <el-form-item label="论文名称">
+            <el-input v-model="thesis.name"></el-input>
+          </el-form-item>
+          <el-form-item label="论文描述">
+            <el-input v-model="thesis.description"></el-input>
+          </el-form-item>
+          <el-form-item label="负责人">
+            <el-input v-model="thesis.maintainer"></el-input>
+          </el-form-item>
+          <el-form-item label="论文类别">
+            {{ showChannel }}
+          </el-form-item>
+          <el-form-item label="负责单位">
+            <el-input v-model="thesis.company"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-upload
+                action=""
+                accept=".jpg"
+                :on-change="handleChangejpg"
+                :auto-upload="false"
+                :headers="headers"
+                :file-list="fileListjpg">
+              <el-button size="small" type="primary">上传截图</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg文件，且不超过16MB</div>
+            </el-upload>
+            <el-upload
+                action=""
+                :auto-upload="false"
+                accept=".zip"
+                :on-change="handleChangezip"
+                :headers="headers"
+                :file-list="fileListzip">
+              <el-button size="small" type="primary">上传压缩包</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传zip文件，且不超过50M</div>
+            </el-upload>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit" v-if="this.$store.state.thesis.id==='0'">立即创建</el-button>
+            <el-button type="primary" @click="edit" v-if="this.$store.state.thesis.id!=='0'">立即修改</el-button>
+            <el-button>取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
 <script>
 
 import axios from "axios";
 import store from "@/vuex/store";
+import CommonAside from "../component/CommonAside"
+import CommonHeader from "@/component/CommonHeader";
+
 export default {
   store,
+  components: {
+    CommonHeader,
+    CommonAside
+  },
   data() {
     return {
+      showType: '',
       showChannel: "",
       fileListjpg: [],
       fileListzip: [],
@@ -88,6 +120,7 @@ export default {
     console.log(this.$data.thesis.channelId)
     this.$data.userinfo.email = this.$store.state.userinfo.email
     console.log(this.$store.state.thesis.id)
+    this.showType = this.$store.state.thesis.id
     if(this.$store.state.thesis.id!=='0'){
       axios.get(`mu/thesis/queryById?id=${this.$store.state.thesis.id}`).then(res => {
         console.log(res.data);
@@ -217,4 +250,21 @@ export default {
   }
 }
 </script>
+<style>
+.el-aside {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 60px;
+  bottom: 0;
+}
+.el-main {
+  position: absolute;
+  left: 200px;
+  right: 0;
+  top: 60px;
+  bottom: 0;
+  overflow-y: scroll;
+}
+</style>
 

@@ -1,49 +1,73 @@
 <template>
-  <div>
-    <el-descriptions title="项目信息">
-      <el-descriptions-item label="论文名称">{{thesis.name}}</el-descriptions-item>
-      <el-descriptions-item label="负责人">{{ thesis.maintainer }}</el-descriptions-item>
-      <el-descriptions-item label="论文简介">{{ thesis.description }}</el-descriptions-item>
-      <el-descriptions-item label="论文类别">
-        <el-tag size="small">{{ showChannel }}</el-tag>
-      </el-descriptions-item>
-      <el-descriptions-item label="负责单位">{{ thesis.company }}</el-descriptions-item>、
-      <el-descriptions-item label="上传时间">{{parseTime(thesis.setTime)}}</el-descriptions-item>
-      <el-descriptions-item label="项目状态">
-        <el-tag size="small">{{thesis.status}}</el-tag>
-      </el-descriptions-item>
-      <el-descriptions-item label="下载">
-        <el-button @click="downloadProfile">点击下载论文文件</el-button>
-        <el-button @click="downloadPic">点击下载论文凭证</el-button>
-        <el-button @click="deleteProject">删除论文</el-button>
-        <el-button @click="edit">编辑论文</el-button>
-      </el-descriptions-item>
-    </el-descriptions>
+  <el-container>
+    <el-header>
+      <CommonHeader/>
+    </el-header>
+    <el-container>
+      <el-aside width="200px">
+        <CommonAside/>
+      </el-aside>
+      <el-main>
+        <el-breadcrumb>
+          <el-breadcrumb-item :to="{ path: '/UserViewProjectsAndPapers' }">查看提交</el-breadcrumb-item>
+          <el-breadcrumb-item>论文提交</el-breadcrumb-item>
+          <el-breadcrumb-item>论文详情</el-breadcrumb-item>
+        </el-breadcrumb>
+        <br>
+        <div>
+          <el-descriptions title="项目信息">
+            <el-descriptions-item label="论文名称">{{thesis.name}}</el-descriptions-item>
+            <el-descriptions-item label="负责人">{{ thesis.maintainer }}</el-descriptions-item>
+            <el-descriptions-item label="论文简介">{{ thesis.description }}</el-descriptions-item>
+            <el-descriptions-item label="论文类别">
+              <el-tag size="small">{{ showChannel }}</el-tag>
+            </el-descriptions-item>
+            <el-descriptions-item label="负责单位">{{ thesis.company }}</el-descriptions-item>、
+            <el-descriptions-item label="上传时间">{{parseTime(thesis.setTime)}}</el-descriptions-item>
+            <el-descriptions-item label="项目状态">
+              <el-tag size="small">{{thesis.status}}</el-tag>
+            </el-descriptions-item>
+            <el-descriptions-item label="下载">
+              <el-button @click="downloadProfile">点击下载论文文件</el-button>
+              <el-button @click="downloadPic">点击下载论文凭证</el-button>
+              <el-button @click="deleteProject">删除论文</el-button>
+              <el-button @click="edit">编辑论文</el-button>
+            </el-descriptions-item>
+          </el-descriptions>
 
-    <el-button @click="showEditDialog" v-if="userinfo.isAdmin == 1">审核</el-button>
+          <el-button @click="showEditDialog" v-if="userinfo.isAdmin == 1">审核</el-button>
 
-    <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
-      <el-dialog
-          title="请问您的审核结果是？"
-          :visible.sync="editDialogVisible"
-          width="50%" @close="editDialogClosed">
-        <el-radio v-model="editStatus" label="Accept">审核通过</el-radio>
-        <el-radio v-model="editStatus" label="Reject">审核驳回</el-radio>
-        <span slot="footer" class="dialog-footer">
+          <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
+            <el-dialog
+                title="请问您的审核结果是？"
+                :visible.sync="editDialogVisible"
+                width="50%" @close="editDialogClosed">
+              <el-radio v-model="editStatus" label="Accept">审核通过</el-radio>
+              <el-radio v-model="editStatus" label="Reject">审核驳回</el-radio>
+              <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false; editStatus ='Waiting' ">取 消</el-button>
         <el-button type="primary" @click="changeStatus">确 定</el-button>
       </span>
-      </el-dialog>
-    </el-card>
-  </div>
+            </el-dialog>
+          </el-card>
+        </div>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
-
 <script>
 import axios from "axios";
 import store from "@/vuex/store.js";
+import CommonAside from "../component/CommonAside"
+import CommonHeader from "@/component/CommonHeader";
+
 export default {
   name: "PaperDetail",
   store,
+  components: {
+    CommonAside,
+    CommonHeader
+  },
   data(){
     return{
       showChannel:"",
@@ -196,5 +220,19 @@ export default {
 </script>
 
 <style scoped>
-
+.el-aside {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 60px;
+  bottom: 0;
+}
+.el-main {
+  position: absolute;
+  left: 200px;
+  right: 0;
+  top: 60px;
+  bottom: 0;
+  overflow-y: scroll;
+}
 </style>

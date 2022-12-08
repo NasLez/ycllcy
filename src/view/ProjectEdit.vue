@@ -1,74 +1,107 @@
 <template>
-  <el-form ref="form" :model="project" label-width="80px">
-    <el-form-item label="项目名称">
-      <el-input v-model="project.name"></el-input>
-    </el-form-item>
+  <el-container>
+    <el-header>
+      <CommonHeader/>
+    </el-header>
+    <el-container>
+      <el-aside width="200px">
+        <CommonAside/>
+      </el-aside>
+      <el-main>
+        <el-breadcrumb separator="/" v-if="showType == '0'">
+        <el-breadcrumb-item>查看通道</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/SubmitProjectsAndPapers' }">项目通道</el-breadcrumb-item>
+        <el-breadcrumb-item>编辑项目</el-breadcrumb-item>
+        </el-breadcrumb>
+        <el-breadcrumb separator="/" v-else>
+          <el-breadcrumb-item :to="{ path: '/UserViewProjectsAndPapers' }">查看提交</el-breadcrumb-item>
+          <el-breadcrumb-item>项目提交</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/ProjectDetail' }">项目详情</el-breadcrumb-item>
+          <el-breadcrumb-item>编辑项目</el-breadcrumb-item>
+        </el-breadcrumb>
+        <br>
+        <el-form ref="form" :model="project" label-width="80px">
+          <el-form-item label="项目名称">
+            <el-input v-model="project.name"></el-input>
+          </el-form-item>
 
-    <el-form-item label="项目简介">
-      <el-input v-model="project.description"></el-input>
-    </el-form-item>
-    <el-form-item label="负责人">
-      <el-input v-model="project.maintainer"></el-input>
-    </el-form-item>
-    <el-form-item label="项目类别">
-      {{ showChannel }}
-    </el-form-item>
-    <el-form-item label="负责单位">
-      <el-input v-model="project.company"></el-input>
-    </el-form-item>
-    <!--    <el-form-item label="起止年份">-->
-    <!--      <el-col>-->
-    <!--        <el-date-picker type="date" placeholder="选择开始日期" v-model="project.setTime" style="width: 100%;"></el-date-picker>-->
-    <!--      </el-col>-->
-    <!--    </el-form-item>-->
-    <el-form-item label="金额">
-      <el-input v-model="project.money"></el-input>
-    </el-form-item>
-    <el-form-item label="开始年份">
-      <el-input v-model="project.startYear"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-upload
-          action=""
-          accept=".jpg"
-          :on-change="handleChangejpg"
-          :auto-upload="false"
-          :headers="headers"
-          :file-list="fileListjpg">
-        <el-button size="small" type="primary">上传截图</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传jpg文件，且不超过16MB</div>
-      </el-upload>
-      <el-upload
-          action=""
-          :auto-upload="false"
-          accept=".zip"
-          :on-change="handleChangezip"
-          :headers="headers"
-          :file-list="fileListzip">
-        <el-button size="small" type="primary">上传压缩包</el-button>
-        <div slot="tip" class="el-upload__tip">只能上传zip文件，且不超过50M</div>
-      </el-upload>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="onSubmit" v-if="this.$store.state.project.id==='0'">立即创建</el-button>
-      <el-button type="primary" @click="edit" v-if="this.$store.state.project.id!=='0'">立即修改</el-button>
-      <el-button>取消</el-button>
-    </el-form-item>
-  </el-form>
+          <el-form-item label="项目简介">
+            <el-input v-model="project.description"></el-input>
+          </el-form-item>
+          <el-form-item label="负责人">
+            <el-input v-model="project.maintainer"></el-input>
+          </el-form-item>
+          <el-form-item label="项目类别">
+            {{ showChannel }}
+          </el-form-item>
+          <el-form-item label="负责单位">
+            <el-input v-model="project.company"></el-input>
+          </el-form-item>
+          <!--    <el-form-item label="起止年份">-->
+          <!--      <el-col>-->
+          <!--        <el-date-picker type="date" placeholder="选择开始日期" v-model="project.setTime" style="width: 100%;"></el-date-picker>-->
+          <!--      </el-col>-->
+          <!--    </el-form-item>-->
+          <el-form-item label="金额">
+            <el-input v-model="project.money"></el-input>
+          </el-form-item>
+          <el-form-item label="开始年份">
+            <el-input v-model="project.startYear"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-upload
+                action=""
+                accept=".jpg"
+                :on-change="handleChangejpg"
+                :auto-upload="false"
+                :headers="headers"
+                :file-list="fileListjpg">
+              <el-button size="small" type="primary">上传截图</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg文件，且不超过16MB</div>
+            </el-upload>
+            <el-upload
+                action=""
+                :auto-upload="false"
+                accept=".zip"
+                :on-change="handleChangezip"
+                :headers="headers"
+                :file-list="fileListzip">
+              <el-button size="small" type="primary">上传压缩包</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传zip文件，且不超过50M</div>
+            </el-upload>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="onSubmit" v-if="this.$store.state.project.id==='0'">立即创建</el-button>
+            <el-button type="primary" @click="edit" v-if="this.$store.state.project.id!=='0'">立即修改</el-button>
+            <el-button>取消</el-button>
+          </el-form-item>
+        </el-form>
+      </el-main>
+    </el-container>
+  </el-container>
 </template>
+
 <script>
 
 import axios from "axios";
 import store from "@/vuex/store";
+import CommonAside from "../component/CommonAside"
+import CommonHeader from "@/component/CommonHeader";
+
 export default {
   store,
+  components: {
+    CommonAside,
+    CommonHeader
+  },
   data() {
     return {
+      showType: '',
       showChannel: "",
       fileListjpg: [],
       fileListzip: [],
       userinfo: {
-        "id":"",
+        "id": "",
         "username": "",
         "phone": "",
         "email": "",
@@ -95,19 +128,20 @@ export default {
       }
     }
   },
-  created:function () {
+  created: function () {
     //  待添加获得参数的接口
     let that = this;
     this.$data.project.channelId = this.$store.state.channel.id
     console.log(this.$data.project.channelId)
     this.$data.userinfo.email = this.$store.state.userinfo.email
     console.log(this.$store.state.project.id)
-    if(this.$store.state.project.id!=='0'){
+    this.showType = this.$store.state.project.id
+    if (this.$store.state.project.id !== '0') {
       axios.get(`mu/project/queryById?id=${this.$store.state.project.id}`).then(res => {
         console.log(res.data);
         console.log("项目信息")
         that.$data.project.id = res.data.id;
-        that.$data.project.channelId=res.data.channelId;
+        that.$data.project.channelId = res.data.channelId;
         that.$data.project.name = res.data.name;
         that.$data.project.maintainer = res.data.maintainer;
         that.$data.project.description = res.data.description;
@@ -151,7 +185,7 @@ export default {
     }
   },
   methods: {
-    edit(){
+    edit() {
       let setTime = this.GetDateTime();
       console.log(setTime);
       const param = new FormData();
@@ -161,7 +195,7 @@ export default {
           }
       );
       this.fileListzip.forEach(
-          val=> {
+          val => {
             param.append("zip", val.raw);
           }
       );
@@ -182,7 +216,7 @@ export default {
       })
     },
     handleChangezip(file, fileList) { //文件数量改变
-      this.fileListzip= fileList;
+      this.fileListzip = fileList;
     },
     handleChangejpg(file, fileList) { //文件数量改变
       this.fileListjpg = fileList;
@@ -213,7 +247,7 @@ export default {
           }
       );
       this.fileListzip.forEach(
-          val=> {
+          val => {
             param.append("zip", val.raw);
           }
       );
@@ -236,3 +270,21 @@ export default {
   }
 }
 </script>
+<style>
+.el-aside {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 60px;
+  bottom: 0;
+}
+
+.el-main {
+  position: absolute;
+  left: 200px;
+  right: 0;
+  top: 60px;
+  bottom: 0;
+  overflow-y: scroll;
+}
+</style>
