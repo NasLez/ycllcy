@@ -96,6 +96,7 @@ export default {
       console.log(tab, event);
     },
     login() {
+      let that = this;
       if (this.formLabelAlign.email == '') {//验证当用户输入的手机号为空或者不正确时不能进行获取验证码
         this.$message({
           message: '邮箱不能为空！',
@@ -132,7 +133,15 @@ export default {
               type: 'success'
             }),
             // this.$router.push({path: '/HomePage', query: {email: this.$data.formLabelAlign.email}})
-            this.$store.state.userinfo.email= this.$data.formLabelAlign.email,
+            that.$store.state.userinfo.email= that.$data.formLabelAlign.email,
+                axios.get(`mu/getUsernames/email=${that.$store.state.userinfo.email}`, {
+                  email: that.$store.state.userinfo.email,
+                }).then(res => {
+                  console.log(res.data);
+                  that.$store.state.userinfo.isAdmin = res.data.userinfo.isAdmin;
+                });
+            console.log(this.$store.state.userinfo.isAdmin)
+            console.log("权限修改成功")
             this.$router.push({path: '/HomePage'})
             // axios.get(`mu/getUsernames/email=${this.$data.formLabelAlign.email}`).then(res1 => {
             //   this.$message({
