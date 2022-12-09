@@ -50,9 +50,7 @@ const store = new Vuex.Store({
             score:'',
             due:'',
         },
-        menu:{
-            id:null,
-        }
+        menuIndex: 1,
     },
     mutations:{
         // setuser(state, email){

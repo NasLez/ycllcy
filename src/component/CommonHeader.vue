@@ -17,6 +17,7 @@ export default {
           message: "注销登录成功！",
           type: 'success'
         })
+        this.$store.state.menuIndex=1
         return res;
       })
       this.$router.push({path: '/'})

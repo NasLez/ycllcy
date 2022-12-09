@@ -2,12 +2,12 @@
   <el-row class="tac" >
     <el-col :span="12">
       <el-menu
-        default-active=1
+        :default-active="`${$store.state.menuIndex}`"
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose">
 
-        <el-menu-item index="1" @click="SkipToPage('/homepage')">
+        <el-menu-item index="1" @click="SkipToPage('/homepage',1)">
           <i class="el-icon-menu"></i>
           <span slot="title" >首页</span>
         </el-menu-item>
@@ -22,7 +22,7 @@
 <!--            <el-menu-item index="1-2">查看用户列表</el-menu-item>-->
 <!--          </el-menu-item-group>-->
 <!--        </el-submenu>-->
-        <el-menu-item index="2" @click="SkipToPage('/UserManagement')" v-if="isAdmin == true">
+        <el-menu-item index="2" @click="SkipToPage('/UserManagement',2)" v-if="isAdmin == true">
           <i class="el-icon-s-custom"></i>
           <span slot="title" >用户管理</span>
         </el-menu-item>
@@ -38,13 +38,13 @@
 <!--          </el-menu-item-group>-->
 <!--          </el-submenu>-->
 
-        <el-menu-item index="4" @click="SkipToPage(isAdmin == '1'?'/ChannelManagement':'/SubmitProjectsAndPapers')">
+        <el-menu-item index="4" @click="SkipToPage(isAdmin == '1'?'/ChannelManagement':'/SubmitProjectsAndPapers',4)">
           <i class="el-icon-s-marketing"></i>
           <span slot="title" v-if="isAdmin == true">通道管理</span>
           <span slot="title" v-else>查看通道</span>
         </el-menu-item>
 
-        <el-menu-item index="5" @click="SkipToPage('/UserViewProjectsAndPapers')">
+        <el-menu-item index="5" @click="SkipToPage('/UserViewProjectsAndPapers',5)">
           <i class="el-icon-location"></i>
           <span slot="title">查看提交</span>
         </el-menu-item>
@@ -57,12 +57,14 @@
 
 <script>
 import store from "@/vuex/store";
+// import {mapGetters,mapState} from "vuex";
 export default {
 
   name: "Com  monAside",
   data(){
     return {
       isAdmin:null,
+      menuIndex: 1,
     }
   },
   store,
@@ -76,8 +78,12 @@ export default {
     handleClose(key, keyPath) {
       console.log(key, keyPath);
     },
-    SkipToPage(path){
-      this.$router.push(path)
+    SkipToPage(path,menuIndex){
+      this.$store.state.menuIndex= menuIndex;
+      console.log(this.$store.state.menuIndex);
+      // this.menuIndex = menuIndex
+      // location. reload();
+      this.$router.push(path);
     }
   },
   computed:{
