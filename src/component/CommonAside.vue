@@ -2,7 +2,7 @@
   <el-row class="tac" >
     <el-col :span="12">
       <el-menu
-          default-active=1
+        default-active=1
           class="el-menu-vertical-demo"
           @open="handleOpen"
           @close="handleClose">
@@ -12,31 +12,31 @@
           <span slot="title" >首页</span>
         </el-menu-item>
 
-        <!--        <el-submenu index="2" v-if="isAdmin == true" @click="SkipToPage('/UserManagement')">-->
-        <!--          <template slot="title">-->
-        <!--            <i class="el-icon-s-custom"></i>-->
-        <!--            <span>用户管理</span>-->
-        <!--          </template>-->
-        <!--          <el-menu-item-group>-->
-        <!--            <el-menu-item index="1-1">注册与注销</el-menu-item>-->
-        <!--            <el-menu-item index="1-2">查看用户列表</el-menu-item>-->
-        <!--          </el-menu-item-group>-->
-        <!--        </el-submenu>-->
+<!--        <el-submenu index="2" v-if="isAdmin == true" @click="SkipToPage('/UserManagement')">-->
+<!--          <template slot="title">-->
+<!--            <i class="el-icon-s-custom"></i>-->
+<!--            <span>用户管理</span>-->
+<!--          </template>-->
+<!--          <el-menu-item-group>-->
+<!--            <el-menu-item index="1-1">注册与注销</el-menu-item>-->
+<!--            <el-menu-item index="1-2">查看用户列表</el-menu-item>-->
+<!--          </el-menu-item-group>-->
+<!--        </el-submenu>-->
         <el-menu-item index="2" @click="SkipToPage('/UserManagement')" v-if="isAdmin == true">
           <i class="el-icon-s-custom"></i>
           <span slot="title" >用户管理</span>
         </el-menu-item>
 
-        <!--        <el-submenu index="3" v-if="isAdmin == false" >-->
-        <!--          <template slot="title">-->
-        <!--            <i class="el-icon-document"></i>-->
-        <!--            <span>我要上传</span>-->
-        <!--          </template>-->
-        <!--          <el-menu-item-group>-->
-        <!--            <el-menu-item index="1-1" @click="SkipToPage('/')">项目</el-menu-item>-->
-        <!--            <el-menu-item index="1-2">论文</el-menu-item>-->
-        <!--          </el-menu-item-group>-->
-        <!--          </el-submenu>-->
+<!--        <el-submenu index="3" v-if="isAdmin == false" >-->
+<!--          <template slot="title">-->
+<!--            <i class="el-icon-document"></i>-->
+<!--            <span>我要上传</span>-->
+<!--          </template>-->
+<!--          <el-menu-item-group>-->
+<!--            <el-menu-item index="1-1" @click="SkipToPage('/')">项目</el-menu-item>-->
+<!--            <el-menu-item index="1-2">论文</el-menu-item>-->
+<!--          </el-menu-item-group>-->
+<!--          </el-submenu>-->
 
         <el-menu-item index="4" @click="SkipToPage(isAdmin == '1'?'/ChannelManagement':'/SubmitProjectsAndPapers')">
           <i class="el-icon-s-marketing"></i>

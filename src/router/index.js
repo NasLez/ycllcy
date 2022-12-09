@@ -13,6 +13,7 @@ import UserViewProjectsAndPapers from "@/view/UserViewProjectsAndPapers";
 import StatisticalSubmissionInformation from "@/component/StatisticalSubmissionInformation";
 import PaperEdit from "@/view/PaperEdit";
 import PaperDetail from "@/view/PaperDetail";
+
 Vue.use(VueRouter)
 
 const routes = [
