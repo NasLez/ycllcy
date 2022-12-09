@@ -6,6 +6,10 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import * as echarts from 'echarts'
+import { Button,Image } from 'element-ui';
+Vue.use(Button)
+Vue.use(Image)
+
 //需要挂载到Vue原型上
 Vue.prototype.$echarts = echarts
 

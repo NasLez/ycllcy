@@ -10,6 +10,7 @@
       <el-main>
         <el-col :span="8">
           <div class="grid-content1">
+            <el-image :src="require('./qll.jpg')"></el-image>
             <el-card class="box-card" style="position: absolute;left: 20px">
               <div class="user">
                 <div class="user-info">
