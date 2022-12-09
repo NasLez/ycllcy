@@ -8,103 +8,107 @@
         <CommonAside/>
       </el-aside>
       <el-main>
-        <div>
-          <div style="width: 300px;">
-            <el-form :label-position="labelPosition" label-width="80px" :model="ActivationCode">
-              <el-form-item label="激活码">
-                <el-input v-model="ActivationCode.code"></el-input>
-              </el-form-item>
-              <el-form-item label="真实姓名">
-                <el-input v-model="ActivationCode.name"></el-input>
-              </el-form-item>
-              <el-form-item label="权限">
-                <el-input v-model="ActivationCode.isAdmin"></el-input>
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" @click="AddActivationCode">添加激活码</el-button>
-              </el-form-item>
-            </el-form>
+        <div style="width: 300px;position: absolute;left: 10px;top: 10px;">
+          <el-form :label-position="labelPosition" label-width="80px" :model="ActivationCode">
+            <el-form-item label="激活码">
+              <el-input v-model="ActivationCode.code"></el-input>
+            </el-form-item>
+            <el-form-item label="真实姓名">
+              <el-input v-model="ActivationCode.name"></el-input>
+            </el-form-item>
+            <el-form-item label="权限">
+              <el-input v-model="ActivationCode.isAdmin"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="AddActivationCode">添加激活码</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div style="width: 500px;position: absolute;left: 320px;top: 10px;">
+          <el-table :data="code_data"
+                    stripe="true"
+                    border="true"
+                    height="400"
+                    style="width: 100%" @row-click="clickData">
+            <el-table-column label="注册码" prop="code" align="center"></el-table-column>
+            <el-table-column label="姓名" prop="name" align="center">
+            </el-table-column>
+            <el-table-column label="权限" prop="isAdmin" align="center"></el-table-column>
+            <el-table-column>
+              <template slot="header" slot-scope="scope">
+                <el-input
+                    v-model="codesearch"
+                    size="mini"
+                    placeholder="输入真实姓名搜索邀请码"/>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="pagination">
+            <el-pagination
+                @size-change="handleSizeChangeCode"
+                @current-change="handleCurrentChangeCode"
+                :current-page.sync="currentPageCode"
+                :page-sizes="[5, 10, 20]"
+                :page-size="pagesizeCode"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total">
+            </el-pagination>
           </div>
-          <div style="width: 500px">
-            <el-table :data="code_data"
-                      stripe="true"
-                      border="true"
-                      height="400"
-                      style="width: 100%" @row-click="clickData">
-              <el-table-column label="注册码" prop="code" align="center"></el-table-column>
-              <el-table-column label="姓名" prop="name" align="center">
-              </el-table-column>
-              <el-table-column label="权限" prop="isAdmin" align="center"></el-table-column>
-              <el-table-column>
-                <template slot="header" slot-scope="scope">
-                  <el-input
-                      v-model="codesearch"
-                      size="mini"
-                      placeholder="输入真实姓名搜索邀请码"/>
-                </template>
-              </el-table-column>
-            </el-table>
-            <div class="pagination">
-              <el-pagination
-                  @size-change="handleSizeChangeCode"
-                  @current-change="handleCurrentChangeCode"
-                  :current-page.sync="currentPageCode"
-                  :page-sizes="[5, 10, 20]"
-                  :page-size="pagesizeCode"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="total">
-              </el-pagination>
-            </div>
-          </div>
-          <div style="width: 1000px;">
-            <el-table :data="user_data"
-                      stripe="true"
-                      border="true"
-                      height="400"
-                      style="width: 1000px"
-                      :default-sort="{prop: 'id', order: 'ascending'}">
-              <el-table-column prop="date" label="用户头像" align="center">
-              </el-table-column>
-              <el-table-column prop="name" label="姓名" align="center">
-              </el-table-column>
-              <el-table-column prop="isAdmin" label="权限" align="center">
-              </el-table-column>
-              <el-table-column prop="email" label="邮箱" align="center">
-              </el-table-column>
-              <el-table-column prop="id" label="注册顺序" sortable align="center">
-              </el-table-column>
-              <el-table-column fixed="right" label="操作" align="center">
-                <template slot="header" slot-scope="scope">
-                  <el-input
-                      v-model="usersearch"
-                      size="mini"
-                      placeholder="输入用户名搜索用户"/>
-                </template>
-                <template slot-scope="scope">
-                  <el-popconfirm
-                      title="确定删除此账号吗？"
-                      confirm-button-text='好的'
-                      cancel-button-text='不用了'
-                      icon="el-icon-info"
-                      icon-color="red"
-                      @confirm="deleteRow(scope.$index, scope.row)">
-                    <el-button slot="reference"  type="text" size="small">删除
-                    </el-button>
-                  </el-popconfirm>
-                </template>
-              </el-table-column>
-            </el-table>
-            <div class="pagination">
-              <el-pagination
-                  @size-change="handleSizeChangeUser"
-                  @current-change="handleCurrentChangeUSer"
-                  :current-page.sync="currentPageUser"
-                  :page-sizes="[5, 10, 20]"
-                  :page-size="pagesizeUser"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="UserTotal">
-              </el-pagination>
-            </div>
+        </div>
+        <div style="width: 1000px;position:relative;top: 450px;">
+          <el-table :data="user_data"
+                    stripe="true"
+                    border="true"
+                    height="400"
+                    style="width: 1000px"
+                    :default-sort="{prop: 'id', order: 'ascending'}">
+            <el-table-column prop="date" label="用户头像" align="center">
+              <template slot-scope="scope">
+                <el-image style="width: 50px;height: 50px" :src="require('./qll.jpg')"
+                          v-if="scope.row.isAdmin==='1'"></el-image>
+                <el-image style="width: 50px;height: 50px" :src="require('./ymr.jpg')"
+                          v-if="scope.row.isAdmin==='0'"></el-image>
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" label="姓名" align="center">
+            </el-table-column>
+            <el-table-column prop="isAdmin" label="权限" align="center">
+            </el-table-column>
+            <el-table-column prop="email" label="邮箱" align="center">
+            </el-table-column>
+            <el-table-column prop="id" label="注册顺序" sortable align="center">
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" align="center">
+              <template slot="header" slot-scope="scope">
+                <el-input
+                    v-model="usersearch"
+                    size="mini"
+                    placeholder="输入用户名搜索用户"/>
+              </template>
+              <template slot-scope="scope">
+                <el-popconfirm
+                    title="确定删除此账号吗？"
+                    confirm-button-text='好的'
+                    cancel-button-text='不用了'
+                    icon="el-icon-info"
+                    icon-color="red"
+                    @confirm="deleteRow(scope.$index, scope.row)">
+                  <el-button slot="reference" type="text" size="small">删除
+                  </el-button>
+                </el-popconfirm>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="pagination">
+            <el-pagination
+                @size-change="handleSizeChangeUser"
+                @current-change="handleCurrentChangeUSer"
+                :current-page.sync="currentPageUser"
+                :page-sizes="[5, 10, 20]"
+                :page-size="pagesizeUser"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="UserTotal">
+            </el-pagination>
           </div>
         </div>
       </el-main>
@@ -117,6 +121,7 @@ import axios from "axios";
 import store from "@/vuex/store";
 import CommonAside from "../component/CommonAside"
 import CommonHeader from "@/component/CommonHeader";
+
 export default {
   //搜索数据
   store,
@@ -340,6 +345,7 @@ export default {
   top: 60px;
   bottom: 0;
 }
+
 .el-main {
   position: absolute;
   left: 200px;
