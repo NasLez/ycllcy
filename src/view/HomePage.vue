@@ -10,7 +10,8 @@
       <el-main>
         <el-col :span="8">
           <div class="grid-content1">
-            <el-image :src="require('./qll.jpg')"></el-image>
+            <el-image style="width: 250px;height: 250px" :src="require('./qll.jpg')" v-if="this.$store.state.userinfo.isAdmin==='1'"></el-image>
+            <el-image style="width: 250px;height: 250px" :src="require('./ymr.jpg')" v-if="this.$store.state.userinfo.isAdmin==='0'"></el-image>
             <el-card class="box-card" style="position: absolute;left: 20px">
               <div class="user">
                 <div class="user-info">
@@ -62,9 +63,9 @@
             </el-card>
           </div>
         </el-col>
-        <el-col :span="16" v-if="this.$store.state.userinfo.isAdmin==='0'">
+        <el-col :span="16" >
           <el-row>
-            <el-descriptions :column="1" border class="grid-content2">
+            <el-descriptions :column="1" border class="grid-content2" v-if="this.$store.state.userinfo.isAdmin==='0'">
               <el-descriptions-item
                   content-class-name="my-content"
                   label="上传总分数">
@@ -147,7 +148,7 @@ export default {
       projectMonth: [0, 0, 0, 0, 0, 0],
       option: {
         title: {
-          text: '近半年提交数据统计'
+          text: '你的近半年提交数据统计！'
         },
         tooltip: {
           trigger: 'axis'
@@ -326,6 +327,7 @@ export default {
     editUserInfo() {
       // 将修改数据传送到后端，并接收修改后的返回数据
       console.log("正在修改用户信息")
+
       let fulluser = this.$data.userinfo;
       console.log(fulluser);
       axios({
@@ -367,148 +369,293 @@ export default {
       this.$router.push({path: '/'})
     },
     echartsInit: function () {
-      this.email = this.$store.state.userinfo.email
-      let myChart = this.$echarts.init(document.getElementById('main'), 'dark');
-      let nowDate = new Date();
-      let date = {
-        year: nowDate.getFullYear(),
-        month: nowDate.getMonth() + 1,
-        date: nowDate.getDate(),
-      }
-      this.option.xAxis.data[5] = date.month + '月'
-      this.option.xAxis.data[4] = date.month - 1 + '月'
-      this.option.xAxis.data[3] = date.month - 2 + '月'
-      this.option.xAxis.data[2] = date.month - 3 + '月'
-      this.option.xAxis.data[1] = date.month - 4 + '月'
-      this.option.xAxis.data[0] = date.month - 5 + '月'
+      if(this.$store.state.userinfo.isAdmin==='0') {
+        this.email = this.$store.state.userinfo.email
+        let myChart = this.$echarts.init(document.getElementById('main'), 'dark');
+        let nowDate = new Date();
+        let date = {
+          year: nowDate.getFullYear(),
+          month: nowDate.getMonth() + 1,
+          date: nowDate.getDate(),
+        }
+        this.option.xAxis.data[5] = date.month + '月'
+        this.option.xAxis.data[4] = date.month - 1 + '月'
+        this.option.xAxis.data[3] = date.month - 2 + '月'
+        this.option.xAxis.data[2] = date.month - 3 + '月'
+        this.option.xAxis.data[1] = date.month - 4 + '月'
+        this.option.xAxis.data[0] = date.month - 5 + '月'
+        axios.get((`mu/project/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res => {
+          if (res.status === 200) {
+            console.log("project 200")
+            for (let i = 0; i < res.data.length; i++) {
+              let projectDate = new Date(res.data[i].setTime)
+              this.month = projectDate.getMonth() + 1
+              if (date.month == this.month) {
+                this.projectMonth[5]++
+              } else if (date.month - 1 == this.month) {
+                this.projectMonth[4]++
+              } else if (date.month - 2 == this.month) {
+                this.projectMonth[3]++
+              } else if (date.month - 3 == this.month) {
+                this.projectMonth[2]++
+              } else if (date.month - 4 == this.month) {
+                this.projectMonth[1]++
+              } else if (date.month - 5 == this.month) {
+                this.projectMonth[0]++
+              }
+            }
+            this.option.series[1].data = this.projectMonth
+            axios.get((`mu/thesis/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res0 => {
+              if (res0.status === 200) {
+                console.log("thesis 200")
+                for (let i = 0; i < res0.data.length; i++) {
+                  let thesisDate = new Date(res0.data[i].submitTime)
+                  this.month = thesisDate.getMonth() + 1
+                  if (date.month == this.month) {
+                    this.thesisMonth[5]++
+                  } else if (date.month - 1 == this.month) {
+                    this.thesisMonth[4]++
+                  } else if (date.month - 2 == this.month) {
+                    this.thesisMonth[3]++
+                  } else if (date.month - 3 == this.month) {
+                    this.thesisMonth[2]++
+                  } else if (date.month - 4 == this.month) {
+                    this.thesisMonth[1]++
+                  } else if (date.month - 5 == this.month) {
+                    this.thesisMonth[0]++
+                  }
+                }
+                this.option.series[0].data = this.thesisMonth
+                myChart.setOption(this.option);
+              }
+            },error=>{
+              console.log("thesis 420")
+              if (error && error.response) {
+                switch (error.response.status) {
+                  case 400: this.$message.error("400")
+                    break;
+                  case 403: this.$message.error("没有权限！");
+                    break;
+                  case 420: {
+                    // this.$message.error("没有找到用户论文！")
+                    this.option.series[0].data = this.thesisMonth
+                    myChart.setOption(this.option);
+                  }
+                    break;
+                  default: this.$message.error("连接错误！")
+                }
+              }else{
+                this.$message.error("连接服务器失败！")
+              }
+            })
+          }
+        },error=>{
+          console.log("project 420")
+          if (error && error.response) {
+            switch (error.response.status) {
+              case 400: this.$message.error("400")
+                break;
+              case 403: this.$message.error("没有权限！");
+                break;
+              case 420: {
+                // this.$message.error("没有找到用户项目！")
+                this.option.series[1].data = this.projectMonth
+                axios.get((`mu/thesis/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res0 => {
+                  if (res0.status === 200) {
+                    console.log("thesis 200")
+                    for (let i = 0; i < res0.data.length; i++) {
+                      let thesisDate = new Date(res0.data[i].submitTime)
+                      this.month = thesisDate.getMonth() + 1
+                      if (date.month == this.month) {
+                        this.thesisMonth[5]++
+                      } else if (date.month - 1 == this.month) {
+                        this.thesisMonth[4]++
+                      } else if (date.month - 2 == this.month) {
+                        this.thesisMonth[3]++
+                      } else if (date.month - 3 == this.month) {
+                        this.thesisMonth[2]++
+                      } else if (date.month - 4 == this.month) {
+                        this.thesisMonth[1]++
+                      } else if (date.month - 5 == this.month) {
+                        this.thesisMonth[0]++
+                      }
+                    }
+                    this.option.series[0].data = this.thesisMonth
+                    myChart.setOption(this.option);
+                  }
+                },error0=>{
+                  console.log("thesis 420")
+                  if (error0 && error0.response) {
+                    switch (error0.response.status) {
+                      case 400: this.$message.error("400")
+                        break;
+                      case 403: this.$message.error("没有权限！");
+                        break;
+                      case 420: {
+                        // this.$message.error("没有找到用户论文！")
+                        this.option.series[0].data = this.thesisMonth
+                        myChart.setOption(this.option);
+                      }
+                        break;
+                      default: this.$message.error("连接错误！")
+                    }
+                  }else{
+                    this.$message.error("连接服务器失败！")
+                  }
+                })
+              }
+                break;
+              default: this.$message.error("连接错误！")
+            }
+          }else{
+            this.$message.error("连接服务器失败！")
+          }
+        })
+      }else if(this.$store.state.userinfo.isAdmin==='1') {
+        this.option.title.text='近半年所有用户提交数据统计！'
+        this.email = this.$store.state.userinfo.email
+        let myChart = this.$echarts.init(document.getElementById('main'), 'dark');
+        let nowDate = new Date();
+        let date = {
+          year: nowDate.getFullYear(),
+          month: nowDate.getMonth() + 1,
+          date: nowDate.getDate(),
+        }
+        this.option.xAxis.data[5] = date.month + '月'
+        this.option.xAxis.data[4] = date.month - 1 + '月'
+        this.option.xAxis.data[3] = date.month - 2 + '月'
+        this.option.xAxis.data[2] = date.month - 3 + '月'
+        this.option.xAxis.data[1] = date.month - 4 + '月'
+        this.option.xAxis.data[0] = date.month - 5 + '月'
 
-      axios.get((`mu/project/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res => {
-        if (res.status === 200) {
-          console.log("project 200")
-          for (let i = 0; i < res.data.length; i++) {
-            let projectDate = new Date(res.data[i].setTime)
-            this.month = projectDate.getMonth() + 1
-            if (date.month == this.month) {
-              this.projectMonth[5]++
-            } else if (date.month - 1 == this.month) {
-              this.projectMonth[4]++
-            } else if (date.month - 2 == this.month) {
-              this.projectMonth[3]++
-            } else if (date.month - 3 == this.month) {
-              this.projectMonth[2]++
-            } else if (date.month - 4 == this.month) {
-              this.projectMonth[1]++
-            } else if (date.month - 5 == this.month) {
-              this.projectMonth[0]++
-            }
-          }
-          this.option.series[1].data = this.projectMonth
-          axios.get((`mu/thesis/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res0 => {
-            if (res0.status === 200) {
-              console.log("thesis 200")
-              for (let i = 0; i < res0.data.length; i++) {
-                let thesisDate = new Date(res0.data[i].submitTime)
-                this.month = thesisDate.getMonth() + 1
-                if (date.month == this.month) {
-                  this.thesisMonth[5]++
-                } else if (date.month - 1 == this.month) {
-                  this.thesisMonth[4]++
-                } else if (date.month - 2 == this.month) {
-                  this.thesisMonth[3]++
-                } else if (date.month - 3 == this.month) {
-                  this.thesisMonth[2]++
-                } else if (date.month - 4 == this.month) {
-                  this.thesisMonth[1]++
-                } else if (date.month - 5 == this.month) {
-                  this.thesisMonth[0]++
-                }
+        axios.get((`mu/project/queryAll`)).then(res => {
+          if (res.status === 200) {
+            console.log("project 200")
+            for (let i = 0; i < res.data.length; i++) {
+              let projectDate = new Date(res.data[i].setTime)
+              this.month = projectDate.getMonth() + 1
+              if (date.month == this.month) {
+                this.projectMonth[5]++
+              } else if (date.month - 1 == this.month) {
+                this.projectMonth[4]++
+              } else if (date.month - 2 == this.month) {
+                this.projectMonth[3]++
+              } else if (date.month - 3 == this.month) {
+                this.projectMonth[2]++
+              } else if (date.month - 4 == this.month) {
+                this.projectMonth[1]++
+              } else if (date.month - 5 == this.month) {
+                this.projectMonth[0]++
               }
-              this.option.series[0].data = this.thesisMonth
-              myChart.setOption(this.option);
             }
-          },error=>{
-            console.log(error)
-            if (error && error.response) {
-              switch (error.response.status) {
-                case 400: this.$message.error("400")
-                  break;
-                case 403: this.$message.error("没有权限！");
-                  break;
-                case 420: {
-                  this.$message.error("没有找到用户论文！")
-                  this.option.series[0].data = this.thesisMonth
-                  myChart.setOption(this.option);
+            this.option.series[1].data = this.projectMonth
+            axios.get((`mu/thesis/queryAll`)).then(res0 => {
+              if (res0.status === 200) {
+                console.log("thesis 200")
+                for (let i = 0; i < res0.data.length; i++) {
+                  let thesisDate = new Date(res0.data[i].submitTime)
+                  this.month = thesisDate.getMonth() + 1
+                  if (date.month == this.month) {
+                    this.thesisMonth[5]++
+                  } else if (date.month - 1 == this.month) {
+                    this.thesisMonth[4]++
+                  } else if (date.month - 2 == this.month) {
+                    this.thesisMonth[3]++
+                  } else if (date.month - 3 == this.month) {
+                    this.thesisMonth[2]++
+                  } else if (date.month - 4 == this.month) {
+                    this.thesisMonth[1]++
+                  } else if (date.month - 5 == this.month) {
+                    this.thesisMonth[0]++
+                  }
                 }
-                  break;
-                default: this.$message.error("连接错误！")
+                this.option.series[0].data = this.thesisMonth
+                myChart.setOption(this.option);
               }
-            }else{
-              this.$message.error("连接服务器失败！")
-            }
-          })
-        }
-      },error=>{
-        console.log(error)
-        if (error && error.response) {
-          switch (error.response.status) {
-            case 400: this.$message.error("400")
-              break;
-            case 403: this.$message.error("没有权限！");
-              break;
-            case 420: {
-              this.$message.error("没有找到用户项目！")
-              this.option.series[1].data = this.projectMonth
-              axios.get((`mu/thesis/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res0 => {
-                if (res0.status === 200) {
-                  console.log("thesis 200")
-                  for (let i = 0; i < res0.data.length; i++) {
-                    let thesisDate = new Date(res0.data[i].submitTime)
-                    this.month = thesisDate.getMonth() + 1
-                    if (date.month == this.month) {
-                      this.thesisMonth[5]++
-                    } else if (date.month - 1 == this.month) {
-                      this.thesisMonth[4]++
-                    } else if (date.month - 2 == this.month) {
-                      this.thesisMonth[3]++
-                    } else if (date.month - 3 == this.month) {
-                      this.thesisMonth[2]++
-                    } else if (date.month - 4 == this.month) {
-                      this.thesisMonth[1]++
-                    } else if (date.month - 5 == this.month) {
-                      this.thesisMonth[0]++
-                    }
+            },error=>{
+              console.log(error)
+              if (error && error.response) {
+                switch (error.response.status) {
+                  case 400: this.$message.error("400")
+                    break;
+                  case 403: this.$message.error("没有权限！");
+                    break;
+                  case 420: {
+                    this.$message.error("没有找到用户论文！")
+                    this.option.series[0].data = this.thesisMonth
+                    myChart.setOption(this.option);
                   }
-                  this.option.series[0].data = this.thesisMonth
-                  myChart.setOption(this.option);
+                    break;
+                  default: this.$message.error("连接错误！")
                 }
-              },error0=>{
-                console.log(error0)
-                if (error0 && error0.response) {
-                  switch (error0.response.status) {
-                    case 400: this.$message.error("400")
-                      break;
-                    case 403: this.$message.error("没有权限！");
-                      break;
-                    case 420: {
-                      this.$message.error("没有找到用户论文！")
-                      this.option.series[0].data = this.thesisMonth
-                      myChart.setOption(this.option);
-                    }
-                      break;
-                    default: this.$message.error("连接错误！")
-                  }
-                }else{
-                  this.$message.error("连接服务器失败！")
-                }
-              })
-            }
-              break;
-            default: this.$message.error("连接错误！")
+              }else{
+                this.$message.error("连接服务器失败！")
+              }
+            })
           }
-        }else{
-          this.$message.error("连接服务器失败！")
-        }
-      })
+        },error=>{
+          console.log(error)
+          if (error && error.response) {
+            switch (error.response.status) {
+              case 400: this.$message.error("400")
+                break;
+              case 403: this.$message.error("没有权限！");
+                break;
+              case 420: {
+                this.$message.error("没有找到用户项目！")
+                this.option.series[1].data = this.projectMonth
+                axios.get((`mu/thesis/queryAll`)).then(res0 => {
+                  if (res0.status === 200) {
+                    console.log("thesis 200")
+                    for (let i = 0; i < res0.data.length; i++) {
+                      let thesisDate = new Date(res0.data[i].submitTime)
+                      this.month = thesisDate.getMonth() + 1
+                      if (date.month == this.month) {
+                        this.thesisMonth[5]++
+                      } else if (date.month - 1 == this.month) {
+                        this.thesisMonth[4]++
+                      } else if (date.month - 2 == this.month) {
+                        this.thesisMonth[3]++
+                      } else if (date.month - 3 == this.month) {
+                        this.thesisMonth[2]++
+                      } else if (date.month - 4 == this.month) {
+                        this.thesisMonth[1]++
+                      } else if (date.month - 5 == this.month) {
+                        this.thesisMonth[0]++
+                      }
+                    }
+                    this.option.series[0].data = this.thesisMonth
+                    myChart.setOption(this.option);
+                  }
+                },error0=>{
+                  console.log(error0)
+                  if (error0 && error0.response) {
+                    switch (error0.response.status) {
+                      case 400: this.$message.error("400")
+                        break;
+                      case 403: this.$message.error("没有权限！");
+                        break;
+                      case 420: {
+                        this.$message.error("没有找到用户论文！")
+                        this.option.series[0].data = this.thesisMonth
+                        myChart.setOption(this.option);
+                      }
+                        break;
+                      default: this.$message.error("连接错误！")
+                    }
+                  }else{
+                    this.$message.error("连接服务器失败！")
+                  }
+                })
+              }
+                break;
+              default: this.$message.error("连接错误！")
+            }
+          }else{
+            this.$message.error("连接服务器失败！")
+          }
+        })
+      }
     }
   }
 }
