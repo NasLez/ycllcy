@@ -18,13 +18,13 @@
             <el-tab-pane label="通道信息" name="look">
               <el-descriptions :column="1" border >
                 <el-descriptions-item label="通道id">
-                  {{ userinfo.id }}
+                  <el-tag size="small" style="color: crimson">{{ userinfo.id }}</el-tag>
                 </el-descriptions-item>
                 <el-descriptions-item label="通道名称">
                   {{ userinfo.name }}
                 </el-descriptions-item>
                 <el-descriptions-item label="通道类型">
-                  {{ userinfo.type }}
+                  <el-tag size="small">{{ userinfo.type }}</el-tag>
                 </el-descriptions-item>
                 <el-descriptions-item label="通道创建者">
                   {{ userinfo.creator }}

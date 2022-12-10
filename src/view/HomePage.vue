@@ -10,9 +10,9 @@
       <el-main>
         <el-col :span="8">
           <div class="grid-content1">
-            <el-image style="width: 250px;height: 250px" :src="require('./qll.jpg')" v-if="this.$store.state.userinfo.isAdmin==='1'"></el-image>
-            <el-image style="width: 250px;height: 250px" :src="require('./ymr.jpg')" v-if="this.$store.state.userinfo.isAdmin==='0'"></el-image>
-            <el-card class="box-card" style="position: absolute;left: 20px">
+            <el-image style="width: 300px;height: 300px" :src="require('./qll.jpg')" v-if="this.$store.state.userinfo.isAdmin==='1'"></el-image>
+            <el-image style="width: 300px;height: 300px" :src="require('./ymr.jpg')" v-if="this.$store.state.userinfo.isAdmin==='0'"></el-image>
+            <el-card class="box-card" style="position: absolute;left: 20px;width: 300px">
               <div class="user">
                 <div class="user-info">
                   <a class="user-nickname">用户名：{{ userinfo.username }}</a><br>
@@ -23,6 +23,7 @@
                   <a class="user-school">学校：{{ userinfo.school }}</a><br>
                 </div>
               </div>
+              <br>
               <template>
                 <el-button size="small" type="primary" icon="el-icon-edit" round
                            @click="showEditDialog()"></el-button>
