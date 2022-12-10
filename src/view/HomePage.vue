@@ -110,9 +110,6 @@ export default {
   data() {
     return {
       userData: {
-        name: '',
-        phone: '',
-        email: '',
         thesisNumber: '0',
         thesisScore: '0',
         projectNumber: '0',
@@ -233,19 +230,9 @@ export default {
 
     this.email = this.$store.state.userinfo.email
     // this.$message.success(this.email)
-    axios.get(`mu/getUsernames/email=${this.email}`).then(res => {
-      if (res.status === 200) {
-        this.userData.name = res.data.name
-        this.userData.phone = res.data.phone
-        this.userData.email = res.data.email
-      } else if (res.status === 403) {
-        this.$message.error("Unauthorized")
-      } else if (res.status === 404) {
-        this.$message.error("Not Found")
-      }
-    })
     axios.get(`mu/project/getScoreByEmail?email=${this.email}`).then(res => {
       if (res.status === 200) {
+        console.log('项目总分数',res.data)
         this.userData.projectScore = res.data
       } else if (res.status === 403) {
         this.$message.error("Unauthorized")
@@ -255,6 +242,7 @@ export default {
     })
     axios.get(`mu/thesis/getScoreByEmail?email=${this.email}`).then(res => {
       if (res.status === 200) {
+        console.log('论文总分数',res.data)
         this.userData.thesisScore = res.data
       } else if (res.status === 403) {
         this.$message.error("Unauthorized")

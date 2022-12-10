@@ -8,7 +8,7 @@
         <CommonAside/>
       </el-aside>
       <el-main>
-        <div style="width: 300px;position: absolute;left: 10px;top: 10px;">
+        <div  style="width: 300px;position: absolute;left: 10px;top: 10px;height: 300px;">
           <el-form :label-position="labelPosition" label-width="80px" :model="ActivationCode">
             <el-form-item label="激活码">
               <el-input v-model="ActivationCode.code"></el-input>
@@ -28,7 +28,7 @@
           <el-table :data="code_data"
                     stripe="true"
                     border="true"
-                    height="400"
+                    height="200"
                     style="width: 100%" @row-click="clickData">
             <el-table-column label="注册码" prop="code" align="center"></el-table-column>
             <el-table-column label="姓名" prop="name" align="center">
@@ -48,25 +48,24 @@
                 @size-change="handleSizeChangeCode"
                 @current-change="handleCurrentChangeCode"
                 :current-page.sync="currentPageCode"
-                :page-sizes="[5, 10, 20]"
+                :page-sizes="[3]"
                 :page-size="pagesizeCode"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="total">
             </el-pagination>
           </div>
         </div>
-        <div style="width: 1000px;position:relative;top: 450px;">
+        <div style="width: 1000px;position:relative;top: 220px;">
           <el-table :data="user_data"
                     stripe="true"
                     border="true"
-                    height="400"
                     style="width: 1000px"
                     :default-sort="{prop: 'id', order: 'ascending'}">
             <el-table-column prop="date" label="用户头像" align="center">
               <template slot-scope="scope">
                 <el-image style="width: 50px;height: 50px" :src="require('./qll.jpg')"
                           v-if="scope.row.isAdmin==='1'"></el-image>
-                <el-image style="width: 50px;height: 50px" :src="require('./ymr.jpg')"
+                <el-image style="width: 30px;height: 30px" :src="require('./ymr.jpg')"
                           v-if="scope.row.isAdmin==='0'"></el-image>
               </template>
             </el-table-column>
@@ -104,7 +103,7 @@
                 @size-change="handleSizeChangeUser"
                 @current-change="handleCurrentChangeUSer"
                 :current-page.sync="currentPageUser"
-                :page-sizes="[5, 10, 20]"
+                :page-sizes="[2]"
                 :page-size="pagesizeUser"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="UserTotal">
@@ -142,9 +141,9 @@ export default {
       codesearch: '',
       usersearch: '',
       currentPageCode: 1,
-      pagesizeCode: 5,
+      pagesizeCode: 3,
       currentPageUser: 1,
-      pagesizeUser: 5,
+      pagesizeUser: 2,
       total: 0,
       UserTotal: 0
     };
@@ -155,8 +154,8 @@ export default {
       // 搜索功能
       if (search) {
         let list = this.codeData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()) || data.name.toLowerCase().includes(search.toLowerCase()));
-        // let fenYe = list.slice((this.currentPage-1)*this.pagesize,this.currentPage*this.pagesize);
-        return list
+        let fenYe = list.slice((this.currentPageCode-1)*this.pagesizeCode,this.currentPageCode*this.pagesizeCode);
+        return list,fenYe
       } else {
         let fenYe = this.codeData.slice((this.currentPageCode - 1) * this.pagesizeCode, this.currentPageCode * this.pagesizeCode)
         return fenYe
@@ -167,8 +166,8 @@ export default {
       // 搜索功能
       if (search) {
         let list = this.userData.filter(data => !search || data.username.toLowerCase().includes(search.toLowerCase()) || data.username.toLowerCase().includes(search.toLowerCase()));
-        // let fenYe = list.slice((this.currentPage-1)*this.pagesize,this.currentPage*this.pagesize);
-        return list
+        let fenYe = list.slice((this.currentPageUser - 1) * this.pagesizeUser, this.currentPageUser * this.pagesizeUser);
+        return list, fenYe
       } else {
         let fenYe = this.userData.slice((this.currentPageUser - 1) * this.pagesizeUser, this.currentPageUser * this.pagesizeUser)
         return fenYe

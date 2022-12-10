@@ -14,15 +14,25 @@
             <el-breadcrumb-item :to="{ path: '/SubmitProjectsAndPapers' }" v-if="bread == 'thesis'">论文通道</el-breadcrumb-item>
             <el-breadcrumb-item :to="{ path: '/SubmitProjectsAndPapers' }" v-if="bread == 'project'">项目通道</el-breadcrumb-item>
           </el-breadcrumb>
-          <el-tabs v-model="activeName" style="width: 500px" stretch @tab-click="handleClick" ref="tabs">
+          <el-tabs v-model="activeName" stretch @tab-click="handleClick" ref="tabs">
             <el-tab-pane label="论文" name="thesis">
-              <el-table :data="thesisData" stripe style="width: 100%" @row-click="clickThesis">
-                <el-table-column label="论文分类" prop="name"></el-table-column>
+              <el-table :data="thesisData" border style="width: 100%" @row-click="clickThesis">
+                <el-table-column label="研究方向"  prop="name"></el-table-column>
+                <el-table-column label="提交截止日期"  prop="due">
+                  <template slot-scope="scope">
+                    {{parseTime(scope.row.due)}}
+                  </template>
+                </el-table-column>
               </el-table>
             </el-tab-pane>
             <el-tab-pane label="项目" name="project">
-              <el-table :data="projectData" stripe style="width: 100%" @row-click="clickProject">
-                <el-table-column label="项目分类" prop="name"></el-table-column>
+              <el-table :data="projectData" border style="width: 100%" @row-click="clickProject">
+                <el-table-column  label="所属类别" prop="name"></el-table-column>
+                <el-table-column label="提交截止日期" prop="due">
+                  <template slot-scope="scope">
+                    {{parseTime(scope.row.due)}}
+                  </template>
+                </el-table-column>
               </el-table>
             </el-tab-pane>
           </el-tabs>
@@ -57,6 +67,42 @@ export default {
     };
   },
   methods: {
+    parseTime(time, cFormat) {
+      if (arguments.length === 0) {
+        return null
+      }
+      const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
+      let date
+      if (typeof time === 'object') {
+        date = time
+      } else {
+        if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
+          time = parseInt(time)
+        }
+        if ((typeof time === 'number') && (time.toString().length === 10)) {
+          time = time * 1000
+        }
+        date = new Date(time)
+      }
+      const formatObj = {
+        y: date.getFullYear(),
+        m: date.getMonth() + 1,
+        d: date.getDate(),
+        h: date.getHours(),
+        i: date.getMinutes(),
+        s: date.getSeconds(),
+        a: date.getDay()
+      }
+      const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
+        const value = formatObj[key]
+        // Note: getDay() returns 0 on Sunday
+        if (key === 'a') {
+          return ['日', '一', '二', '三', '四', '五', '六'][value]
+        }
+        return value.toString().padStart(2, '0')
+      })
+      return time_str
+    },
     handleClick(tab, event) {
       if(this.activeName == 'project'){
         this.bread = 'project'
@@ -104,8 +150,6 @@ export default {
         this.$message.error("超过截止时间！禁止提交！")
       }
     },
-    listChannel() {
-    }
   }
 }
 </script>

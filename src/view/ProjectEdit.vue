@@ -56,8 +56,8 @@
                 :auto-upload="false"
                 :headers="headers"
                 :file-list="fileListjpg">
-              <el-button size="small" type="primary">上传截图</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传jpg文件，且不超过16MB</div>
+              <el-button size="small" type="primary">上传项目凭证</el-button>
+              <div slot="tip" class="el-upload__tip" style="color: crimson">只能上传jpg文件，且不超过16MB</div>
             </el-upload>
             <el-upload
                 action=""
@@ -66,8 +66,8 @@
                 :on-change="handleChangezip"
                 :headers="headers"
                 :file-list="fileListzip">
-              <el-button size="small" type="primary">上传压缩包</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传zip文件，且不超过50M</div>
+              <el-button size="small" type="primary">上传项目文件</el-button>
+              <div slot="tip" class="el-upload__tip" style="color: crimson">只能上传zip文件，且不超过50M</div>
             </el-upload>
           </el-form-item>
           <el-form-item>

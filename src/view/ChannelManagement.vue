@@ -15,15 +15,25 @@
             <el-breadcrumb-item v-else-if="activeName == 'project'">项目通道</el-breadcrumb-item>
             <el-breadcrumb-item v-else-if="activeName == 'addChannel'">添加通道</el-breadcrumb-item>
           </el-breadcrumb>
-          <el-tabs  v-model="activeName" style="width: 500px" stretch @tab-click="handleClick" ref="tabs">
+          <el-tabs  v-model="activeName"  stretch @tab-click="handleClick" ref="tabs">
             <el-tab-pane label="论文" name="thesis">
-              <el-table :data="thesisData" stripe style="width: 100%" @row-click="clickData" >
-                <el-table-column label="论文分类" prop="name" ></el-table-column>
+              <el-table :data="thesisData" stripe border style="width: 100%" @row-click="clickData" >
+                <el-table-column label="研究方向"  prop="name"></el-table-column>
+                <el-table-column label="提交截止日期"  prop="due">
+                  <template slot-scope="scope">
+                    {{parseTime(scope.row.due)}}
+                  </template>
+                </el-table-column>
               </el-table>
             </el-tab-pane>
             <el-tab-pane label="项目" name="project">
-              <el-table :data="projectData" stripe style="width: 100%" @row-click="clickData" >
-                <el-table-column label="项目分类" prop="name" ></el-table-column>
+              <el-table :data="projectData" stripe border style="width: 100%" @row-click="clickData" >
+                <el-table-column  label="所属类别" prop="name"></el-table-column>
+                <el-table-column label="提交截止日期" prop="due">
+                  <template slot-scope="scope">
+                    {{parseTime(scope.row.due)}}
+                  </template>
+                </el-table-column>
               </el-table>
             </el-tab-pane>
             <el-tab-pane label="添加通道" name="addChannel">
@@ -65,7 +75,6 @@
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" @click="add">添加通道信息</el-button>
-                  <el-button type="primary" @click="pack">打包数据</el-button>
                 </el-form-item>
               </el-form>
             </el-tab-pane>
@@ -115,13 +124,60 @@ export default {
       value: ''
     };
   },
+  created:function () {
+    axios.get((`mu/listChannel`)).then(res => {
+      this.tableData = res.data;
+      for (let i = 0,j=0,k=0; i < this.tableData.length; i++) {
+        if (res.data[i].type === "Thesis") {
+          // alert(res.data[i].name)
+          this.$data.thesisData1[j]=res.data[i]
+          j++
+        }else{
+          this.$data.projectData1[k]=res.data[i]
+          k++
+        }
+      }
+      this.thesisData=this.thesisData1;
+      this.projectData=this.projectData1
+      console.log(this.tableData);
+    })
+  },
   methods: {
-    pack(){
-      this.package=JSON.stringify(this.addChannel)
-      this.$message({
-        message:this.package,
-        type:'success'
+    parseTime(time, cFormat) {
+      if (arguments.length === 0) {
+        return null
+      }
+      const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
+      let date
+      if (typeof time === 'object') {
+        date = time
+      } else {
+        if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
+          time = parseInt(time)
+        }
+        if ((typeof time === 'number') && (time.toString().length === 10)) {
+          time = time * 1000
+        }
+        date = new Date(time)
+      }
+      const formatObj = {
+        y: date.getFullYear(),
+        m: date.getMonth() + 1,
+        d: date.getDate(),
+        h: date.getHours(),
+        i: date.getMinutes(),
+        s: date.getSeconds(),
+        a: date.getDay()
+      }
+      const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
+        const value = formatObj[key]
+        // Note: getDay() returns 0 on Sunday
+        if (key === 'a') {
+          return ['日', '一', '二', '三', '四', '五', '六'][value]
+        }
+        return value.toString().padStart(2, '0')
       })
+      return time_str
     },
     add(){
       if (this.$data.addChannel.name === '') {
@@ -158,68 +214,44 @@ export default {
         this.look = this.$route.query.row
         this.due = this.$data.addChannel.due.toString()
         axios.put(`mu/addChannel?name=${this.$data.addChannel.name}&type=${this.$data.addChannel.type}&creator=${this.$data.addChannel.creator}&creatorEmail=${this.$data.addChannel.creatorEmail}&score=${this.$data.addChannel.score}&due=${this.$data.addChannel.due}`).then(res => {
-          if (res.status === 400) {
-            this.$message({
-              message: "serve error",
-              type: 'warning'
-            })
-          } else if (res.status === 403) {
-            this.$message({
-              message: "Unauthorized",
-              type: 'warning'
-            })
-          }else if (res.status === 200) {
-            this.$message({
-              message: "OK",
-              type: 'success'
-            })
+          axios.get((`mu/listChannel`)).then(res => {
+            this.tableData = res.data;
+            for (let i = 0,j=0,k=0; i < this.tableData.length; i++) {
+              if (res.data[i].type === "Thesis") {
+                // alert(res.data[i].name)
+                this.$data.thesisData1[j]=res.data[i]
+                j++
+              }else{
+                this.$data.projectData1[k]=res.data[i]
+                k++
+              }
+            }
+            this.thesisData=this.thesisData1;
+            this.projectData=this.projectData1
+            console.log(this.tableData);
+          })
+        },error=>{
+          if (error && error.response) {
+            switch (error.response.status) {
+              case 400: this.$message.error("400")
+                break;
+              case 403: this.$message.error("没有权限！");
+                break;
+              default: this.$message.error("连接错误！")
+            }
+          }else{
+            this.$message.error("连接服务器失败！")
           }
         })
       }
     },
     handleClick(tab, event) {
       console.log(tab, event);
-      axios.get((`mu/listChannel`)).then(res => {
-        this.tableData = res.data;
-        for (let i = 0,j=0,k=0; i < this.tableData.length; i++) {
-          if (res.data[i].type === "Thesis") {
-            // alert(res.data[i].name)
-            this.$data.thesisData1[j]=res.data[i]
-            j++
-          }else{
-            this.$data.projectData1[k]=res.data[i]
-            k++
-          }
-        }
-        this.thesisData=this.thesisData1;
-        this.projectData=this.projectData1
-        console.log(this.tableData);
-      })
-
     },
     clickData(row, event, column) {
       console.log(row,  event,  column)
       this.$store.state.channel.id=row.id
       this.$router.push({path: '/updateChannel'})
-    },
-    listChannel() {
-      axios.get((`mu/listChannel`)).then(res => {
-        this.tableData = res.data;
-        if (res.data[0].type === "Thesis") {
-          this.$message({
-            message: res.data[0].name,
-            type: 'success'
-          })
-        }
-        for (let i = 0,j=0; i < this.tableData.length; i++) {
-          if (res.data[i].type === "Thesis") {
-            // alert(res.data[i].name)
-            this.$data.thesisData[j]=res.data[i]
-            j++
-          }
-        }
-        console.log(this.tableData);
-      })
     }
   }
 }

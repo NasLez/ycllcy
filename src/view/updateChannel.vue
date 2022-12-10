@@ -13,17 +13,31 @@
             <el-breadcrumb-item :to="{ path: '/ChannelManagement' }">查看通道</el-breadcrumb-item>
             <el-breadcrumb-item>通道详情</el-breadcrumb-item>
           </el-breadcrumb>
-          <el-tabs v-model="activeName" @tab-click="handleClick" style="width: 400px;" stretch>
+          <el-tabs v-model="activeName" @tab-click="handleClick"  stretch>
             <el-tab-pane label="通道信息" name="look">
-              <div>
-                通道id：<a>{{ userinfo.id }}</a><br>
-                通道名称：<a>{{ userinfo.name }}</a><br>
-                通道类型：<a>{{ userinfo.type }}</a><br>
-                通道创建者：<a>{{ userinfo.creator }}</a><br>
-                通道创建者邮箱：<a>{{ userinfo.creatorEmail }}</a><br>
-                通道分数：<a>{{ userinfo.score }}</a><br>
-                通道截止日期：<a value-format="yyyy-MM-dd HH:mm:ss">{{ parseTime(userinfo.due) }}</a><br>
-              </div>
+              <el-descriptions :column="1" border >
+                <el-descriptions-item label="通道id">
+                  {{ userinfo.id }}
+                </el-descriptions-item>
+                <el-descriptions-item label="通道名称">
+                  {{ userinfo.name }}
+                </el-descriptions-item>
+                <el-descriptions-item label="通道类型">
+                  {{ userinfo.type }}
+                </el-descriptions-item>
+                <el-descriptions-item label="通道创建者">
+                  {{ userinfo.creator }}
+                </el-descriptions-item>
+                <el-descriptions-item label="通道创建者邮箱">
+                  {{ userinfo.creatorEmail }}
+                </el-descriptions-item>
+                <el-descriptions-item label="通道分数">
+                  {{userinfo.score }}
+                </el-descriptions-item>
+                <el-descriptions-item label="通道截止日期">
+                  {{ parseTime(userinfo.due) }}
+                </el-descriptions-item>
+              </el-descriptions>
             </el-tab-pane>
             <el-tab-pane label="修改通道信息" name="update">
               <el-form :label-position="labelPosition" label-width="120px" :model="updateChannel">
@@ -96,7 +110,7 @@ export default {
         score: '',
         due: '',
       },
-      activeName: '',
+      activeName: 'look',
       labelPosition: 'right',
       updateChannel: {
         name: '',
