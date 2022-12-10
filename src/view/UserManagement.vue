@@ -65,7 +65,7 @@
               <template slot-scope="scope">
                 <el-image style="width: 50px;height: 50px" :src="require('./qll.jpg')"
                           v-if="scope.row.isAdmin==='1'"></el-image>
-                <el-image style="width: 30px;height: 30px" :src="require('./ymr.jpg')"
+                <el-image style="width: 50px;height: 50px" :src="require('./ymr.jpg')"
                           v-if="scope.row.isAdmin==='0'"></el-image>
               </template>
             </el-table-column>

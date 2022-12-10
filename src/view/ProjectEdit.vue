@@ -73,7 +73,7 @@
           <el-form-item>
             <el-button type="primary" @click="onSubmit" v-if="this.$store.state.project.id==='0'">立即创建</el-button>
             <el-button type="primary" @click="edit" v-if="this.$store.state.project.id!=='0'">立即修改</el-button>
-            <el-button>取消</el-button>
+            <el-button type="primary" @click="back">取消</el-button>
           </el-form-item>
         </el-form>
       </el-main>
@@ -185,6 +185,13 @@ export default {
     }
   },
   methods: {
+    back(){
+      if(this.$store.state.project.id!=='0'){
+        this.$router.push({path:'/ProjectDetail'})
+      }else{
+        this.$router.push({path:'/SubmitProjectsAndPapers'})
+      }
+    },
     edit() {
       let setTime = this.GetDateTime();
       console.log(setTime);

@@ -23,7 +23,6 @@
                   height="400"
                   style="width: 100%"
                   @row-click="clickThesis"
-                  :row-class-name="tableRowClassName"
                   :default-sort="{prop: 'submitTime', order: 'descending'}">
                 <el-table-column
                     label="提交时间"
@@ -54,13 +53,13 @@
                 <el-table-column
                     align="center"
                     label="审核状态"
-                    :filters="[{text:'审核中',value:'Waiting'},{text:'审核通过',value:'Accept'},{text:'审核不通过',value:'Reject'},]"
+                    :filters="[{text:'审核中',value:'Waiting'},{text:'审核通过',value:'Accept'},{text:'审核驳回',value:'Reject'},]"
                     :filter-method="filterStatus"
                     prop="status">
                   <template slot-scope="scope">
-                    <a v-if="scope.row.status==='Waiting'">审核中</a>
-                    <a v-if="scope.row.status==='Accept'">审核通过</a>
-                    <a v-if="scope.row.status==='Reject'">审核驳回</a>
+                    <el-tag v-if="scope.row.status==='Waiting'">审核中</el-tag>
+                    <el-tag v-if="scope.row.status==='Accept'" style="color: green">审核通过</el-tag>
+                    <el-tag v-if="scope.row.status==='Reject'" style="color: crimson">审核驳回</el-tag>
                   </template>
                 </el-table-column>
               </el-table>
@@ -72,7 +71,6 @@
                   height="400"
                   style="width: 100%"
                   @row-click="clickProject"
-                  :row-class-name="tableRowClassName"
                   :default-sort="{prop: 'setTime', order: 'descending'}">
                 <el-table-column
                     align="center"
@@ -99,12 +97,12 @@
                     align="center"
                     label="审核状态"
                     prop="status"
-                    :filters="[{text:'审核中',value:'Waiting'},{text:'审核通过',value:'Accept'},{text:'审核不通过',value:'Reject'},]"
+                    :filters="[{text:'审核中',value:'Waiting'},{text:'审核通过',value:'Accept'},{text:'审核驳回',value:'Reject'},]"
                     :filter-method="filterStatus">
                   <template slot-scope="scope">
-                    <a v-if="scope.row.status==='Waiting'">审核中</a>
-                    <a v-if="scope.row.status==='Accept'">审核通过</a>
-                    <a v-if="scope.row.status==='Reject'">审核驳回</a>
+                    <el-tag v-if="scope.row.status==='Waiting'">审核中</el-tag>
+                    <el-tag v-if="scope.row.status==='Accept'" style="color: green">审核通过</el-tag>
+                    <el-tag v-if="scope.row.status==='Reject'" style="color: crimson">审核驳回</el-tag>
                   </template>
                 </el-table-column>
               </el-table>
@@ -116,19 +114,7 @@
   </el-container>
 </template>
 
-<style>
-.el-table .accept {
-  background: chartreuse;
-}
 
-.el-table .waiting {
-  background: deepskyblue;
-}
-
-.el-table .reject {
-  background: crimson;
-}
-</style>
 
 <script>
 import axios from "axios";
@@ -227,16 +213,6 @@ export default {
     }
   },
   methods: {
-    tableRowClassName({row}) {
-      console.log(row.status,'测试颜色')
-      if (row.status==="Waiting") {
-        return 'waiting';
-      } else if (row.status==="Accept") {
-        return 'accept';
-      }else if(row.status==="Reject"){
-        return 'reject'
-      }
-    },
     parseTime(time, cFormat) {
       if (arguments.length === 0) {
         return null
@@ -283,12 +259,10 @@ export default {
     clickThesis(row, event, column) {
       console.log(row, event, column)
       this.$store.state.thesis.id = row.id
-      this.$message.success(this.$store.state.thesis.id)
       this.$router.push({path: '/PaperDetail'})
     },
     clickProject(row, event, column) {
       console.log(row, event, column)
-      // this.$message.success("id=" + row.id + ",uploaderEmail=" + row.uploaderEmail)
       this.$store.state.project.id = row.id
       console.log(this.$store.state.project.id)
       console.log(this.$store.state.userinfo.email)

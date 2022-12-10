@@ -14,43 +14,79 @@
           <el-breadcrumb-item>论文详情</el-breadcrumb-item>
         </el-breadcrumb>
         <br>
-        <div>
-          <el-descriptions title="项目信息">
-            <el-descriptions-item label="论文名称">{{thesis.name}}</el-descriptions-item>
-            <el-descriptions-item label="负责人">{{ thesis.maintainer }}</el-descriptions-item>
-            <el-descriptions-item label="论文简介">{{ thesis.description }}</el-descriptions-item>
-            <el-descriptions-item label="论文类别">
-              <el-tag size="small">{{ showChannel }}</el-tag>
-            </el-descriptions-item>
-            <el-descriptions-item label="负责单位">{{ thesis.company }}</el-descriptions-item>、
-            <el-descriptions-item label="上传时间">{{parseTime(thesis.setTime)}}</el-descriptions-item>
-            <el-descriptions-item label="项目状态">
-              <el-tag size="small">{{thesis.status}}</el-tag>
-            </el-descriptions-item>
-            <el-descriptions-item label="下载">
-              <el-button @click="downloadProfile">点击下载论文文件</el-button>
-              <el-button @click="downloadPic">点击下载论文凭证</el-button>
-              <el-button @click="deleteProject">删除论文</el-button>
-              <el-button @click="edit">编辑论文</el-button>
-            </el-descriptions-item>
-          </el-descriptions>
-
-          <el-button @click="showEditDialog" v-if="userinfo.isAdmin == 1">审核</el-button>
-
-          <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
-            <el-dialog
-                title="请问您的审核结果是？"
-                :visible.sync="editDialogVisible"
-                width="50%" @close="editDialogClosed">
-              <el-radio v-model="editStatus" label="Accept">审核通过</el-radio>
-              <el-radio v-model="editStatus" label="Reject">审核驳回</el-radio>
-              <span slot="footer" class="dialog-footer">
+        <el-card style="">
+          <a style="font-size: 40px;color: lightskyblue;text-align: center">
+            {{thesis.name}}
+          </a>
+          <el-tag size="200px"
+                  v-if="thesis.status==='Waiting'"
+                  >
+            审核中
+          </el-tag>
+          <el-tag size="large"
+                  v-if="thesis.status==='Accept'"
+                  style="color: chartreuse">
+            审核通过
+          </el-tag>
+          <el-tag size="large"
+                  v-if="thesis.status==='Reject'"
+                  style="color: crimson">
+            审核驳回
+          </el-tag>
+          <br>
+          <a style="font-weight: bold;text-align: left">作者：</a>
+          <a style="">
+            {{thesis.maintainer}}
+          </a><br>
+          <a style="font-weight: bold;text-align: left">所属单位：</a>
+          <a style="">
+            {{thesis.company}}
+          </a><br>
+          <a style="font-weight: bold;text-align: left">所属研究方向：</a>
+          <a style="text-align: left">
+            {{showChannel}}
+          </a><br>
+          <a style="font-weight: bold;text-align: left">上传者邮箱：</a>
+          <a style="text-align: left">
+            {{thesis.uploaderEmail}}
+          </a><br>
+          <a style="font-weight: bold;text-align: left">上传时间：</a>
+          <a style="text-align: left">
+            {{parseTime(thesis.setTime)}}
+          </a>
+          <div style="position: absolute;right: 50px">
+            <el-button @click="edit" type="text" style="color: #99a9bf" v-if="this.$store.state.userinfo.isAdmin==='0'">修改</el-button>
+            <el-button @click="deleteProject" type="text" style="color: #99a9bf">删除</el-button>
+            <el-button @click="downloadProfile" type="text" >下载论文</el-button>
+            <el-button @click="downloadPic" type="text" >下载论文凭证</el-button>
+          </div>
+          <br><br>
+          <el-divider></el-divider>
+          <a style="font-weight: bold;text-align: left">摘要：</a>
+          <a style="text-align: left">
+            {{thesis.description}}
+          </a>
+          <el-divider></el-divider>
+          <div v-if="this.$store.state.userinfo.isAdmin==='1'">
+            <el-button @click="showEditDialog"
+                       style="position: absolute;right: 500px;color: crimson"
+                       >审核</el-button>
+            <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
+              <el-dialog
+                  title="请问您的审核结果是？"
+                  :visible.sync="editDialogVisible"
+                  width="50%" @close="editDialogClosed">
+                <el-radio v-model="editStatus" label="Accept">审核通过</el-radio>
+                <el-radio v-model="editStatus" label="Reject">审核驳回</el-radio>
+                <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false; editStatus ='Waiting' ">取 消</el-button>
         <el-button type="primary" @click="changeStatus">确 定</el-button>
       </span>
-            </el-dialog>
-          </el-card>
-        </div>
+              </el-dialog>
+            </el-card>
+            <br><br>
+          </div>
+        </el-card>
       </el-main>
     </el-container>
   </el-container>

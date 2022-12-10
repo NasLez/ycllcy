@@ -14,45 +14,67 @@
           <el-breadcrumb-item>项目详情</el-breadcrumb-item>
         </el-breadcrumb>
         <br>
-        <div>
-          <el-descriptions title="项目信息">
-            <el-descriptions-item label="项目名称">{{project.name}}</el-descriptions-item>
-            <el-descriptions-item label="负责人">{{ project.maintainer }}</el-descriptions-item>
-            <el-descriptions-item label="项目简介">{{ project.description }}</el-descriptions-item>
-            <el-descriptions-item label="项目类别">
-              <el-tag size="small">{{ showChannel }}</el-tag>
-            </el-descriptions-item>
-            <el-descriptions-item label="负责单位">{{ project.company }}</el-descriptions-item>
-            <el-descriptions-item label="开始年份">{{project.startYear}}</el-descriptions-item>
-            <el-descriptions-item label="金额">{{project.money}}</el-descriptions-item>
-            <el-descriptions-item label="上传时间">{{project.setTime}}</el-descriptions-item>
-            <el-descriptions-item label="项目状态">
-              <el-tag size="small">{{ project.status}}</el-tag>
-            </el-descriptions-item>
-            <el-descriptions-item label="下载">
-              <el-button @click="downloadProfile">点击下载项目文件</el-button>
-              <el-button @click="downloadPic">点击下载图片凭证</el-button>
-              <el-button @click="deleteProject">删除项目</el-button>
-              <el-button @click="edit">编辑项目</el-button>
-            </el-descriptions-item>
-          </el-descriptions>
-
-          <el-button @click="showEditDialog" v-if="userinfo.isAdmin == 1">审核</el-button>
-
-          <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
-            <el-dialog
-                title="请问您的审核结果是？"
-                :visible.sync="editDialogVisible"
-                width="50%" @close="editDialogClosed">
-              <el-radio v-model="editStatus" label="Accept">审核通过</el-radio>
-              <el-radio v-model="editStatus" label="Reject">审核驳回</el-radio>
-              <span slot="footer" class="dialog-footer">
-        <el-button @click="editDialogVisible = false; editStatus ='Waiting' ">取 消</el-button>
-        <el-button type="primary" @click="changeStatus">确 定</el-button>
-      </span>
-            </el-dialog>
+        <el-card>
+          <a style="font-size: 40px;color: lightskyblue;text-align: center">
+            {{ project.name }}
+          </a>
+          <el-tag size="200px"
+                  v-if="project.status==='Waiting'"
+          >
+            审核中
+          </el-tag>
+          <el-tag size="large"
+                  v-if="project.status==='Accept'"
+                  style="color: chartreuse">
+            审核通过
+          </el-tag>
+          <el-tag size="large"
+                  v-if="project.status==='Reject'"
+                  style="color: crimson">
+            审核驳回
+          </el-tag>
+          <br>
+          <a style="font-weight: bold;text-align: left">作者：</a>
+          <a >
+            {{ project.maintainer }}，
+          </a><br>
+          <a style="font-weight: bold;text-align: left">所属单位：</a>
+          <a >
+            {{ project.company }}
+          </a><br>
+          <a style="font-weight: bold;text-align: left">项目所属类别：</a>
+          <a style="text-align: left">
+            {{ showChannel }}
+          </a><br>
+          <a style="font-weight: bold;text-align: left">上传者邮箱：</a>
+          <a style="text-align: left">{{ project.uploaderEmail }}</a><br>
+          <a style="font-weight: bold;text-align: left">上传时间：</a>
+          <a style="text-align: left">{{ project.setTime }}</a><br>
+          <a style="font-weight: bold;text-align: left">项目金额：</a>
+          <a style="text-align: left">{{ project.money }}，</a>
+          <a style="font-weight: bold;text-align: left">项目开始年份：</a>
+          <a style="text-align: left">{{ project.startYear }}</a>
+          <div style="position: absolute;right: 50px;">
+            <el-button @click="edit" type="text" style="color: #99a9bf" v-if="this.$store.state.userinfo.isAdmin==='0'">修改</el-button>
+            <el-button @click="deleteProject" type="text" style="color: #99a9bf">删除</el-button>
+            <el-button @click="downloadProfile" type="text">下载项目</el-button>
+            <el-button @click="downloadPic" type="text">下载项目凭证</el-button>
+          </div>
+            <br><br>
+            <el-divider></el-divider>
+            <a style="font-weight: bold;text-align: left">简介：</a>
+            <a style="text-align: left">
+              {{ project.description }}
+            </a>
+            <el-divider></el-divider>
+          <div v-if="this.$store.state.userinfo.isAdmin==='1'">
+            <el-button @click="showEditDialog"
+                       style="position: absolute;right: 500px;color: crimson"
+                       >审核
+            </el-button>
+            <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible"></el-card>
+          </div><br><br>
           </el-card>
-        </div>
       </el-main>
     </el-container>
   </el-container>
@@ -63,6 +85,7 @@ import axios from "axios";
 import store from "@/vuex/store.js";
 import CommonAside from "../component/CommonAside"
 import CommonHeader from "@/component/CommonHeader";
+
 export default {
   name: "ProjectDetail",
   store,
@@ -70,13 +93,13 @@ export default {
     CommonAside,
     CommonHeader
   },
-  data(){
-    return{
-      showChannel:"",
-      editDialogVisible:false,
-      editStatus:"",
+  data() {
+    return {
+      showChannel: "",
+      editDialogVisible: false,
+      editStatus: "",
       userinfo: {
-        "id":"",
+        "id": "",
         "username": "",
         "phone": "",
         "email": "",
@@ -87,7 +110,7 @@ export default {
         "name": ""
       },
       project: {
-        id:'',
+        id: '',
         name: '',
         uploaderEmail: '',
         maintainer: '',
@@ -104,10 +127,10 @@ export default {
   created() {
     let that = this;
     // this.project.id = this.$route.query.id
-    this.project.id=this.$store.state.project.id
+    this.project.id = this.$store.state.project.id
     console.log(this.project.id)
     // this.userinfo.email = this.$route.query.email
-    this.userinfo.email=this.$store.state.userinfo.email
+    this.userinfo.email = this.$store.state.userinfo.email
     console.log(this.userinfo.email)
     console.log("到达详情页面")
 
@@ -136,7 +159,7 @@ export default {
         console.log(res.data);
         console.log("项目信息")
         that.$data.project.id = res.data.id;
-        that.$data.project.channelId=res.data.channelId;
+        that.$data.project.channelId = res.data.channelId;
         that.$data.project.name = res.data.name;
         that.$data.project.maintainer = res.data.maintainer;
         that.$data.project.description = res.data.description;
@@ -156,24 +179,24 @@ export default {
     }
   },
   methods: {
-    edit(){
-      this.$router.push({path:'/ProjectEdit'})
+    edit() {
+      this.$router.push({path: '/ProjectEdit'})
     },
-    deleteProject(){
-      axios.delete(`mu/project/delete?id=${this.project.id}`).then(res=>{
-        if(res.status===200){
+    deleteProject() {
+      axios.delete(`mu/project/delete?id=${this.project.id}`).then(res => {
+        if (res.status === 200) {
           this.$message.success("删除成功")
           this.$router.push({path: '/UserViewProjectsAndPapers'})
         }
       })
     },
-    showEditDialog(){
+    showEditDialog() {
       this.$data.editDialogVisible = true;
     },
-    editDialogClosed(){
+    editDialogClosed() {
       this.$refs.editFormRef.resetFields()
     },
-    changeStatus(){
+    changeStatus() {
       let that = this;
       axios.post(`mu/project/changeStatus?id=${that.$data.project.id}&status=${that.$data.editStatus}`, {
         id: that.$data.project.id,
@@ -185,13 +208,13 @@ export default {
       this.editDialogVisible = false
       this.project.status = this.editStatus
     },
-    downloadProfile(){
+    downloadProfile() {
       let that = this;
-      window.open(`mu/project/download/${that.$data.project.id}/zip`,"_blank")
+      window.open(`mu/project/download/${that.$data.project.id}/zip`, "_blank")
     },
-    downloadPic(){
+    downloadPic() {
       let that = this;
-      window.open(`mu/project/download/${that.$data.project.id}/fig`,"_blank")
+      window.open(`mu/project/download/${that.$data.project.id}/fig`, "_blank")
     }
   }
 
@@ -206,6 +229,7 @@ export default {
   top: 60px;
   bottom: 0;
 }
+
 .el-main {
   position: absolute;
   left: 200px;
