@@ -15,7 +15,8 @@
             <el-breadcrumb-item v-else-if="activeName == 'project'">项目通道</el-breadcrumb-item>
             <el-breadcrumb-item v-else-if="activeName == 'addChannel'">添加通道</el-breadcrumb-item>
           </el-breadcrumb>
-          <el-tabs  v-model="activeName"  stretch @tab-click="handleClick" ref="tabs">
+          <br>
+          <el-tabs type="border-card" v-model="activeName"  stretch @tab-click="handleClick" ref="tabs">
             <el-tab-pane label="论文" name="thesis">
               <el-table :data="thesisData" stripe border style="width: 100%" @row-click="clickData" >
                 <el-table-column label="研究方向"  prop="name"></el-table-column>

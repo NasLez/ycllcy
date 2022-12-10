@@ -1,7 +1,7 @@
 <template>
   <div style="position: absolute;left: 500px;"><a style="color:dodgerblue">项目论文管理平台-----登录</a>
     <br><br>
-    <el-tabs v-model="activeName" @tab-click="handleClick" style="width: 350px;" stretch>
+    <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick" style="width: 350px;" stretch>
 
       <el-tab-pane label="登录" name="login">
         <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">

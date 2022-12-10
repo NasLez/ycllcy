@@ -14,7 +14,8 @@
             <el-breadcrumb-item :to="{ path: '/SubmitProjectsAndPapers' }" v-if="bread == 'thesis'">论文通道</el-breadcrumb-item>
             <el-breadcrumb-item :to="{ path: '/SubmitProjectsAndPapers' }" v-if="bread == 'project'">项目通道</el-breadcrumb-item>
           </el-breadcrumb>
-          <el-tabs v-model="activeName" stretch @tab-click="handleClick" ref="tabs">
+          <br>
+          <el-tabs type="border-card" v-model="activeName" stretch @tab-click="handleClick" ref="tabs">
             <el-tab-pane label="论文" name="thesis">
               <el-table :data="thesisData" border style="width: 100%" @row-click="clickThesis">
                 <el-table-column label="研究方向"  prop="name"></el-table-column>

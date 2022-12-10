@@ -13,7 +13,8 @@
             <el-breadcrumb-item :to="{ path: '/ChannelManagement' }">查看通道</el-breadcrumb-item>
             <el-breadcrumb-item>通道详情</el-breadcrumb-item>
           </el-breadcrumb>
-          <el-tabs v-model="activeName" @tab-click="handleClick"  stretch>
+          <br>
+          <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick"  stretch>
             <el-tab-pane label="通道信息" name="look">
               <el-descriptions :column="1" border >
                 <el-descriptions-item label="通道id">

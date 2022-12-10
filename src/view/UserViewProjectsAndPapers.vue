@@ -14,7 +14,8 @@
             <el-breadcrumb-item v-if="activeName == 'thesis'">论文提交</el-breadcrumb-item>
             <el-breadcrumb-item v-else-if="activeName == 'project'">项目提交</el-breadcrumb-item>
           </el-breadcrumb>
-          <el-tabs v-model="activeName"  stretch @tab-click="handleClick">
+          <br>
+          <el-tabs type="border-card" v-model="activeName"  stretch @tab-click="handleClick">
             <el-tab-pane label="论文" name="thesis">
               <el-table
                   :data="thesisData"
