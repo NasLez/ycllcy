@@ -4,7 +4,7 @@
       <CommonHeader/>
     </el-header>
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="200px" style="background-color: #ffffff">
         <CommonAside/>
       </el-aside>
       <el-main>
@@ -742,5 +742,14 @@ export default {
       font-weight: bold;
     }
   }
+}
+el-header{
+  margin:0;
+
+  padding:0;
+
+  border:0;
+
+  outline:0;
 }
 </style>
