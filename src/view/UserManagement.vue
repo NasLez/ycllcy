@@ -8,7 +8,7 @@
         <CommonAside/>
       </el-aside>
       <el-main>
-        <div  style="width: 300px;position: absolute;left: 10px;top: 10px;height: 300px;">
+        <div style="width: 300px;position: absolute;left: 10px;top: 10px;height: 300px;">
           <el-form :label-position="labelPosition" label-width="80px" :model="ActivationCode">
             <el-form-item label="激活码">
               <el-input v-model="ActivationCode.code"></el-input>
@@ -20,7 +20,7 @@
               <el-input v-model="ActivationCode.isAdmin"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="success"  @click="AddActivationCode" icon="el-icon-plus">添加激活码</el-button>
+              <el-button type="success" @click="AddActivationCode" icon="el-icon-plus">添加激活码</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -55,11 +55,12 @@
             </el-pagination>
           </div>
         </div>
-        <div style="width: 1000px;position:relative;top: 220px;">
-          <el-table :data="user_data"
+        <div style="width: 800px;position:relative;top: 250px;">
+          <el-table :data="userData"
                     stripe="true"
                     border="true"
-                    style="width: 1000px"
+                    style="width: 800px"
+                    max-height="400"
                     :default-sort="{prop: 'id', order: 'ascending'}">
             <el-table-column prop="date" label="用户头像" align="center">
               <template slot-scope="scope">
@@ -69,9 +70,12 @@
                           v-if="scope.row.isAdmin==='0'"></el-image>
               </template>
             </el-table-column>
-            <el-table-column prop="name" label="姓名" align="center">
+            <el-table-column prop="name" label="真实姓名" align="center">
             </el-table-column>
-            <el-table-column prop="isAdmin" label="权限" align="center">
+            <el-table-column prop="isAdmin" label="权限"
+                             :filters="[{text: '1', value: '1'}, {text: '0', value: '0'}]"
+                             :filter-method="filterHandler"
+                             align="center">
             </el-table-column>
             <el-table-column prop="email" label="邮箱" align="center">
             </el-table-column>
@@ -82,7 +86,7 @@
                 <el-input
                     v-model="usersearch"
                     size="mini"
-                    placeholder="输入用户名搜索用户"/>
+                    placeholder="输入姓名搜索用户"/>
               </template>
               <template slot-scope="scope">
                 <el-popconfirm
@@ -92,23 +96,24 @@
                     icon="el-icon-info"
                     icon-color="red"
                     @confirm="deleteRow(scope.$index, scope.row)">
-                  <el-button slot="reference" type="text" size="small" icon="el-icon-delete-solid" style="color: #B70031;">删除
+                  <el-button slot="reference" type="text" size="small" icon="el-icon-delete-solid"
+                             style="color: #B70031;">删除
                   </el-button>
                 </el-popconfirm>
               </template>
             </el-table-column>
           </el-table>
-          <div class="pagination">
-            <el-pagination
-                @size-change="handleSizeChangeUser"
-                @current-change="handleCurrentChangeUSer"
-                :current-page.sync="currentPageUser"
-                :page-sizes="[2]"
-                :page-size="pagesizeUser"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="UserTotal">
-            </el-pagination>
-          </div>
+          <!--          <div class="pagination">-->
+          <!--            <el-pagination-->
+          <!--                @size-change="handleSizeChangeUser"-->
+          <!--                @current-change="handleCurrentChangeUSer"-->
+          <!--                :current-page.sync="currentPageUser"-->
+          <!--                :page-sizes="[5]"-->
+          <!--                :page-size="pagesizeUser"-->
+          <!--                layout="total, sizes, prev, pager, next, jumper"-->
+          <!--                :total="UserTotal">-->
+          <!--            </el-pagination>-->
+          <!--          </div>-->
         </div>
       </el-main>
     </el-container>
@@ -143,7 +148,7 @@ export default {
       currentPageCode: 1,
       pagesizeCode: 3,
       currentPageUser: 1,
-      pagesizeUser: 2,
+      pagesizeUser: 5,
       total: 0,
       UserTotal: 0
     };
@@ -154,8 +159,8 @@ export default {
       // 搜索功能
       if (search) {
         let list = this.codeData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()) || data.name.toLowerCase().includes(search.toLowerCase()));
-        let fenYe = list.slice((this.currentPageCode-1)*this.pagesizeCode,this.currentPageCode*this.pagesizeCode);
-        return list,fenYe
+        let fenYe = list.slice((this.currentPageCode - 1) * this.pagesizeCode, this.currentPageCode * this.pagesizeCode);
+        return list, fenYe
       } else {
         let fenYe = this.codeData.slice((this.currentPageCode - 1) * this.pagesizeCode, this.currentPageCode * this.pagesizeCode)
         return fenYe
@@ -201,6 +206,10 @@ export default {
   name: "UserManagement",
 
   methods: {
+    filterHandler(value, row, column) {
+      const property = column['property'];
+      return row[property] === value;
+    },
     handleSizeChangeCode(val) {
       this.pagesizeCode = val;
       axios.get(`mu/showActivationCode`).then(res => {
@@ -306,28 +315,21 @@ export default {
         })
       } else {
         axios.put(`mu/addActivationCode?code=${this.$data.ActivationCode.code}&name=${this.$data.ActivationCode.name}&isAdmin=${this.$data.ActivationCode.isAdmin}`).then(res => {
-          if (res.status === 403) {
-            this.$message({
-              message: 'Unauthorized',
-              type: 'warning'
-            })
-          } else if (res.status === 200) {
-            this.$message({
-              message: '添加注册码成功！',
-              type: 'success'
-            })
-            axios.get(`mu/showActivationCode`).then(res => {
-              if (res.status === 403) {
-                this.$message({
-                  message: 'Unauthorized',
-                  type: 'warning'
-                })
-              } else if (res.status === 200) {
-                this.codeData = res.data
-                this.total = this.codeData.length
-              }
-            })
-          }
+          this.$message({
+            message: '添加注册码成功！',
+            type: 'success'
+          })
+          axios.get(`mu/showActivationCode`).then(res => {
+            if (res.status === 403) {
+              this.$message({
+                message: 'Unauthorized',
+                type: 'warning'
+              })
+            } else if (res.status === 200) {
+              this.codeData = res.data
+              this.total = this.codeData.length
+            }
+          })
         })
       }
     },

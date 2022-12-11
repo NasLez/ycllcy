@@ -17,35 +17,34 @@
           </el-breadcrumb>
           <br>
           <div class="box-block-content">
-            <el-tabs type="border-card" v-model="activeName"  stretch @tab-click="handleClick" ref="tabs">
+            <el-tabs type="border-card" v-model="activeName" stretch @tab-click="handleClick">
               <el-tab-pane label="论文" name="thesis">
-                <el-table :data="thesisData" stripe border style="width: 100%" @row-click="clickData" >
-                  <el-table-column label="研究方向"  prop="name"></el-table-column>
-                  <el-table-column label="提交截止日期"  prop="due">
+                <el-table :data="thesisData" stripe border style="width: 100%" @row-click="clickData">
+                  <el-table-column label="研究方向" prop="name" align="center"></el-table-column>
+                  <el-table-column label="提交截止日期" prop="due" align="center">
                     <template slot-scope="scope">
-                      {{parseTime(scope.row.due)}}
+                      {{ parseTime(scope.row.due) }}
                     </template>
                   </el-table-column>
                 </el-table>
               </el-tab-pane>
               <el-tab-pane label="项目" name="project">
-                <el-table :data="projectData" stripe border style="width: 100%" @row-click="clickData" >
-                  <el-table-column  label="所属类别" prop="name"></el-table-column>
-                  <el-table-column label="提交截止日期" prop="due">
+                <el-table :data="projectData" stripe border style="width: 100%" @row-click="clickData">
+                  <el-table-column label="所属类别" prop="name" align="center"></el-table-column>
+                  <el-table-column label="提交截止日期" prop="due" align="center">
                     <template slot-scope="scope">
-                      {{parseTime(scope.row.due)}}
+                      {{ parseTime(scope.row.due) }}
                     </template>
                   </el-table-column>
                 </el-table>
               </el-tab-pane>
               <el-tab-pane label="添加通道" name="addChannel">
-
-                <el-form :label-position="labelPosition" label-width="120px" :model="addChannel">
-                  <el-form-item label="通道名称">
+                <el-form ref="addChannelDelete" :label-position="labelPosition" label-width="120px" :model="addChannel">
+                  <el-form-item label="通道名称" prop="name">
                     <el-input type="string" v-model="addChannel.name" style="width:225px"
                               placeholder="请输入通道名称"></el-input>
                   </el-form-item>
-                  <el-form-item label="通道类型">
+                  <el-form-item label="通道类型" prop="type">
                     <el-select v-model="addChannel.type" placeholder="请选择通道类型">
                       <el-option
                           v-for="item in options"
@@ -55,19 +54,19 @@
                       </el-option>
                     </el-select>
                   </el-form-item>
-                  <el-form-item label="通道创建者">
+                  <el-form-item label="通道创建者" prop="creator">
                     <el-input type="string" v-model="addChannel.creator" style="width:225px"
                               placeholder="请输入通道创建者"></el-input>
                   </el-form-item>
-                  <el-form-item label="通道创建者邮箱">
+                  <el-form-item label="通道创建者邮箱" prop="creatorEmail">
                     <el-input type="email" v-model="addChannel.creatorEmail" style="width:225px"
                               placeholder="请输入通道创建者邮箱"></el-input>
                   </el-form-item>
-                  <el-form-item label="通道得分">
+                  <el-form-item label="通道得分" prop="score">
                     <el-input type="string" v-model="addChannel.score" style="width:225px"
                               placeholder="请输入通道得分"></el-input>
                   </el-form-item>
-                  <el-form-item label="通道截止时间">
+                  <el-form-item label="通道截止时间" prop="due">
                     <el-date-picker
                         v-model="addChannel.due"
                         type="datetime"
@@ -76,7 +75,7 @@
                     </el-date-picker>
                   </el-form-item>
                   <el-form-item>
-                    <el-button type="primary" @click="add">添加通道信息</el-button>
+                    <el-button type="success" icon="el-icon-plus" @click="add('addChannelDelete')">添加通道信息</el-button>
                   </el-form-item>
                 </el-form>
               </el-tab-pane>
@@ -94,6 +93,7 @@ import axios from "axios";
 import store from "@/vuex/store";
 import CommonAside from "../component/CommonAside"
 import CommonHeader from "@/component/CommonHeader";
+
 export default {
   name: "ChannelManagement",
   store,
@@ -103,20 +103,20 @@ export default {
   },
   data() {
     return {
-      labelPosition:'right',
-      activeName:'',
+      labelPosition: 'right',
+      activeName: '',
       projectData: [],
-      projectData1:[],
+      projectData1: [],
       thesisData1: [],
-      thesisData:[],
+      thesisData: [],
       tabPosition: 'left',
-      addChannel:{
-        name:'',
-        type:'',
-        creator:'',
-        creatorEmail:'',
-        score:'',
-        due:'',
+      addChannel: {
+        name: '',
+        type: '',
+        creator: '',
+        creatorEmail: '',
+        score: '',
+        due: '',
       },
       options: [{
         value: 'Thesis',
@@ -127,24 +127,6 @@ export default {
       }],
       value: ''
     };
-  },
-  created:function () {
-    axios.get((`mu/listChannel`)).then(res => {
-      this.tableData = res.data;
-      for (let i = 0,j=0,k=0; i < this.tableData.length; i++) {
-        if (res.data[i].type === "Thesis") {
-          // alert(res.data[i].name)
-          this.$data.thesisData1[j]=res.data[i]
-          j++
-        }else{
-          this.$data.projectData1[k]=res.data[i]
-          k++
-        }
-      }
-      this.thesisData=this.thesisData1;
-      this.projectData=this.projectData1
-      console.log(this.tableData);
-    })
   },
   methods: {
     parseTime(time, cFormat) {
@@ -183,7 +165,7 @@ export default {
       })
       return time_str
     },
-    add(){
+    add(addChannelDelete) {
       if (this.$data.addChannel.name === '') {
         this.$message({
           message: "请输入新的通道名称！",
@@ -218,43 +200,56 @@ export default {
         this.look = this.$route.query.row
         this.due = this.$data.addChannel.due.toString()
         axios.put(`mu/addChannel?name=${this.$data.addChannel.name}&type=${this.$data.addChannel.type}&creator=${this.$data.addChannel.creator}&creatorEmail=${this.$data.addChannel.creatorEmail}&score=${this.$data.addChannel.score}&due=${this.$data.addChannel.due}`).then(res => {
+          console.log(res)
+          this.$refs[addChannelDelete].resetFields()
+          this.$message.success("添加成功！")
           axios.get((`mu/listChannel`)).then(res => {
             this.tableData = res.data;
-            for (let i = 0,j=0,k=0; i < this.tableData.length; i++) {
+            this.$message.success(this.tableData.length)
+            for (let i = 0, j = 0, k = 0; i < this.tableData.length; i++) {
               if (res.data[i].type === "Thesis") {
-                // alert(res.data[i].name)
-                this.$data.thesisData1[j]=res.data[i]
+                this.$data.thesisData1[j] = res.data[i]
+                console.log(this.thesisData1[j].name)
                 j++
-              }else{
-                this.$data.projectData1[k]=res.data[i]
+              } else {
+                this.$data.projectData1[k] = res.data[i]
+                console.log(this.projectData1[k].name)
                 k++
               }
             }
-            this.thesisData=this.thesisData1;
-            this.projectData=this.projectData1
-            console.log(this.tableData);
+            this.$data.thesisData = this.$data.thesisData1;
+            this.$data.projectData = this.$data.projectData1
+            console.log(this.thesisData);
+            console.log(this.projectData)
           })
-        },error=>{
-          if (error && error.response) {
-            switch (error.response.status) {
-              case 400: this.$message.error("400")
-                break;
-              case 403: this.$message.error("没有权限！");
-                break;
-              default: this.$message.error("连接错误！")
-            }
-          }else{
-            this.$message.error("连接服务器失败！")
-          }
         })
       }
     },
     handleClick(tab, event) {
       console.log(tab, event);
+      axios.get((`mu/listChannel`)).then(res => {
+        this.tableData = res.data;
+        this.$message.success(this.tableData.length)
+        for (let i = 0, j = 0, k = 0; i < this.tableData.length; i++) {
+          if (res.data[i].type === "Thesis") {
+            this.$data.thesisData1[j] = res.data[i]
+            console.log(this.thesisData1[j].name)
+            j++
+          } else {
+            this.$data.projectData1[k] = res.data[i]
+            console.log(this.projectData1[k].name)
+            k++
+          }
+        }
+        this.$data.thesisData = this.$data.thesisData1;
+        this.$data.projectData = this.$data.projectData1
+        console.log(this.thesisData);
+        console.log(this.projectData)
+      })
     },
     clickData(row, event, column) {
-      console.log(row,  event,  column)
-      this.$store.state.channel.id=row.id
+      console.log(row, event, column)
+      this.$store.state.channel.id = row.id
       this.$router.push({path: '/updateChannel'})
     }
   }
@@ -269,6 +264,7 @@ export default {
   top: 60px;
   bottom: 0;
 }
+
 .el-main {
   position: absolute;
   left: 200px;
@@ -277,12 +273,14 @@ export default {
   bottom: 0;
   overflow-y: scroll;
 }
-.box-block{
+
+.box-block {
   height: 100%;
   justify-content: center;
   align-items: center;
 }
-.el-header{
+
+.el-header {
   padding: 0 0;
 }
 </style>
