@@ -20,50 +20,51 @@
           <el-breadcrumb-item>编辑论文</el-breadcrumb-item>
         </el-breadcrumb>
         <br>
-        <el-form ref="form" :model="thesis" label-width="80px">
+        <el-form ref="form" :model="thesis" label-width="80px" style="width: 500px;">
           <el-form-item label="论文名称">
-            <el-input v-model="thesis.name"></el-input>
+            <el-input v-model="thesis.name" style="width: 200px;" clearable></el-input>
           </el-form-item>
           <el-form-item label="负责人">
-            <el-input v-model="thesis.maintainer"></el-input>
+            <el-input v-model="thesis.maintainer" style="width: 200px;" clearable></el-input>
           </el-form-item>
           <el-form-item label="论文类别">
-            {{ showChannel }}
+            <el-tag style="font-size: 15px">{{ showChannel }}</el-tag>
           </el-form-item>
           <el-form-item label="负责单位">
-            <el-input v-model="thesis.company"></el-input>
+            <el-input v-model="thesis.company" style="width: 200px;" clearable></el-input>
           </el-form-item>
           <el-form-item label="论文描述">
-            <el-input type="textarea" v-model="thesis.description"></el-input>
+            <el-input type="textarea" v-model="thesis.description" :rows="3"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-upload
-                action=""
-                accept=".jpg"
-                :on-change="handleChangejpg"
-                :auto-upload="false"
-                :headers="headers"
-                :file-list="fileListjpg">
-              <el-button size="small" type="primary">上传论文凭证</el-button>
-              <div slot="tip" class="el-upload__tip" style="color: crimson">只能上传jpg文件，且不超过16MB</div>
-            </el-upload>
-            <el-upload
-                action=""
-                :auto-upload="false"
-                accept=".zip"
-                :on-change="handleChangezip"
-                :headers="headers"
-                :file-list="fileListzip">
-              <el-button size="small" type="primary">上传论文文件</el-button>
-              <div slot="tip" class="el-upload__tip" style="color: crimson">只能上传zip文件，且不超过50M</div>
-            </el-upload>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit" v-if="this.$store.state.thesis.id==='0'">立即创建</el-button>
-            <el-button type="primary" @click="edit" v-if="this.$store.state.thesis.id!=='0'">立即修改</el-button>
-            <el-button type="primary" @click="back">取消</el-button>
+            <el-button type="primary" plain round @click="onSubmit" v-if="this.$store.state.thesis.id==='0'">提交
+            </el-button>
+            <el-button type="primary" plain round @click="edit" v-if="this.$store.state.thesis.id!=='0'">修改</el-button>
+            <el-button type="info" plain round @click="back">取消</el-button>
           </el-form-item>
         </el-form>
+        <el-upload
+            action=""
+            :auto-upload="false"
+            accept=".zip"
+            :on-change="handleChangezip"
+            :headers="headers"
+            style="position: absolute;left: 700px;top: 150px"
+            :file-list="fileListzip">
+          <el-button size="small" type="primary"  icon="el-icon-upload">上传论文</el-button>
+          <div slot="tip" class="el-upload__tip" style="color: yellowgreen;">只能上传zip文件，且不超过50M</div>
+        </el-upload>
+        <el-upload
+            action=""
+            accept=".jpg"
+            :on-change="handleChangejpg"
+            :auto-upload="false"
+            :headers="headers"
+            style="position: absolute;left: 700px;top: 250px"
+            :file-list="fileListjpg">
+          <el-button size="small" type="primary"  icon="el-icon-upload">上传凭证</el-button>
+          <div slot="tip" class="el-upload__tip" style="color: yellowgreen;">只能上传jpg文件，且不超过16MB</div>
+        </el-upload>
       </el-main>
     </el-container>
   </el-container>
@@ -88,7 +89,7 @@ export default {
       fileListjpg: [],
       fileListzip: [],
       userinfo: {
-        "id":"",
+        "id": "",
         "username": "",
         "phone": "",
         "email": "",
@@ -113,7 +114,7 @@ export default {
       }
     }
   },
-  created:function () {
+  created: function () {
     //  待添加获得参数的接口
     let that = this;
     this.$data.thesis.channelId = this.$store.state.channel.id
@@ -121,12 +122,12 @@ export default {
     this.$data.userinfo.email = this.$store.state.userinfo.email
     console.log(this.$store.state.thesis.id)
     this.showType = this.$store.state.thesis.id
-    if(this.$store.state.thesis.id!=='0'){
+    if (this.$store.state.thesis.id !== '0') {
       axios.get(`mu/thesis/queryById?id=${this.$store.state.thesis.id}`).then(res => {
         console.log(res.data);
         console.log("项目信息")
         that.$data.thesis.id = res.data.id;
-        that.$data.thesis.channelId=res.data.channelId;
+        that.$data.thesis.channelId = res.data.channelId;
         that.$data.thesis.name = res.data.name;
         that.$data.thesis.maintainer = res.data.maintainer;
         that.$data.thesis.description = res.data.description;
@@ -141,6 +142,7 @@ export default {
       })
     }
     getChannelAndUser(this.$data.thesis.channelId, this.$data.userinfo.email);
+
     function getChannelAndUser(channel, email) {
       axios.get(`mu/getUsernames/email=${email}`).then(res => {
         console.log(res.data);
@@ -165,14 +167,14 @@ export default {
     }
   },
   methods: {
-    back(){
-      if(this.$store.state.thesis.id!=='0'){
-        this.$router.push({path:'/PaperDetail'})
-      }else{
-        this.$router.push({path:'/SubmitProjectsAndPapers'})
+    back() {
+      if (this.$store.state.thesis.id !== '0') {
+        this.$router.push({path: '/PaperDetail'})
+      } else {
+        this.$router.push({path: '/SubmitProjectsAndPapers'})
       }
     },
-    edit(){
+    edit() {
       let setTime = this.GetDateTime();
       console.log(setTime);
       const param = new FormData();
@@ -182,7 +184,7 @@ export default {
           }
       );
       this.fileListzip.forEach(
-          val=> {
+          val => {
             param.append("zip", val.raw);
           }
       );
@@ -203,7 +205,7 @@ export default {
       })
     },
     handleChangezip(file, fileList) { //文件数量改变
-      this.fileListzip= fileList;
+      this.fileListzip = fileList;
     },
     handleChangejpg(file, fileList) { //文件数量改变
       this.fileListjpg = fileList;
@@ -234,7 +236,7 @@ export default {
           }
       );
       this.fileListzip.forEach(
-          val=> {
+          val => {
             param.append("zip", val.raw);
           }
       );
@@ -242,15 +244,7 @@ export default {
           , param
       ).then(res => {
         console.log(res.data);
-        if (res.status === 200) {
-          this.$message.success("创建成功")
-        } else if (res.status === 400) {
-          this.$message.warning("serve error")
-        } else if (res.status === 403) {
-          this.$message.warning("Unauthorized")
-        } else {
-          this.$message.warning("others")
-        }
+        this.$message.success("创建成功")
         this.$router.push({path: '/UserViewProjectsAndPapers'})
       })
     }
@@ -265,6 +259,7 @@ export default {
   top: 60px;
   bottom: 0;
 }
+
 .el-main {
   position: absolute;
   left: 200px;

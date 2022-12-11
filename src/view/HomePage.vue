@@ -7,7 +7,7 @@
       <el-aside width="200px">
         <CommonAside/>
       </el-aside>
-      <el-main style=" margin-left: 120px;">
+      <el-main>
         <div>
           <el-col :span="8">
             <div class="grid-content1">

@@ -72,7 +72,19 @@
                        style="position: absolute;right: 500px;color: crimson"
                        >审核
             </el-button>
-            <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible"></el-card>
+            <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
+              <el-dialog
+                  title="请问您的审核结果是？"
+                  :visible.sync="editDialogVisible"
+                  width="50%" @close="editDialogClosed">
+                <el-radio v-model="editStatus" label="Accept">审核通过</el-radio>
+                <el-radio v-model="editStatus" label="Reject">审核驳回</el-radio>
+                <span slot="footer" class="dialog-footer">
+        <el-button @click="editDialogVisible = false; editStatus ='Waiting' ">取 消</el-button>
+        <el-button type="primary" @click="changeStatus">确 定</el-button>
+      </span>
+              </el-dialog>
+            </el-card>
           </div><br><br>
           </el-card>
       </el-main>

@@ -17,9 +17,11 @@
           <br>
           <el-tabs type="border-card" v-model="activeName" stretch @tab-click="handleClick" ref="tabs">
             <el-tab-pane label="论文" name="thesis">
-              <el-table :data="thesisData" border style="width: 100%" @row-click="clickThesis">
+              <el-table :data="thesisData"
+                        :default-sort = "{prop: 'due', order: 'descending'}"
+                        border style="width: 100%" @row-click="clickThesis">
                 <el-table-column label="研究方向"  prop="name"></el-table-column>
-                <el-table-column label="提交截止日期"  prop="due">
+                <el-table-column label="提交截止日期"  prop="due" sortable>
                   <template slot-scope="scope">
                     {{parseTime(scope.row.due)}}
                   </template>
@@ -27,9 +29,11 @@
               </el-table>
             </el-tab-pane>
             <el-tab-pane label="项目" name="project">
-              <el-table :data="projectData" border style="width: 100%" @row-click="clickProject">
+              <el-table :data="projectData"
+                        :default-sort = "{prop: 'due', order: 'descending'}"
+                        border style="width: 100%" @row-click="clickProject">
                 <el-table-column  label="所属类别" prop="name"></el-table-column>
-                <el-table-column label="提交截止日期" prop="due">
+                <el-table-column label="提交截止日期" prop="due" sortable>
                   <template slot-scope="scope">
                     {{parseTime(scope.row.due)}}
                   </template>

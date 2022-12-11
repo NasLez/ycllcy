@@ -20,18 +20,18 @@
           <el-breadcrumb-item>编辑项目</el-breadcrumb-item>
         </el-breadcrumb>
         <br>
-        <el-form ref="form" :model="project" label-width="80px">
+        <el-form ref="form" :model="project" label-width="80px" style="width: 500px">
           <el-form-item label="项目名称">
-            <el-input v-model="project.name"></el-input>
+            <el-input v-model="project.name" style="width: 200px;" clearable></el-input>
           </el-form-item>
           <el-form-item label="负责人">
-            <el-input v-model="project.maintainer"></el-input>
+            <el-input v-model="project.maintainer" style="width: 200px;" clearable></el-input>
           </el-form-item>
           <el-form-item label="项目类别">
-            {{ showChannel }}
+            <el-tag style="font-size: 15px">{{ showChannel }}</el-tag>
           </el-form-item>
           <el-form-item label="负责单位">
-            <el-input v-model="project.company"></el-input>
+            <el-input v-model="project.company" style="width: 200px;" clearable></el-input>
           </el-form-item>
           <!--    <el-form-item label="起止年份">-->
           <!--      <el-col>-->
@@ -39,42 +39,43 @@
           <!--      </el-col>-->
           <!--    </el-form-item>-->
           <el-form-item label="开始年份">
-            <el-input v-model="project.startYear"></el-input>
+            <el-input v-model="project.startYear" style="width: 200px;" clearable></el-input>
           </el-form-item>
           <el-form-item label="金额">
-            <el-input v-model="project.money"></el-input>
+            <el-input v-model="project.money" style="width: 200px;" clearable></el-input>
           </el-form-item>
           <el-form-item label="项目简介">
-            <el-input  type="textarea" v-model="project.description"></el-input>
+            <el-input  type="textarea" v-model="project.description" :rows="3"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-upload
-                action=""
-                accept=".jpg"
-                :on-change="handleChangejpg"
-                :auto-upload="false"
-                :headers="headers"
-                :file-list="fileListjpg">
-              <el-button size="small" type="primary">上传项目凭证</el-button>
-              <div slot="tip" class="el-upload__tip" style="color: crimson">只能上传jpg文件，且不超过16MB</div>
-            </el-upload>
-            <el-upload
-                action=""
-                :auto-upload="false"
-                accept=".zip"
-                :on-change="handleChangezip"
-                :headers="headers"
-                :file-list="fileListzip">
-              <el-button size="small" type="primary">上传项目文件</el-button>
-              <div slot="tip" class="el-upload__tip" style="color: crimson">只能上传zip文件，且不超过50M</div>
-            </el-upload>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="onSubmit" v-if="this.$store.state.project.id==='0'">立即创建</el-button>
-            <el-button type="primary" @click="edit" v-if="this.$store.state.project.id!=='0'">立即修改</el-button>
-            <el-button type="primary" @click="back">取消</el-button>
+            <el-button type="primary" plain round @click="onSubmit" v-if="this.$store.state.thesis.id==='0'">提交</el-button>
+            <el-button type="primary" plain round @click="edit" v-if="this.$store.state.thesis.id!=='0'">修改</el-button>
+            <el-button type="info" plain round @click="back">取消</el-button>
           </el-form-item>
         </el-form>
+
+        <el-upload
+            action=""
+            :auto-upload="false"
+            accept=".zip"
+            :on-change="handleChangezip"
+            :headers="headers"
+            style="position: absolute;left: 700px;top: 150px"
+            :file-list="fileListzip">
+          <el-button size="small" type="primary"  icon="el-icon-upload">上传项目</el-button>
+          <div slot="tip" class="el-upload__tip" style="color: yellowgreen;">只能上传zip文件，且不超过50M</div>
+        </el-upload>
+        <el-upload
+            action=""
+            accept=".jpg"
+            :on-change="handleChangejpg"
+            :auto-upload="false"
+            :headers="headers"
+            style="position: absolute;left: 700px;top: 250px"
+            :file-list="fileListjpg">
+          <el-button size="small" type="primary"  icon="el-icon-upload">上传凭证</el-button>
+          <div slot="tip" class="el-upload__tip" style="color: yellowgreen;">只能上传jpg文件，且不超过16MB</div>
+        </el-upload>
       </el-main>
     </el-container>
   </el-container>
