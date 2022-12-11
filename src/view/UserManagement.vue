@@ -20,7 +20,7 @@
               <el-input v-model="ActivationCode.isAdmin"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="AddActivationCode">添加激活码</el-button>
+              <el-button type="success"  @click="AddActivationCode" icon="el-icon-plus">添加激活码</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -92,7 +92,7 @@
                     icon="el-icon-info"
                     icon-color="red"
                     @confirm="deleteRow(scope.$index, scope.row)">
-                  <el-button slot="reference" type="text" size="small">删除
+                  <el-button slot="reference" type="text" size="small" icon="el-icon-delete-solid" style="color: #B70031;">删除
                   </el-button>
                 </el-popconfirm>
               </template>

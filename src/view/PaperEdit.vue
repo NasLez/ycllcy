@@ -37,10 +37,9 @@
             <el-input type="textarea" v-model="thesis.description" :rows="3"></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" plain round @click="onSubmit" v-if="this.$store.state.thesis.id==='0'">提交
-            </el-button>
-            <el-button type="primary" plain round @click="edit" v-if="this.$store.state.thesis.id!=='0'">修改</el-button>
-            <el-button type="info" plain round @click="back">取消</el-button>
+            <el-button type="primary" plain round icon="el-icon-check" @click="onSubmit" v-if="this.$store.state.thesis.id==='0'">提交</el-button>
+            <el-button type="primary" icon="el-icon-edit" plain round @click="edit" v-if="this.$store.state.thesis.id!=='0'">修改</el-button>
+            <el-button type="info" icon="el-icon-close" plain round @click="back">取消</el-button>
           </el-form-item>
         </el-form>
         <el-upload
@@ -51,8 +50,8 @@
             :headers="headers"
             style="position: absolute;left: 700px;top: 150px"
             :file-list="fileListzip">
-          <el-button size="small" type="primary"  icon="el-icon-upload">上传论文</el-button>
-          <div slot="tip" class="el-upload__tip" style="color: yellowgreen;">只能上传zip文件，且不超过50M</div>
+          <el-button size="small" type="primary"  icon="el-icon-upload2">上传论文</el-button>
+          <div slot="tip" class="el-upload__tip" style="color: grey;">只能上传zip文件，且不超过50M</div>
         </el-upload>
         <el-upload
             action=""
@@ -62,8 +61,8 @@
             :headers="headers"
             style="position: absolute;left: 700px;top: 250px"
             :file-list="fileListjpg">
-          <el-button size="small" type="primary"  icon="el-icon-upload">上传凭证</el-button>
-          <div slot="tip" class="el-upload__tip" style="color: yellowgreen;">只能上传jpg文件，且不超过16MB</div>
+          <el-button size="small" type="primary"  icon="el-icon-upload2">上传凭证</el-button>
+          <div slot="tip" class="el-upload__tip" style="color: gray;">只能上传jpg文件，且不超过16MB</div>
         </el-upload>
       </el-main>
     </el-container>

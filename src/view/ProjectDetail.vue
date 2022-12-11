@@ -20,17 +20,17 @@
           </a>
           <el-tag size="200px"
                   v-if="project.status==='Waiting'"
-          >
+                  style="font-size: 15px">
             审核中
           </el-tag>
           <el-tag size="large"
                   v-if="project.status==='Accept'"
-                  style="color: chartreuse">
+                  style="color: yellowgreen;font-size: 15px">
             审核通过
           </el-tag>
           <el-tag size="large"
                   v-if="project.status==='Reject'"
-                  style="color: crimson">
+                  style="color: crimson;font-size: 15px">
             审核驳回
           </el-tag>
           <br>
@@ -55,10 +55,10 @@
           <a style="font-weight: bold;text-align: left">项目开始年份：</a>
           <a style="text-align: left">{{ project.startYear }}</a>
           <div style="position: absolute;right: 50px;">
-            <el-button @click="edit" type="text" style="color: #99a9bf" v-if="this.$store.state.userinfo.isAdmin==='0'">修改</el-button>
-            <el-button @click="deleteProject" type="text" style="color: #99a9bf">删除</el-button>
-            <el-button @click="downloadProfile" type="text">下载项目</el-button>
-            <el-button @click="downloadPic" type="text">下载项目凭证</el-button>
+            <el-button @click="edit" type="text" icon="el-icon-edit" style="color: lightskyblue" v-if="this.$store.state.userinfo.isAdmin==='0'">修改</el-button>
+            <el-button @click="deleteProject" type="text" style="color: #99a9bf" icon="el-icon-delete-solid">删除</el-button>
+            <el-button @click="downloadProfile" type="text" icon="el-icon-download">下载项目</el-button>
+            <el-button @click="downloadPic" type="text" icon="el-icon-download">下载凭证</el-button>
           </div>
             <br><br>
             <el-divider></el-divider>
@@ -68,7 +68,7 @@
             </a>
             <el-divider></el-divider>
           <div v-if="this.$store.state.userinfo.isAdmin==='1'">
-            <el-button @click="showEditDialog"
+            <el-button @click="showEditDialog" icon="el-icon-edit-outline"
                        style="position: absolute;right: 500px;color: crimson"
                        >审核
             </el-button>
