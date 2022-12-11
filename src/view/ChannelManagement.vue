@@ -7,8 +7,8 @@
       <el-aside width="200px">
         <CommonAside/>
       </el-aside>
-      <el-main>
-        <div>
+      <el-main class="box">
+        <div class="box-block">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/ChannelManagement' }">查看通道</el-breadcrumb-item>
             <el-breadcrumb-item v-if="activeName == 'thesis'">论文通道</el-breadcrumb-item>
@@ -16,70 +16,73 @@
             <el-breadcrumb-item v-else-if="activeName == 'addChannel'">添加通道</el-breadcrumb-item>
           </el-breadcrumb>
           <br>
-          <el-tabs type="border-card" v-model="activeName"  stretch @tab-click="handleClick" ref="tabs">
-            <el-tab-pane label="论文" name="thesis">
-              <el-table :data="thesisData" stripe border style="width: 100%" @row-click="clickData" >
-                <el-table-column label="研究方向"  prop="name"></el-table-column>
-                <el-table-column label="提交截止日期"  prop="due">
-                  <template slot-scope="scope">
-                    {{parseTime(scope.row.due)}}
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-tab-pane>
-            <el-tab-pane label="项目" name="project">
-              <el-table :data="projectData" stripe border style="width: 100%" @row-click="clickData" >
-                <el-table-column  label="所属类别" prop="name"></el-table-column>
-                <el-table-column label="提交截止日期" prop="due">
-                  <template slot-scope="scope">
-                    {{parseTime(scope.row.due)}}
-                  </template>
-                </el-table-column>
-              </el-table>
-            </el-tab-pane>
-            <el-tab-pane label="添加通道" name="addChannel">
+          <div class="box-block-content">
+            <el-tabs type="border-card" v-model="activeName"  stretch @tab-click="handleClick" ref="tabs">
+              <el-tab-pane label="论文" name="thesis">
+                <el-table :data="thesisData" stripe border style="width: 100%" @row-click="clickData" >
+                  <el-table-column label="研究方向"  prop="name"></el-table-column>
+                  <el-table-column label="提交截止日期"  prop="due">
+                    <template slot-scope="scope">
+                      {{parseTime(scope.row.due)}}
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-tab-pane>
+              <el-tab-pane label="项目" name="project">
+                <el-table :data="projectData" stripe border style="width: 100%" @row-click="clickData" >
+                  <el-table-column  label="所属类别" prop="name"></el-table-column>
+                  <el-table-column label="提交截止日期" prop="due">
+                    <template slot-scope="scope">
+                      {{parseTime(scope.row.due)}}
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </el-tab-pane>
+              <el-tab-pane label="添加通道" name="addChannel">
 
-              <el-form :label-position="labelPosition" label-width="120px" :model="addChannel">
-                <el-form-item label="通道名称">
-                  <el-input type="string" v-model="addChannel.name" style="width:225px"
-                            placeholder="请输入通道名称"></el-input>
-                </el-form-item>
-                <el-form-item label="通道类型">
-                  <el-select v-model="addChannel.type" placeholder="请选择通道类型">
-                    <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="通道创建者">
-                  <el-input type="string" v-model="addChannel.creator" style="width:225px"
-                            placeholder="请输入通道创建者"></el-input>
-                </el-form-item>
-                <el-form-item label="通道创建者邮箱">
-                  <el-input type="email" v-model="addChannel.creatorEmail" style="width:225px"
-                            placeholder="请输入通道创建者邮箱"></el-input>
-                </el-form-item>
-                <el-form-item label="通道得分">
-                  <el-input type="string" v-model="addChannel.score" style="width:225px"
-                            placeholder="请输入通道得分"></el-input>
-                </el-form-item>
-                <el-form-item label="通道截止时间">
-                  <el-date-picker
-                      v-model="addChannel.due"
-                      type="datetime"
-                      placeholder="请选择通道截止时间"
-                      value-format="yyyy-MM-dd HH:mm:ss">
-                  </el-date-picker>
-                </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" @click="add">添加通道信息</el-button>
-                </el-form-item>
-              </el-form>
-            </el-tab-pane>
-          </el-tabs>
+                <el-form :label-position="labelPosition" label-width="120px" :model="addChannel">
+                  <el-form-item label="通道名称">
+                    <el-input type="string" v-model="addChannel.name" style="width:225px"
+                              placeholder="请输入通道名称"></el-input>
+                  </el-form-item>
+                  <el-form-item label="通道类型">
+                    <el-select v-model="addChannel.type" placeholder="请选择通道类型">
+                      <el-option
+                          v-for="item in options"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="通道创建者">
+                    <el-input type="string" v-model="addChannel.creator" style="width:225px"
+                              placeholder="请输入通道创建者"></el-input>
+                  </el-form-item>
+                  <el-form-item label="通道创建者邮箱">
+                    <el-input type="email" v-model="addChannel.creatorEmail" style="width:225px"
+                              placeholder="请输入通道创建者邮箱"></el-input>
+                  </el-form-item>
+                  <el-form-item label="通道得分">
+                    <el-input type="string" v-model="addChannel.score" style="width:225px"
+                              placeholder="请输入通道得分"></el-input>
+                  </el-form-item>
+                  <el-form-item label="通道截止时间">
+                    <el-date-picker
+                        v-model="addChannel.due"
+                        type="datetime"
+                        placeholder="请选择通道截止时间"
+                        value-format="yyyy-MM-dd HH:mm:ss">
+                    </el-date-picker>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" @click="add">添加通道信息</el-button>
+                  </el-form-item>
+                </el-form>
+              </el-tab-pane>
+            </el-tabs>
+          </div>
+
         </div>
       </el-main>
     </el-container>
@@ -273,5 +276,13 @@ export default {
   top: 60px;
   bottom: 0;
   overflow-y: scroll;
+}
+.box-block{
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.el-header{
+  padding: 0 0;
 }
 </style>

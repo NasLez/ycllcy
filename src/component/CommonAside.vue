@@ -5,8 +5,10 @@
         :default-active="`${$store.state.menuIndex}`"
           class="el-menu-vertical-demo"
           @open="handleOpen"
-          @close="handleClose">
-
+          @close="handleClose"
+        background-color="#F1F1F1"
+        active-text-color="#B70031"
+      >
         <el-menu-item index="1" @click="SkipToPage('/homepage',1)">
           <i class="el-icon-menu"></i>
           <span slot="title" >首页</span>
@@ -112,5 +114,8 @@ export default {
 }
 html{
 
+}
+.tac{
+  background-color: #B70031;
 }
 </style>

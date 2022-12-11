@@ -1,7 +1,7 @@
 <template>
   <div class="box">
     <p style="padding-left:20px ">项目论文管理系统</p>
-    <el-button style="text-align: right; font-size: 12px" type="primary" @click="logout">注销登录</el-button>
+    <el-button style="text-align: right; font-size: 12px;margin-right: 20px" type="danger" plain @click="logout">注销登录</el-button>
   </div>
 </template>
 
@@ -27,14 +27,18 @@ export default {
 </script>
 
 <style scoped>
+
 .box{
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 60px;
-  background-color: #409EFF;
+  /*width: 800px;*/
+  margin-left:0;
+  background-color: #B70031;
   color: #fff;
   font-size: 20px;
   font-weight: bold;
+  padding: 0 0;
 }
 </style>

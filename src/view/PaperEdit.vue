@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header>
+    <el-header style="padding: 0 0">
       <CommonHeader/>
     </el-header>
     <el-container>
@@ -24,9 +24,6 @@
           <el-form-item label="论文名称">
             <el-input v-model="thesis.name"></el-input>
           </el-form-item>
-          <el-form-item label="论文描述">
-            <el-input v-model="thesis.description"></el-input>
-          </el-form-item>
           <el-form-item label="负责人">
             <el-input v-model="thesis.maintainer"></el-input>
           </el-form-item>
@@ -35,6 +32,9 @@
           </el-form-item>
           <el-form-item label="负责单位">
             <el-input v-model="thesis.company"></el-input>
+          </el-form-item>
+          <el-form-item label="论文描述">
+            <el-input type="textarea" v-model="thesis.description"></el-input>
           </el-form-item>
           <el-form-item>
             <el-upload

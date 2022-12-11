@@ -1,96 +1,101 @@
 <template>
   <el-container>
-    <el-header>
+    <el-header style="padding: 0 0">
       <CommonHeader/>
     </el-header>
     <el-container>
-      <el-aside width="200px" style="background-color: #ffffff">
+      <el-aside width="200px">
         <CommonAside/>
       </el-aside>
-      <el-main>
-        <el-col :span="8">
-          <div class="grid-content1">
-            <el-image style="width: 300px;height: 300px" :src="require('./qll.jpg')" v-if="this.$store.state.userinfo.isAdmin==='1'"></el-image>
-            <el-image style="width: 300px;height: 300px" :src="require('./ymr.jpg')" v-if="this.$store.state.userinfo.isAdmin==='0'"></el-image>
-            <el-card class="box-card" style="position: absolute;left: 20px;width: 300px">
-              <div class="user">
-                <div class="user-info">
-                  <a class="user-nickname">用户名：{{ userinfo.username }}</a><br>
-                  <a class="user-name">真实姓名：{{ userinfo.name }}</a><br>
-                  <a class="user-access">身份：{{ showAdmin }}</a><br>
-                  <a class="user-phone">电话号码：{{ userinfo.phone }}</a><br>
-                  <a class="user-email">邮箱地址：{{ userinfo.email }}</a><br>
-                  <a class="user-school">学校：{{ userinfo.school }}</a><br>
+      <el-main style=" margin-left: 120px;">
+        <div>
+          <el-col :span="8">
+            <div class="grid-content1">
+              <el-image style="width: 300px;height: 300px" :src="require('./qll.jpg')" v-if="this.$store.state.userinfo.isAdmin==='1'"></el-image>
+              <el-image style="width: 300px;height: 300px" :src="require('./ymr.jpg')" v-if="this.$store.state.userinfo.isAdmin==='0'"></el-image>
+              <el-card class="box-card" style="position: absolute;left: 20px;width: 300px;margin-top: 0">
+                <div class="user">
+                  <div class="user-info">
+                    <div class="user-nickname">{{ userinfo.username }}</div><br>
+                    <div class="user-name">{{ userinfo.name }}</div><br>
+                    <div class="user-access">{{ showAdmin }}</div><br>
+                    <div class="user-phone">电话：{{ userinfo.phone }}</div><br>
+                    <div class="user-email">邮箱：{{ userinfo.email }}</div><br>
+                    <div class="user-school">学校：{{ userinfo.school }}</div><br>
+                  </div>
                 </div>
-              </div>
-              <br>
-              <template>
-                <el-button size="small" type="primary" icon="el-icon-edit" round
-                           @click="showEditDialog()"></el-button>
-              </template>
-            </el-card>
-            <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
-              <el-dialog
-                  title="修改用户"
-                  :visible.sync="editDialogVisible"
-                  width="50%" @close="editDialogClosed">
-                <el-form :model="userinfo" :rules="editFormRules" ref="editFormRef" label-width="70px">
-                  <!--     disabled表示禁用状态     -->
+                <template style=" display:flex;justify-content: center;align-text:center;">
+                  <el-button size="small" type="info" round style="margin-top: 0px;margin-left: 90px"
+                             @click="showEditDialog()">修改信息
+                  </el-button>
+                </template>
+              </el-card>
+              <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
+                <el-dialog
+                    title="修改用户"
+                    :visible.sync="editDialogVisible"
+                    width="50%" @close="editDialogClosed">
+                  <el-form :model="userinfo" :rules="editFormRules" ref="editFormRef" label-width="70px">
+                    <!--     disabled表示禁用状态     -->
 
-                  <el-form-item label="真实姓名" prop="name">
-                    <el-input v-model="userinfo.name" disabled></el-input>
-                  </el-form-item>
-                  <el-form-item label="身份" prop="isAdmin">
-                    <el-input v-model="showAdmin" disabled></el-input>
-                  </el-form-item>
-                  <el-form-item label="邮箱" prop="email">
-                    <el-input v-model="userinfo.email" disabled></el-input>
-                  </el-form-item>
-                  <el-form-item label="用户名" prop="username">
-                    <el-input v-model="userinfo.username"></el-input>
-                  </el-form-item>
-                  <el-form-item label="电话号码" prop="phone">
-                    <el-input v-model="userinfo.phone"></el-input>
-                  </el-form-item>
-                  <el-form-item label="学校" prop="school">
-                    <el-input v-model="userinfo.school"></el-input>
-                  </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
+                    <el-form-item label="真实姓名" prop="name">
+                      <el-input v-model="userinfo.name" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="身份" prop="isAdmin">
+                      <el-input v-model="showAdmin" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱" prop="email">
+                      <el-input v-model="userinfo.email" disabled></el-input>
+                    </el-form-item>
+                    <el-form-item label="用户名" prop="username">
+                      <el-input v-model="userinfo.username"></el-input>
+                    </el-form-item>
+                    <el-form-item label="电话号码" prop="phone">
+                      <el-input v-model="userinfo.phone"></el-input>
+                    </el-form-item>
+                    <el-form-item label="学校" prop="school">
+                      <el-input v-model="userinfo.school"></el-input>
+                    </el-form-item>
+                  </el-form>
+                  <span slot="footer" class="dialog-footer">
                 <el-button @click="editDialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="editUserInfo">确 定</el-button>
               </span>
-              </el-dialog>
-            </el-card>
-          </div>
-        </el-col>
-        <el-col :span="16" >
-          <el-row>
-            <el-descriptions :column="1" border class="grid-content2" v-if="this.$store.state.userinfo.isAdmin==='0'">
-              <el-descriptions-item
-                  content-class-name="my-content"
-                  label="上传总分数">
-                {{ parseInt(this.userData.thesisScore) + parseInt(this.userData.projectScore) }}
-              </el-descriptions-item>
-              <el-descriptions-item label="上传论文总数量">
-                {{ userData.thesisNumber }}
-              </el-descriptions-item>
-              <el-descriptions-item label="论文总分数">
-                {{ userData.thesisScore }}
-              </el-descriptions-item>
-              <el-descriptions-item label="上传项目总数量">
-                {{ userData.projectNumber }}
-              </el-descriptions-item>
-              <el-descriptions-item label="项目总分数">
-                {{ userData.projectScore }}
-              </el-descriptions-item>
-            </el-descriptions>
-          </el-row>
-          <el-row>
-            <div style="width: 600px;height: 300px" id='main'>
+                </el-dialog>
+              </el-card>
             </div>
-          </el-row>
-        </el-col>
+          </el-col>
+          <el-col :span="16" >
+            <el-row>
+              <el-descriptions :column="1" border class="grid-content2" v-if="this.$store.state.userinfo.isAdmin==='0'">
+                <el-descriptions-item
+                    content-class-name="my-content"
+                    label="上传总分数">
+                  {{ parseInt(this.userData.thesisScore) + parseInt(this.userData.projectScore) }}
+                </el-descriptions-item>
+                <el-descriptions-item label="上传论文总数量">
+                  {{ userData.thesisNumber }}
+                </el-descriptions-item>
+                <el-descriptions-item label="论文总分数">
+                  {{ userData.thesisScore }}
+                </el-descriptions-item>
+                <el-descriptions-item label="上传项目总数量">
+                  {{ userData.projectNumber }}
+                </el-descriptions-item>
+                <el-descriptions-item label="项目总分数">
+                  {{ userData.projectScore }}
+                </el-descriptions-item>
+              </el-descriptions>
+            </el-row>
+            <el-row>
+              <div v-if="this.$store.state.userinfo.isAdmin == 1" style="width: 650px;height: 540px" id="main">
+              </div>
+              <div v-else style="width: 600px;height: 300px" id='main'>
+              </div>
+            </el-row>
+          </el-col>
+        </div>
+
 
       </el-main>
       <!--        <el-footer>Footer</el-footer>-->
@@ -360,7 +365,7 @@ export default {
     echartsInit: function () {
       if(this.$store.state.userinfo.isAdmin==='0') {
         this.email = this.$store.state.userinfo.email
-        let myChart = this.$echarts.init(document.getElementById('main'), 'dark');
+        let myChart = this.$echarts.init(document.getElementById('main'), 'white');
         let nowDate = new Date();
         let date = {
           year: nowDate.getFullYear(),
@@ -676,17 +681,13 @@ export default {
 .grid-content1 {
   border-radius: 4px;
   min-height: 36px;
+  padding: 0;
 }
 .grid-content2 {
   border-radius: 4px;
   width: 600px;
   min-height: 36px;
 }
-//
-//.row-bg {
-//  padding: 10px 0;
-//  background-color: #f9fafc;
-//}
 
 .el-main{
   display: flex;
@@ -697,32 +698,36 @@ export default {
 .el-aside::-webkit-scrollbar {
   display: none;
 }
-
 .user {
   display: flex;
-  flex-direction: column;
   align-items: center;
-
-  .user-head {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    margin-right: 20px;
-    margin-bottom: 50px;
-  }
+  justify-content: center;
+  padding-bottom: 0;
+  //.user-head {
+  //  width: 200px;
+  //  height: 200px;
+  //  border-radius: 50%;
+  //  margin-right: 20px;
+  //  margin-bottom: 50px;
+  //}
 
   .user-info {
     .user-nickname {
-      font-size: 16px;
+
+      text-align: center;
+      font-size: 20px;
       font-weight: bold;
     }
 
     .user-name {
+      text-align: center;
       font-size: 16px;
       font-weight: bold;
     }
 
     .user-access {
+
+      text-align: center;
       font-size: 16px;
       font-weight: bold;
     }
@@ -743,13 +748,7 @@ export default {
     }
   }
 }
-el-header{
-  margin:0;
-
-  padding:0;
-
-  border:0;
-
-  outline:0;
+.el-header{
+  padding: 0 0;
 }
 </style>

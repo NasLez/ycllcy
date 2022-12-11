@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-header>
+    <el-header style="padding: 0 0">
       <CommonHeader/>
     </el-header>
     <el-container>
@@ -24,10 +24,6 @@
           <el-form-item label="项目名称">
             <el-input v-model="project.name"></el-input>
           </el-form-item>
-
-          <el-form-item label="项目简介">
-            <el-input v-model="project.description"></el-input>
-          </el-form-item>
           <el-form-item label="负责人">
             <el-input v-model="project.maintainer"></el-input>
           </el-form-item>
@@ -42,11 +38,14 @@
           <!--        <el-date-picker type="date" placeholder="选择开始日期" v-model="project.setTime" style="width: 100%;"></el-date-picker>-->
           <!--      </el-col>-->
           <!--    </el-form-item>-->
+          <el-form-item label="开始年份">
+            <el-input v-model="project.startYear"></el-input>
+          </el-form-item>
           <el-form-item label="金额">
             <el-input v-model="project.money"></el-input>
           </el-form-item>
-          <el-form-item label="开始年份">
-            <el-input v-model="project.startYear"></el-input>
+          <el-form-item label="项目简介">
+            <el-input  type="textarea" v-model="project.description"></el-input>
           </el-form-item>
           <el-form-item>
             <el-upload

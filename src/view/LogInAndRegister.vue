@@ -1,7 +1,7 @@
 <template>
   <div id="body">
     <div class="block1">
-      <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick" style="width: 400px;justify-content: center" stretch>
+      <el-tabs  type="border-card" v-model="activeName" @tab-click="handleClick" style="width: 400px;justify-content: center" stretch>
         <el-tab-pane label="登录" name="login" style="margin-top: 20px">
           <el-form :label-position="labelPosition" label-width="95px" :model="formLabelAlign">
             <el-form-item label="账户">
@@ -182,10 +182,11 @@ export default {
 }
 .block1{
   margin-top: 180px;
+  background-color: rgba(0, 0, 0, 0.81);
 }
 page { background: #ebecee; }
-html, body {
-  background-color: #EAF2F5;
+html {
+  /*background: -webkit-linear-gradient(top, #EAF2F5, rgba(234, 87, 127, 0.99));*/
 }
 
 </style>

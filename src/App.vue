@@ -35,4 +35,7 @@ export default {
 page {
   background: #ebecee;
 }
+.el-header{
+  padding: 0 0;
+}
 </style>
