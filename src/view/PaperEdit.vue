@@ -120,7 +120,7 @@ export default {
         ],
         description: [
           {required: true, message: '请输入论文描述', trigger: 'blur'},
-          {max: 200, message: '长度请在200字以内', trigger: 'blur'}
+          {max: 500, message: '长度请在500字以内', trigger: 'blur'}
         ],
       },
       userinfo: {

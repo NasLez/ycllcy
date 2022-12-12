@@ -276,6 +276,7 @@ export default {
     changeStatus() {
       let that = this;
       axios.post(`mu/thesis/changeStatus?id=${that.$data.thesis.id}&status=${that.$data.editStatus}`).then(res => {
+        this.thesis.status = that.editStatus;
         console.log("修改状态成功")
         console.log(res.data)
       });
