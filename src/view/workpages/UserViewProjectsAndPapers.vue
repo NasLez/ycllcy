@@ -158,14 +158,11 @@ export default {
         arr.forEach(item => {
           this.channelId = item.channelId
           axios.get(`mu/getChannelById?id=${this.channelId}`).then(qll => {
-            if (qll.status === 200) {
               this.channelName = qll.data.name
               this.$set(item, 'channelName', this.channelName)
-            } else if (qll.status === 403) {
-              this.$message.error("Unauthorized")
-            } else if (qll.status === 404) {
-              this.$message.error("serve error")
-            }
+          },error=>{
+            console.log(error)
+            this.$message.error("服务器错误")
           })
         })
         this.projectData = arr
@@ -175,14 +172,11 @@ export default {
         arr.forEach(item => {
           this.channelId = item.channelId
           axios.get(`mu/getChannelById?id=${this.channelId}`).then(qll => {
-            if (qll.status === 200) {
               this.channelName = qll.data.name
               this.$set(item, 'channelName', this.channelName)
-            } else if (qll.status === 403) {
-              this.$message.error("Unauthorized")
-            } else if (qll.status === 404) {
-              this.$message.error("serve error")
-            }
+          },error=>{
+            console.log(error)
+            this.$message.error("服务器错误")
           })
         })
         this.thesisData = arr
@@ -193,14 +187,11 @@ export default {
         arr.forEach(item => {
           this.channelId = item.channelId
           axios.get(`mu/getChannelById?id=${this.channelId}`).then(qll => {
-            if (qll.status === 200) {
               this.channelName = qll.data.name
               this.$set(item, 'channelName', this.channelName)
-            } else if (qll.status === 403) {
-              this.$message.error("Unauthorized")
-            } else if (qll.status === 404) {
-              this.$message.error("serve error")
-            }
+          },error=>{
+            console.log(error)
+            this.$message.error("服务器错误")
           })
         })
         this.projectData = arr
@@ -210,14 +201,11 @@ export default {
         arr.forEach(item => {
           this.channelId = item.channelId
           axios.get(`mu/getChannelById?id=${this.channelId}`).then(qll => {
-            if (qll.status === 200) {
               this.channelName = qll.data.name
               this.$set(item, 'channelName', this.channelName)
-            } else if (qll.status === 403) {
-              this.$message.error("Unauthorized")
-            } else if (qll.status === 404) {
-              this.$message.error("serve error")
-            }
+          },error=>{
+            console.log(error)
+            this.$message.error("服务器错误")
           })
         })
         this.thesisData = arr
@@ -276,8 +264,6 @@ export default {
     clickProject(row, event, column) {
       console.log(row, event, column)
       this.$store.state.project.id = row.id
-      console.log(this.$store.state.project.id)
-      console.log(this.$store.state.userinfo.email)
       this.$router.push({path: '/ProjectDetail'})
     }
   }

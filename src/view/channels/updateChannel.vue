@@ -175,7 +175,7 @@ export default {
         y: date.getFullYear(),
         m: date.getMonth() + 1,
         d: date.getDate(),
-        h: date.getHours(),
+        h: date.getHours()-8,
         i: date.getMinutes(),
         s: date.getSeconds(),
         a: date.getDay()

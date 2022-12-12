@@ -10,7 +10,6 @@ import UserManagement from "@/view/superpages/UserManagement";
 import ProjectDetail from "@/view/workpages/ProjectDetail";
 import ProjectEdit from "@/view/workpages/ProjectEdit";
 import UserViewProjectsAndPapers from "@/view/workpages/UserViewProjectsAndPapers";
-import StatisticalSubmissionInformation from "@/component/StatisticalSubmissionInformation";
 import PaperEdit from "@/view/workpages/PaperEdit";
 import PaperDetail from "@/view/workpages/PaperDetail";
 import userHome from "@/view/superpages/userHome";
@@ -56,10 +55,6 @@ const routes = [
     {
         path: '/UserViewProjectsAndPapers',
         component: UserViewProjectsAndPapers
-    },
-    {
-        path: '/StatisticalSubmissionInformation',
-        component: StatisticalSubmissionInformation
     },
     {
         path: '/PaperEdit',

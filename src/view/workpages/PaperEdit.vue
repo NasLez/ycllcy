@@ -227,18 +227,12 @@ export default {
           , param
       ).then(res => {
         console.log(res.data);
-        if (res.status === 200) {
-          this.$message.success("修改成功")
-        } else if (res.status === 400) {
-          this.$message.warning("serve error")
-        } else if (res.status === 403) {
-          this.$message.warning("Unauthorized")
-        } else {
-          this.$message.warning("others")
-        }
+        this.$message.success("修改成功")
         this.$store.state.menuIndex = '5';
         this.$router.push({path: '/PaperDetail'})
-        // this.$router.push({path: '/UserViewProjectsAndPapers'})
+      },error=>{
+        console.log(error)
+        this.$message.error("修改失败！请检查！")
       })
     },
     handleChangezip(file, fileList) { //文件数量改变
@@ -284,6 +278,9 @@ export default {
         this.$message.success("创建成功")
         this.$store.state.menuIndex = '5';
         this.$router.push({path: '/UserViewProjectsAndPapers'})
+      },error=>{
+        console.log(error)
+        this.$message.error("上传失败！请检查！")
       })
     }
   }

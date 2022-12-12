@@ -11,7 +11,8 @@
         <div style="padding-left: 10%">
           <div style="display: flex;flex-direction: row;justify-content: center;padding: 10% 0">
             <div style="width: 40%;margin-right:7%;justify-content: center">
-              <el-form ref="refName" :label-position="labelPosition" label-width="80px" :model="ActivationCode" style="border-right:1px solid #b9b9b9">
+              <el-form ref="refName" :label-position="labelPosition" label-width="80px" :model="ActivationCode"
+                       style="border-right:1px solid #b9b9b9">
                 <el-form-item label="激活码" prop="code" style="width: 80%">
                   <el-input v-model="ActivationCode.code"></el-input>
                 </el-form-item>
@@ -29,7 +30,8 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="success" @click="AddActivationCode('refName')" icon="el-icon-plus">添加激活码</el-button>
+                  <el-button type="success" @click="AddActivationCode('refName')" icon="el-icon-plus">添加激活码
+                  </el-button>
                 </el-form-item>
               </el-form>
             </div>
@@ -44,7 +46,7 @@
                   </el-table-column>
                   <el-table-column label="权限" prop="isAdmin" align="center">
                     <template slot-scope="scope">
-                      <el-tag v-if="scope.row.isAdmin==='1'" >管理员</el-tag>
+                      <el-tag v-if="scope.row.isAdmin==='1'">管理员</el-tag>
                       <el-tag v-if="scope.row.isAdmin==='0'" type="success">用户</el-tag>
                     </template>
                   </el-table-column>
@@ -100,7 +102,7 @@
                                  :filter-method="filterHandler"
                                  align="center">
                   <template slot-scope="scope">
-                    <el-tag v-if="scope.row.isAdmin==='1'" >管理员</el-tag>
+                    <el-tag v-if="scope.row.isAdmin==='1'">管理员</el-tag>
                     <el-tag v-if="scope.row.isAdmin==='0'" type="success">用户</el-tag>
                   </template>
                 </el-table-column>
@@ -128,7 +130,7 @@
                     <el-button slot="reference" type="text" size="small" icon="el-icon-view"
                                v-if="scope.row.isAdmin==='0'" @click="clickUser(scope.row)">查看
                     </el-button>
-                    <a  v-if="scope.row.isAdmin==='1'">——</a>
+                    <a v-if="scope.row.isAdmin==='1'">——</a>
                   </template>
                 </el-table-column>
               </el-table>
@@ -221,26 +223,12 @@ export default {
   },
   created: function () {
     axios.get(`mu/showActivationCode`).then(res => {
-      if (res.status === 403) {
-        this.$message({
-          message: 'Unauthorized',
-          type: 'warning'
-        })
-      } else if (res.status === 200) {
-        this.codeData = res.data
-        this.total = this.codeData.length
-      }
+      this.codeData = res.data
+      this.total = this.codeData.length
     })
     axios.get(`mu/showAllUser`).then(res => {
-      if (res.status === 403) {
-        this.$message({
-          message: 'Unauthorized',
-          type: 'warning'
-        })
-      } else if (res.status === 200) {
-        this.userData = res.data
-        this.UserTotal = this.userData.length
-      }
+      this.userData = res.data
+      this.UserTotal = this.userData.length
     })
   },
   name: "UserManagement",
@@ -253,93 +241,46 @@ export default {
     handleSizeChangeCode(val) {
       this.pagesizeCode = val;
       axios.get(`mu/showActivationCode`).then(res => {
-        if (res.status === 403) {
-          this.$message({
-            message: 'Unauthorized',
-            type: 'warning'
-          })
-        } else if (res.status === 200) {
-          this.codeData = res.data
-        }
+        this.codeData = res.data
       })
     },
     handleSizeChangeUser(val) {
       this.pagesizeUser = val;
       axios.get(`mu/showAllUser`).then(res => {
-        if (res.status === 403) {
-          this.$message({
-            message: 'Unauthorized',
-            type: 'warning'
-          })
-        } else if (res.status === 200) {
-          this.userData = res.data
-          this.UserTotal = this.userData.length
-        }
+        this.userData = res.data
+        this.UserTotal = this.userData.length
       })
     },
     handleCurrentChangeUSer(val) {
       this.currentPageUser = val;
       axios.get(`mu/showAllUser`).then(res => {
-        if (res.status === 403) {
-          this.$message({
-            message: 'Unauthorized',
-            type: 'warning'
-          })
-        } else if (res.status === 200) {
-          this.userData = res.data
-          this.UserTotal = this.userData.length
-        }
+        this.userData = res.data
+        this.UserTotal = this.userData.length
       })
     },
     handleCurrentChangeCode(val) {
       this.currentPageCode = val;
       axios.get(`mu/showActivationCode`).then(res => {
-        if (res.status === 403) {
-          this.$message({
-            message: 'Unauthorized',
-            type: 'warning'
-          })
-        } else if (res.status === 200) {
-          this.codeData = res.data
-        }
+        this.codeData = res.data
       })
     },
     deleteRow(index, rows) {
       axios.delete(`mu/deleteUser?email=${rows.email}`).then(res => {
-        if (res.status === 403) {
-          this.$message({
-            message: 'Unauthorized',
-            type: 'warning'
-          })
-        } else if (res.status === 404) {
-          this.$message({
-            message: 'Not Found',
-            type: 'warning'
-          })
-        } else if (res.status === 200) {
-          this.$message({
-            message: "删除用户成功！",
-            type: 'success'
-          })
-          axios.get(`mu/showAllUser`).then(res => {
-            if (res.status === 403) {
-              this.$message({
-                message: 'Unauthorized',
-                type: 'warning'
-              })
-            } else if (res.status === 200) {
-              this.userData = res.data
-              this.UserTotal = this.userData.length
-            }
-          })
-        }
+        this.$message({
+          message: "删除用户成功！",
+          type: 'success'
+        })
+        axios.get(`mu/showAllUser`).then(res => {
+            this.userData = res.data
+            this.UserTotal = this.userData.length
+        })
       })
     },
     clickData() {
     },
     clickUser(row) {
       console.log(row)
-      this.$store.state.userEmail= row.email
+      this.$store.state.userEmail = row.email
       this.$router.push({path: '/userHome'})
     },
     AddActivationCode(refName) {
@@ -366,15 +307,8 @@ export default {
           })
           this.$refs[refName].resetFields()
           axios.get(`mu/showActivationCode`).then(res => {
-            if (res.status === 403) {
-              this.$message({
-                message: 'Unauthorized',
-                type: 'warning'
-              })
-            } else if (res.status === 200) {
               this.codeData = res.data
               this.total = this.codeData.length
-            }
           })
         })
       }

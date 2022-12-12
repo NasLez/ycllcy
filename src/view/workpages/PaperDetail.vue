@@ -207,9 +207,6 @@ export default {
         that.$data.thesis.description = res.data.description;
         that.$data.thesis.company = res.data.company;
         that.$data.thesis.setTime = res.data.submitTime;
-        // if(res.data.status !="waiting"){
-        //   that.step_active="1"
-        // }
         that.$data.thesis.status = res.data.status;
         axios.get(`mu/getChannelById?id=${that.$data.thesis.channelId}`).then(res => {
           console.log(res.data);
@@ -261,10 +258,11 @@ export default {
     },
     deleteProject() {
       axios.delete(`mu/thesis/delete?id=${this.thesis.id}`).then(res => {
-        if (res.status === 200) {
           this.$message.success("删除成功")
           this.$router.push({path: '/UserViewProjectsAndPapers'})
-        }
+      },error=>{
+        console.log(error)
+        this.$message.error("删除失败！")
       })
     },
     showEditDialog() {

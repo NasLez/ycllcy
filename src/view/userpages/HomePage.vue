@@ -12,19 +12,27 @@
           <el-col :span="8">
             <div style="display: flex;flex-direction: column;justify-content: center">
               <div>
-                <el-image style="width: 300px;height: 300px" :src="require('/src/avatar/qll.jpg')" v-if="this.$store.state.userinfo.isAdmin==='1'"></el-image>
-                <el-image style="width: 300px;height: 300px" :src="require('/src/avatar/ymr.jpg')" v-if="this.$store.state.userinfo.isAdmin==='0'"></el-image>
+                <el-image style="width: 300px;height: 300px" :src="require('/src/avatar/qll.jpg')"
+                          v-if="this.$store.state.userinfo.isAdmin==='1'"></el-image>
+                <el-image style="width: 300px;height: 300px" :src="require('/src/avatar/ymr.jpg')"
+                          v-if="this.$store.state.userinfo.isAdmin==='0'"></el-image>
               </div>
               <div>
                 <el-card class="box-card" style="width: 300px">
                   <div class="user">
                     <div class="user-info">
-                      <div class="user-nickname">{{ userinfo.username }}</div><br>
-                      <div class="user-name">{{ userinfo.name }}</div><br>
-                      <div class="user-access">{{ showAdmin }}</div><br>
-                      <div class="user-phone">电话：{{ userinfo.phone }}</div><br>
-                      <div class="user-email">邮箱：{{ userinfo.email }}</div><br>
-                      <div class="user-school">学校：{{ userinfo.school }}</div><br>
+                      <div class="user-nickname">{{ userinfo.username }}</div>
+                      <br>
+                      <div class="user-name">{{ userinfo.name }}</div>
+                      <br>
+                      <div class="user-access">{{ showAdmin }}</div>
+                      <br>
+                      <div class="user-phone">电话：{{ userinfo.phone }}</div>
+                      <br>
+                      <div class="user-email">邮箱：{{ userinfo.email }}</div>
+                      <br>
+                      <div class="user-school">学校：{{ userinfo.school }}</div>
+                      <br>
                     </div>
                   </div>
                   <template style=" display:flex;justify-content: center;align-text:center;">
@@ -72,7 +80,7 @@
               </el-card>
             </div>
           </el-col>
-          <el-col :span="16" >
+          <el-col :span="16">
             <el-row>
               <el-descriptions :column="1" border class="grid-content2" v-if="this.$store.state.userinfo.isAdmin==='0'">
                 <el-descriptions-item
@@ -212,8 +220,6 @@ export default {
   },
   created: function () {
     let that = this;
-    // console.log(this.$route.query.email)
-    // this.email1 = this.$route.query.email;
     console.log(this.$store.state.userinfo.email)
     this.email1 = this.$store.state.userinfo.email;
     GetUser(this.email1);
@@ -231,7 +237,6 @@ export default {
         that.$data.userinfo.id = res.data.id;
         that.$data.userinfo.username = res.data.username;
         that.$data.userinfo.isAdmin = res.data.isAdmin;
-        // that.$store.state.userinfo.isAdmin = res.data.isAdmin;
         that.$data.userinfo.name = res.data.name;
         that.$data.userinfo.phone = res.data.phone;
         that.$data.userinfo.email = res.data.email;
@@ -242,56 +247,32 @@ export default {
     }
 
     this.email = this.$store.state.userinfo.email
-    // this.$message.success(this.email)
     axios.get(`mu/project/getScoreByEmail?email=${this.email}`).then(res => {
-      if (res.status === 200) {
-        console.log('项目总分数',res.data)
+        console.log('项目总分数', res.data)
         this.userData.projectScore = res.data
-      } else if (res.status === 403) {
-        this.$message.error("Unauthorized")
-      } else if (res.status === 400) {
-        this.$message.error("Serve Error")
-      }
+    },error=>{
+      console.log(error)
     })
     axios.get(`mu/thesis/getScoreByEmail?email=${this.email}`).then(res => {
-      if (res.status === 200) {
-        console.log('论文总分数',res.data)
+        console.log('论文总分数', res.data)
         this.userData.thesisScore = res.data
-      } else if (res.status === 403) {
-        this.$message.error("Unauthorized")
-      } else if (res.status === 400) {
-        this.$message.error("Serve Error")
-      }
+    },error=>{
+      console.log(error)
     })
     axios.get((`mu/project/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res => {
-      if (res.status === 200) {
         let arr = Array.from(res.data);
         this.userData.projectNumber = arr.length
-      } else if (res.status === 403) {
-        this.$message.error("Unauthorized")
-      } else if (res.status === 400) {
-        this.$message.error("Serve Error")
-      } else if (res.status === 404) {
-        this.$message.error("Not Found")
-      }
+    },error=>{
+      console.log(error)
     })
     axios.get((`mu/thesis/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res => {
-      if (res.status === 200) {
         let arr = Array.from(res.data);
         this.userData.thesisNumber = arr.length
-      } else if (res.status === 403) {
-        this.$message.error("Unauthorized")
-      } else if (res.status === 400) {
-        this.$message.error("Serve Error")
-      } else if (res.status === 404) {
-        this.$message.error("Not Found")
-      }
+    },error=>{
+      console.log(error)
     })
   },
   methods: {
-    StatisticalSubmissionInformation() {
-      this.$router.push({path: '/StatisticalSubmissionInformation'})
-    },
     ViewProjectsAndPapers() {
       this.$store.state.userinfo.isAdmin = this.userinfo.isAdmin
       this.$router.push({path: '/UserViewProjectsAndPapers'})
@@ -349,16 +330,6 @@ export default {
       //提示修改成功
       // })
     },
-    usermanagement() {
-      if (this.$data.userinfo.isAdmin === "1") {
-        this.$router.push({path: '/UserManagement'})
-      } else {
-        this.$message({
-          message: "没有权限！",
-          type: 'warning'
-        })
-      }
-    },
     logout() {
       axios.get('mu/logout').then(res => {
         this.$message({
@@ -370,7 +341,7 @@ export default {
       this.$router.push({path: '/'})
     },
     echartsInit: function () {
-      if(this.$store.state.userinfo.isAdmin==='0') {
+      if (this.$store.state.userinfo.isAdmin === '0') {
         this.email = this.$store.state.userinfo.email
         let myChart = this.$echarts.init(document.getElementById('main'), 'white');
         let nowDate = new Date();
@@ -387,7 +358,6 @@ export default {
         this.option.xAxis.data[0] = date.month - 5 + '月'
         axios.get((`mu/project/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res => {
           if (res.status === 200) {
-            console.log("project 200")
             for (let i = 0; i < res.data.length; i++) {
               let projectDate = new Date(res.data[i].setTime)
               this.month = projectDate.getMonth() + 1
@@ -408,7 +378,6 @@ export default {
             this.option.series[1].data = this.projectMonth
             axios.get((`mu/thesis/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res0 => {
               if (res0.status === 200) {
-                console.log("thesis 200")
                 for (let i = 0; i < res0.data.length; i++) {
                   let thesisDate = new Date(res0.data[i].submitTime)
                   this.month = thesisDate.getMonth() + 1
@@ -429,41 +398,41 @@ export default {
                 this.option.series[0].data = this.thesisMonth
                 myChart.setOption(this.option);
               }
-            },error=>{
-              console.log("thesis 420")
+            }, error => {
               if (error && error.response) {
                 switch (error.response.status) {
-                  case 400: this.$message.error("400")
+                  case 400:
+                    this.$message.error("服务器错误")
                     break;
-                  case 403: this.$message.error("没有权限！");
+                  case 403:
+                    this.$message.error("没有权限！");
                     break;
                   case 420: {
-                    // this.$message.error("没有找到用户论文！")
                     this.option.series[0].data = this.thesisMonth
                     myChart.setOption(this.option);
                   }
                     break;
-                  default: this.$message.error("连接错误！")
+                  default:
+                    this.$message.error("连接错误！")
                 }
-              }else{
+              } else {
                 this.$message.error("连接服务器失败！")
               }
             })
           }
-        },error=>{
-          console.log("project 420")
+        }, error => {
           if (error && error.response) {
             switch (error.response.status) {
-              case 400: this.$message.error("400")
+              case 400:
+                this.$message.error("服务器错误")
                 break;
-              case 403: this.$message.error("没有权限！");
+              case 403:
+                this.$message.error("没有权限！");
                 break;
               case 420: {
-                // this.$message.error("没有找到用户项目！")
                 this.option.series[1].data = this.projectMonth
                 axios.get((`mu/thesis/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res0 => {
                   if (res0.status === 200) {
-                    console.log("thesis 200")
                     for (let i = 0; i < res0.data.length; i++) {
                       let thesisDate = new Date(res0.data[i].submitTime)
                       this.month = thesisDate.getMonth() + 1
@@ -484,36 +453,38 @@ export default {
                     this.option.series[0].data = this.thesisMonth
                     myChart.setOption(this.option);
                   }
-                },error0=>{
-                  console.log("thesis 420")
+                }, error0 => {
                   if (error0 && error0.response) {
                     switch (error0.response.status) {
-                      case 400: this.$message.error("400")
+                      case 400:
+                        this.$message.error("服务器错误")
                         break;
-                      case 403: this.$message.error("没有权限！");
+                      case 403:
+                        this.$message.error("没有权限！");
                         break;
                       case 420: {
-                        // this.$message.error("没有找到用户论文！")
                         this.option.series[0].data = this.thesisMonth
                         myChart.setOption(this.option);
                       }
                         break;
-                      default: this.$message.error("连接错误！")
+                      default:
+                        this.$message.error("连接错误！")
                     }
-                  }else{
+                  } else {
                     this.$message.error("连接服务器失败！")
                   }
                 })
               }
                 break;
-              default: this.$message.error("连接错误！")
+              default:
+                this.$message.error("连接错误！")
             }
-          }else{
+          } else {
             this.$message.error("连接服务器失败！")
           }
         })
-      }else if(this.$store.state.userinfo.isAdmin==='1') {
-        this.option.title.text='近半年所有用户提交数据统计！'
+      } else if (this.$store.state.userinfo.isAdmin === '1') {
+        this.option.title.text = '近半年所有用户提交数据统计！'
         this.email = this.$store.state.userinfo.email
         let myChart = this.$echarts.init(document.getElementById('main'), 'dark');
         let nowDate = new Date();
@@ -531,7 +502,6 @@ export default {
 
         axios.get((`mu/project/queryAll`)).then(res => {
           if (res.status === 200) {
-            console.log("project 200")
             for (let i = 0; i < res.data.length; i++) {
               let projectDate = new Date(res.data[i].setTime)
               this.month = projectDate.getMonth() + 1
@@ -552,7 +522,6 @@ export default {
             this.option.series[1].data = this.projectMonth
             axios.get((`mu/thesis/queryAll`)).then(res0 => {
               if (res0.status === 200) {
-                console.log("thesis 200")
                 for (let i = 0; i < res0.data.length; i++) {
                   let thesisDate = new Date(res0.data[i].submitTime)
                   this.month = thesisDate.getMonth() + 1
@@ -573,41 +542,43 @@ export default {
                 this.option.series[0].data = this.thesisMonth
                 myChart.setOption(this.option);
               }
-            },error=>{
+            }, error => {
               console.log(error)
               if (error && error.response) {
                 switch (error.response.status) {
-                  case 400: this.$message.error("400")
+                  case 400:
+                    this.$message.error("服务器错误")
                     break;
-                  case 403: this.$message.error("没有权限！");
+                  case 403:
+                    this.$message.error("没有权限！");
                     break;
                   case 420: {
-                    this.$message.error("没有找到用户论文！")
                     this.option.series[0].data = this.thesisMonth
                     myChart.setOption(this.option);
                   }
                     break;
-                  default: this.$message.error("连接错误！")
+                  default:
+                    this.$message.error("连接错误！")
                 }
-              }else{
+              } else {
                 this.$message.error("连接服务器失败！")
               }
             })
           }
-        },error=>{
+        }, error => {
           console.log(error)
           if (error && error.response) {
             switch (error.response.status) {
-              case 400: this.$message.error("400")
+              case 400:
+                this.$message.error("服务器错误")
                 break;
-              case 403: this.$message.error("没有权限！");
+              case 403:
+                this.$message.error("没有权限！");
                 break;
               case 420: {
-                this.$message.error("没有找到用户项目！")
                 this.option.series[1].data = this.projectMonth
                 axios.get((`mu/thesis/queryAll`)).then(res0 => {
                   if (res0.status === 200) {
-                    console.log("thesis 200")
                     for (let i = 0; i < res0.data.length; i++) {
                       let thesisDate = new Date(res0.data[i].submitTime)
                       this.month = thesisDate.getMonth() + 1
@@ -628,31 +599,34 @@ export default {
                     this.option.series[0].data = this.thesisMonth
                     myChart.setOption(this.option);
                   }
-                },error0=>{
+                }, error0 => {
                   console.log(error0)
                   if (error0 && error0.response) {
                     switch (error0.response.status) {
-                      case 400: this.$message.error("400")
+                      case 400:
+                        this.$message.error("服务器错误")
                         break;
-                      case 403: this.$message.error("没有权限！");
+                      case 403:
+                        this.$message.error("没有权限！");
                         break;
                       case 420: {
-                        this.$message.error("没有找到用户论文！")
                         this.option.series[0].data = this.thesisMonth
                         myChart.setOption(this.option);
                       }
                         break;
-                      default: this.$message.error("连接错误！")
+                      default:
+                        this.$message.error("连接错误！")
                     }
-                  }else{
+                  } else {
                     this.$message.error("连接服务器失败！")
                   }
                 })
               }
                 break;
-              default: this.$message.error("连接错误！")
+              default:
+                this.$message.error("连接错误！")
             }
-          }else{
+          } else {
             this.$message.error("连接服务器失败！")
           }
         })
@@ -665,10 +639,12 @@ export default {
 <style lang="less">
 .el-row {
   margin-bottom: 20px;
+
   &:last-child {
     margin-bottom: 0;
   }
 }
+
 .el-col {
   border-radius: 4px;
 }
@@ -685,15 +661,17 @@ export default {
 ////  background: #e5e9f2;
 ////}
 
-.el-main{
+.el-main {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
+
 .el-aside::-webkit-scrollbar {
   display: none;
 }
+
 .user {
   display: flex;
   align-items: center;
@@ -744,7 +722,8 @@ export default {
     }
   }
 }
-.el-header{
+
+.el-header {
   padding: 0 0;
 }
 </style>

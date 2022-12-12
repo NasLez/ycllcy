@@ -82,12 +82,7 @@ export default {
         })
       } else {
         axios.post(`mu/resetPassword?email=${this.YclResetPassword.email}&code=${this.YclResetPassword.code}&newPassword=${this.YclResetPassword.NewPassword}`).then(res3 => {
-          if (res3.status === 400) {
-            this.$message({
-              message: "服务器错误！",
-              type: 'warning'
-            })
-          } else if (res3.status === 220) {
+           if (res3.status === 220) {
             this.$message({
               message: "邀请码不正确或者邀请码和真实姓名不匹配！",
               type: 'warning'
@@ -102,7 +97,6 @@ export default {
               message: "修改密码成功！",
               type: 'success'
             })
-            // this.$router.push({path:'/'})
             this.activeName = 'login'
           }
         })
@@ -131,12 +125,7 @@ export default {
           email: this.$data.formLabelAlign.email,
           password: this.$data.formLabelAlign.password
         }).then(res2 => {
-          if (res2.status === 400) {
-            this.$message({
-              message: "服务器错误！",
-              type: 'warning'
-            })
-          } else if (res2.status === 220) {
+          if (res2.status === 220) {
             this.$message({
               message: "登录密码错误！",
               type: 'warning'
@@ -152,7 +141,6 @@ export default {
               type: 'success'
             })
             console.log("正在修改权限")
-            // this.$router.push({path: '/HomePage', query: {email: this.$data.formLabelAlign.email}})
             that.$store.state.userinfo.email= that.$data.formLabelAlign.email
             axios.get(`mu/getUsernames/email=${that.$data.formLabelAlign.email}`, {
               email: that.$data.formLabelAlign.email,
@@ -162,7 +150,6 @@ export default {
               console.log("权限修改成功")
               that.$router.push({path: '/HomePage'})
             });
-            // console.log(that.$store.state.userinfo.isAdmin)
           }
         })
       }

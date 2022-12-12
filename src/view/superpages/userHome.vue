@@ -150,19 +150,15 @@ export default {
   components: {
     CommonAside,
     CommonHeader,
-    // StatisticalSubmissionInformation
   },
   mounted() {
     this.echartsInit();
   },
   created: function () {
     let that = this;
-    // console.log(this.$route.query.email)
-    // this.email1 = this.$route.query.email;
     console.log(this.$store.state.userinfo.email)
     this.email1 = this.$store.state.userEmail;
     GetUser(this.email1);
-
     function GetUser(MyEmail) {
       axios.get(`mu/getUsernames/email=${MyEmail}`, {
         email: MyEmail,
@@ -182,50 +178,33 @@ export default {
     }
 
     this.email = this.$store.state.userEmail
-    // this.$message.success(this.email)
     axios.get(`mu/project/getScoreByEmail?email=${this.email}`).then(res => {
-      if (res.status === 200) {
         console.log('项目总分数',res.data)
         this.userData.projectScore = res.data
-      } else if (res.status === 403) {
-        this.$message.error("Unauthorized")
-      } else if (res.status === 400) {
-        this.$message.error("Serve Error")
-      }
+    },error=>{
+      console.log(error)
+      this.$message.error("服务器错误")
     })
     axios.get(`mu/thesis/getScoreByEmail?email=${this.email}`).then(res => {
-      if (res.status === 200) {
         console.log('论文总分数',res.data)
         this.userData.thesisScore = res.data
-      } else if (res.status === 403) {
-        this.$message.error("Unauthorized")
-      } else if (res.status === 400) {
-        this.$message.error("Serve Error")
-      }
+    },error=>{
+      console.log(error)
+      this.$message.error("服务器错误")
     })
     axios.get((`mu/project/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res => {
-      if (res.status === 200) {
         let arr = Array.from(res.data);
         this.userData.projectNumber = arr.length
-      } else if (res.status === 403) {
-        this.$message.error("Unauthorized")
-      } else if (res.status === 400) {
-        this.$message.error("Serve Error")
-      } else if (res.status === 404) {
-        this.$message.error("Not Found")
-      }
+    },error=>{
+      console.log(error)
+      this.$message.error("服务器错误")
     })
     axios.get((`mu/thesis/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res => {
-      if (res.status === 200) {
         let arr = Array.from(res.data);
         this.userData.thesisNumber = arr.length
-      } else if (res.status === 403) {
-        this.$message.error("Unauthorized")
-      } else if (res.status === 400) {
-        this.$message.error("Serve Error")
-      } else if (res.status === 404) {
-        this.$message.error("Not Found")
-      }
+    },error=>{
+      console.log(error)
+      this.$message.error("服务器错误")
     })
   },
   methods: {
@@ -271,7 +250,6 @@ export default {
         this.option.xAxis.data[0] = date.month - 5 + '月'
         axios.get((`mu/project/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res => {
           if (res.status === 200) {
-            console.log("project 200")
             for (let i = 0; i < res.data.length; i++) {
               let projectDate = new Date(res.data[i].setTime)
               this.month = projectDate.getMonth() + 1
@@ -292,7 +270,6 @@ export default {
             this.option.series[1].data = this.projectMonth
             axios.get((`mu/thesis/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res0 => {
               if (res0.status === 200) {
-                console.log("thesis 200")
                 for (let i = 0; i < res0.data.length; i++) {
                   let thesisDate = new Date(res0.data[i].submitTime)
                   this.month = thesisDate.getMonth() + 1
@@ -314,15 +291,13 @@ export default {
                 myChart.setOption(this.option);
               }
             },error=>{
-              console.log("thesis 420")
               if (error && error.response) {
                 switch (error.response.status) {
-                  case 400: this.$message.error("400")
+                  case 400: this.$message.error("服务器错误")
                     break;
                   case 403: this.$message.error("没有权限！");
                     break;
                   case 420: {
-                    // this.$message.error("没有找到用户论文！")
                     this.option.series[0].data = this.thesisMonth
                     myChart.setOption(this.option);
                   }
@@ -335,19 +310,16 @@ export default {
             })
           }
         },error=>{
-          console.log("project 420")
           if (error && error.response) {
             switch (error.response.status) {
-              case 400: this.$message.error("400")
+              case 400: this.$message.error("服务器错误")
                 break;
               case 403: this.$message.error("没有权限！");
                 break;
               case 420: {
-                // this.$message.error("没有找到用户项目！")
                 this.option.series[1].data = this.projectMonth
                 axios.get((`mu/thesis/queryByUploaderEmail?uploaderEmail=${this.email}`)).then(res0 => {
                   if (res0.status === 200) {
-                    console.log("thesis 200")
                     for (let i = 0; i < res0.data.length; i++) {
                       let thesisDate = new Date(res0.data[i].submitTime)
                       this.month = thesisDate.getMonth() + 1
@@ -369,15 +341,13 @@ export default {
                     myChart.setOption(this.option);
                   }
                 },error0=>{
-                  console.log("thesis 420")
                   if (error0 && error0.response) {
                     switch (error0.response.status) {
-                      case 400: this.$message.error("400")
+                      case 400: this.$message.error("服务器错误")
                         break;
                       case 403: this.$message.error("没有权限！");
                         break;
                       case 420: {
-                        // this.$message.error("没有找到用户论文！")
                         this.option.series[0].data = this.thesisMonth
                         myChart.setOption(this.option);
                       }

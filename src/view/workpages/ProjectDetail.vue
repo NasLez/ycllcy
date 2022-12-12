@@ -229,10 +229,11 @@ export default {
     },
     deleteProject() {
       axios.delete(`mu/project/delete?id=${this.project.id}`).then(res => {
-        if (res.status === 200) {
           this.$message.success("删除成功")
           this.$router.push({path: '/UserViewProjectsAndPapers'})
-        }
+      },error=>{
+        console.log(error)
+        this.$message.error("删除失败！")
       })
     },
     showEditDialog() {

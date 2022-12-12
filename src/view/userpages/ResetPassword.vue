@@ -111,12 +111,7 @@ export default {
         })
       } else {
         axios.put(`mu/register?username=${this.yclRegister.username}&phone=${this.yclRegister.phone}&email=${this.yclRegister.email}&school=${this.yclRegister.school}&password=${this.yclRegister.password}&code=${this.yclRegister.code}&name=${this.yclRegister.name}`).then(res4 => {
-          if (res4.status === 400) {
-            this.$message({
-              message: "服务器错误！",
-              type: 'warning'
-            })
-          } else if (res4.status === 220) {
+          if (res4.status === 220) {
             this.$message({
               message: "邀请码不正确或者邀请码和真实姓名不匹配！",
               type: 'warning'

@@ -151,7 +151,6 @@ export default {
       }
       this.$data.thesisData = this.$data.thesisData1
       this.$data.projectData = this.$data.projectData1
-      // this.$data.thesisData = res.data;
     })
   },
   methods: {
