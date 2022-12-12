@@ -51,6 +51,7 @@ const store = new Vuex.Store({
             due:'',
         },
         menuIndex: 1,
+        userEmail:''
     },
     mutations:{
         // setuser(state, email){

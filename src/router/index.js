@@ -13,7 +13,7 @@ import UserViewProjectsAndPapers from "@/view/UserViewProjectsAndPapers";
 import StatisticalSubmissionInformation from "@/component/StatisticalSubmissionInformation";
 import PaperEdit from "@/view/PaperEdit";
 import PaperDetail from "@/view/PaperDetail";
-
+import userHome from "@/view/userHome";
 Vue.use(VueRouter)
 
 const routes = [
@@ -68,6 +68,10 @@ const routes = [
     {
         path: '/PaperDetail',
         component: PaperDetail
+    },
+    {
+        path: '/userHome',
+        component: userHome
     }
 ]
 const router = new VueRouter({
