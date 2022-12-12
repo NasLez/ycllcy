@@ -8,6 +8,8 @@
         <CommonAside/>
       </el-aside>
       <el-main>
+        <el-page-header @back="goBack" content="详情页面">
+        </el-page-header>
         <div>
           <el-col :span="8">
             <div class="grid-content1">
@@ -222,6 +224,9 @@ export default {
     })
   },
   methods: {
+    goBack() {
+      this.$router.push({path: '/UserManagement'})
+    },
     ViewProjectsAndPapers() {
       this.$store.state.userinfo.isAdmin = this.userinfo.isAdmin
       this.$router.push({path: '/UserViewProjectsAndPapers'})
