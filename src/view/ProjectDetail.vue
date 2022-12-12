@@ -196,7 +196,6 @@ export default {
         that.$data.userinfo.school = res.data.school;
         that.$data.userinfo.password = res.data.password;
         that.$data.userinfo.code = res.data.code;
-        that.$data.project.uploaderEmail = res.data.email;
       });
       axios.get(`mu/project/queryById?id=${id}`, {
         id: id
@@ -204,6 +203,7 @@ export default {
         console.log(res.data);
         console.log("项目信息")
         that.$data.project.id = res.data.id;
+        that.$data.project.uploaderEmail = res.data.uploaderEmail;
         that.$data.project.channelId = res.data.channelId;
         that.$data.project.name = res.data.name;
         that.$data.project.maintainer = res.data.maintainer;

@@ -193,7 +193,6 @@ export default {
         that.$data.userinfo.school = res.data.school;
         that.$data.userinfo.password = res.data.password;
         that.$data.userinfo.code = res.data.code;
-        that.$data.thesis.uploaderEmail = res.data.email;
       });
       axios.get(`mu/thesis/queryById?id=${id}`, {
         id: id
@@ -203,6 +202,7 @@ export default {
         that.$data.thesis.id = res.data.id;
         that.$data.thesis.channelId = res.data.channelId;
         that.$data.thesis.name = res.data.name;
+        that.$data.thesis.uploaderEmail = res.data.uploaderEmail;
         that.$data.thesis.maintainer = res.data.maintainer;
         that.$data.thesis.description = res.data.description;
         that.$data.thesis.company = res.data.company;
