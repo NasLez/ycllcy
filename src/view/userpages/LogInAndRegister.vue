@@ -44,7 +44,7 @@
 </template>
 <script>
 import axios from "axios";
-import store from "../vuex/store.js";
+import store from "../../vuex/store.js";
 export default {
   name: "LogInAndRegister",
   data() {
@@ -171,7 +171,7 @@ export default {
 };
 </script>
 <style>
-@import '../component/reset.css';
+@import '../../component/reset.css';
 #body{
   height: 100%;
   width: 100%;

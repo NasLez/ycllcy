@@ -10,8 +10,8 @@
       <el-main>
         <el-breadcrumb>
           <el-breadcrumb-item :to="{ path: '/UserViewProjectsAndPapers' }">查看提交</el-breadcrumb-item>
-          <el-breadcrumb-item>论文提交</el-breadcrumb-item>
-          <el-breadcrumb-item>论文详情</el-breadcrumb-item>
+          <el-breadcrumb-item>项目提交</el-breadcrumb-item>
+          <el-breadcrumb-item>项目详情</el-breadcrumb-item>
         </el-breadcrumb>
         <br>
         <div style="display: flex;justify-content: center">
@@ -19,20 +19,20 @@
             <div>
               <div style="text-align: center">
                 <a style="font-size: 25px;color: #005EC1;font-weight: bold">
-                  {{ thesis.name }}
+                  {{ project.name }}
                 </a>
                 <el-tag size="small"
                         style="font-size: 15px"
-                        v-if="thesis.status==='Waiting'">
+                        v-if="project.status==='Waiting'">
                   审核中
                 </el-tag>
                 <el-tag size="small" type="info"
-                        v-if="thesis.status==='Accept'"
+                        v-if="project.status==='Accept'"
                         style="font-size: 15px">
                   审核通过
                 </el-tag>
                 <el-tag size="small" type="danger"
-                        v-if="thesis.status==='Reject'"
+                        v-if="project.status==='Reject'"
                         style="font-size: 15px">
                   审核驳回
                 </el-tag>
@@ -40,61 +40,61 @@
             </div>
             <br>
             <div>
-              <div style="margin: 15px 0">
+              <div style="margin: 10px 0">
                 <a style="font-weight: bold;text-align: left">作者：</a>
-                <a style="">
-                  {{ thesis.maintainer }}
+                <a>
+                  {{ project.maintainer }}
                 </a>
               </div>
-              <div  style="margin: 15px 0">
+              <div  style="margin: 10px 0">
                 <a style="font-weight: bold;text-align: left">所属单位：</a>
-                <a style="">
-                  {{ thesis.company }}
+                <a >
+                  {{ project.company }}
                 </a>
               </div>
-              <div style="margin: 15px 0">
-                <a style="font-weight: bold;text-align: left">所属研究方向：</a>
+              <div  style="margin: 10px 0">
+                <a style="font-weight: bold;text-align: left">项目所属类别：</a>
                 <a style="text-align: left">
                   {{ showChannel }}
                 </a>
               </div>
-              <div style="margin: 15px 0">
+              <div  style="margin: 10px 0">
                 <a style="font-weight: bold;text-align: left">上传者邮箱：</a>
-                <a style="text-align: left">
-                  {{ thesis.uploaderEmail }}
-                </a>
+                <a style="text-align: left">{{ project.uploaderEmail }}</a>
               </div>
-              <div style="margin-top: 15px">
+              <div  style="margin: 10px 0">
+                <a style="font-weight: bold;text-align: left">项目开始年份：</a>
+                <a style="text-align: left">{{ project.startYear }}</a>
+              </div>
+              <div  style="margin: 10px 0">
+                <a style="font-weight: bold;text-align: left">项目金额：</a>
+                <a style="text-align: left">{{ project.money }}</a>
+              </div>
+              <div  style="margin: 10px 0">
                 <a style="font-weight: bold;text-align: left">上传时间：</a>
-                <a style="text-align: left">
-                  {{ parseTime(thesis.setTime) }}
-                </a>
+                <a style="text-align: left">{{ project.setTime }}</a>
               </div>
               <div style="text-align: right;padding-right: 50px">
-                <!--            <el-button @click="edit" type="text" icon="el-icon-edit" style="color: lightskyblue"-->
-                <!--                       v-if="this.$store.state.userinfo.isAdmin==='0'">修改-->
-                <!--            </el-button>-->
-                <el-button @click="edit" type="text" icon="el-icon-edit" style="color: lightskyblue"
-                           v-if="this.$store.state.userinfo.isAdmin==='0'">修改
-                </el-button><el-popconfirm
-                  title="确定删除此论文吗？"
-                  confirm-button-text='是'
-                  cancel-button-text='否'
-                  icon="el-icon-info"
-                  icon-color="red"
-                  @confirm="deleteProject">
-                <el-button slot="reference" type="text" style="color: #99a9bf" icon="el-icon-delete-solid">删除
-                </el-button>
-              </el-popconfirm>
-                <el-button @click="downloadProfile" type="text" icon="el-icon-download">下载论文</el-button>
+                <el-button @click="edit" type="text" icon="el-icon-edit" style="color: lightskyblue" v-if="this.$store.state.userinfo.isAdmin==='0'">修改</el-button>
+                <el-popconfirm
+                    title="确定删除此项目吗？"
+                    confirm-button-text='是'
+                    cancel-button-text='否'
+                    icon="el-icon-info"
+                    icon-color="red"
+                    @confirm="deleteProject">
+                  <el-button slot="reference" type="text" style="color: #99a9bf" icon="el-icon-delete-solid">删除
+                  </el-button>
+                </el-popconfirm>
+                <el-button @click="downloadProfile" type="text" icon="el-icon-download">下载项目</el-button>
                 <el-button @click="downloadPic" type="text" icon="el-icon-download">下载凭证</el-button>
               </div>
             </div>
             <el-divider></el-divider>
             <div style="padding-bottom: 0">
-              <div style="font-weight: bold;text-align: left;color:#005EC1;margin: 10px 0 ">摘要：</div>
+              <div style="font-weight: bold;text-align: left;color:#005EC1;margin: 10px 0 ">简介：</div>
               <a style="text-align: left;line-height:2">
-                {{ thesis.description }}
+                {{ project.description }}
               </a>
             </div>
             <div v-if="this.$store.state.userinfo.isAdmin==='1'" style="padding-bottom: 0">
@@ -117,23 +117,22 @@
                   </span>
                 </el-dialog>
               </el-card>
-              <br><br>
-            </div>
+            </div><br><br>
           </el-card>
         </div>
-
       </el-main>
     </el-container>
   </el-container>
 </template>
+
 <script>
 import axios from "axios";
 import store from "@/vuex/store.js";
-import CommonAside from "../component/CommonAside"
+import CommonAside from "../../component/CommonAside"
 import CommonHeader from "@/component/CommonHeader";
 
 export default {
-  name: "PaperDetail",
+  name: "ProjectDetail",
   store,
   components: {
     CommonAside,
@@ -141,7 +140,6 @@ export default {
   },
   data() {
     return {
-      // step_active: 0,
       showChannel: "",
       editDialogVisible: false,
       editStatus: "",
@@ -156,7 +154,7 @@ export default {
         "code": "",
         "name": ""
       },
-      thesis: {
+      project: {
         id: '',
         name: '',
         uploaderEmail: '',
@@ -164,19 +162,24 @@ export default {
         channelId: '',
         description: '',
         company: '',
+        money: '',
         setTime: '',
         status: '',
+        startYear: ''
       },
     }
   },
   created() {
     let that = this;
-    this.thesis.id = this.$store.state.thesis.id
-    console.log(this.thesis.id)
+    // this.project.id = this.$route.query.id
+    this.project.id = this.$store.state.project.id
+    console.log(this.project.id)
+    // this.userinfo.email = this.$route.query.email
     this.userinfo.email = this.$store.state.userinfo.email
     console.log(this.userinfo.email)
     console.log("到达详情页面")
-    getUSerAndProject(this.userinfo.email, this.thesis.id);
+
+    getUSerAndProject(this.userinfo.email, this.project.id);
 
     function getUSerAndProject(email, id) {
       axios.get(`mu/getUsernames/email=${email}`, {
@@ -194,24 +197,25 @@ export default {
         that.$data.userinfo.password = res.data.password;
         that.$data.userinfo.code = res.data.code;
       });
-      axios.get(`mu/thesis/queryById?id=${id}`, {
+      axios.get(`mu/project/queryById?id=${id}`, {
         id: id
       }).then(res => {
         console.log(res.data);
         console.log("项目信息")
-        that.$data.thesis.id = res.data.id;
-        that.$data.thesis.channelId = res.data.channelId;
-        that.$data.thesis.name = res.data.name;
-        that.$data.thesis.uploaderEmail = res.data.uploaderEmail;
-        that.$data.thesis.maintainer = res.data.maintainer;
-        that.$data.thesis.description = res.data.description;
-        that.$data.thesis.company = res.data.company;
-        that.$data.thesis.setTime = res.data.submitTime;
-        // if(res.data.status !="waiting"){
-        //   that.step_active="1"
-        // }
-        that.$data.thesis.status = res.data.status;
-        axios.get(`mu/getChannelById?id=${that.$data.thesis.channelId}`).then(res => {
+        that.$data.project.id = res.data.id;
+        that.$data.project.uploaderEmail = res.data.uploaderEmail;
+        that.$data.project.channelId = res.data.channelId;
+        that.$data.project.name = res.data.name;
+        that.$data.project.maintainer = res.data.maintainer;
+        that.$data.project.description = res.data.description;
+        that.$data.project.company = res.data.company;
+        that.$data.project.money = res.data.money;
+        that.$data.project.setTime = res.data.setTime;
+        that.$data.project.status = res.data.status;
+        that.$data.project.startYear = res.data.startYear;
+        axios.get(`mu/getChannelById?id=${that.$data.project.channelId}`, {
+          id: that.$data.project.channelId
+        }).then(res => {
           console.log(res.data);
           console.log("打印通道信息")
           that.$data.showChannel = res.data.name;
@@ -220,47 +224,11 @@ export default {
     }
   },
   methods: {
-    parseTime(time, cFormat) {
-      if (arguments.length === 0) {
-        return null
-      }
-      const format = cFormat || '{y}-{m}-{d} {h}:{i}:{s}'
-      let date
-      if (typeof time === 'object') {
-        date = time
-      } else {
-        if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
-          time = parseInt(time)
-        }
-        if ((typeof time === 'number') && (time.toString().length === 10)) {
-          time = time * 1000
-        }
-        date = new Date(time)
-      }
-      const formatObj = {
-        y: date.getFullYear(),
-        m: date.getMonth() + 1,
-        d: date.getDate(),
-        h: date.getHours(),
-        i: date.getMinutes(),
-        s: date.getSeconds(),
-        a: date.getDay()
-      }
-      const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
-        const value = formatObj[key]
-        // Note: getDay() returns 0 on Sunday
-        if (key === 'a') {
-          return ['日', '一', '二', '三', '四', '五', '六'][value]
-        }
-        return value.toString().padStart(2, '0')
-      })
-      return time_str
-    },
     edit() {
-      this.$router.push({path: '/PaperEdit'})
+      this.$router.push({path: '/ProjectEdit'})
     },
     deleteProject() {
-      axios.delete(`mu/thesis/delete?id=${this.thesis.id}`).then(res => {
+      axios.delete(`mu/project/delete?id=${this.project.id}`).then(res => {
         if (res.status === 200) {
           this.$message.success("删除成功")
           this.$router.push({path: '/UserViewProjectsAndPapers'})
@@ -275,21 +243,23 @@ export default {
     },
     changeStatus() {
       let that = this;
-      axios.post(`mu/thesis/changeStatus?id=${that.$data.thesis.id}&status=${that.$data.editStatus}`).then(res => {
-        this.thesis.status = that.editStatus;
+      axios.post(`mu/project/changeStatus?id=${that.$data.project.id}&status=${that.$data.editStatus}`, {
+        id: that.$data.project.id,
+        status: that.$data.editStatus
+      }).then(res => {
         console.log("修改状态成功")
         console.log(res.data)
       });
       this.editDialogVisible = false
-      this.thesis.status = this.editStatus
+      this.project.status = this.editStatus
     },
     downloadProfile() {
       let that = this;
-      window.open(`mu/thesis/download/${that.$data.thesis.id}/zip`, "_blank")
+      window.open(`mu/project/download/${that.$data.project.id}/zip`, "_blank")
     },
     downloadPic() {
       let that = this;
-      window.open(`mu/thesis/download/${that.$data.thesis.id}/fig`, "_blank")
+      window.open(`mu/project/download/${that.$data.project.id}/fig`, "_blank")
     }
   }
 

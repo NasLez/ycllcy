@@ -7,13 +7,14 @@
       <el-aside width="200px">
         <CommonAside/>
       </el-aside>
-      <el-main style="padding-left: 8%">
-        <div>
+      <el-main>
+        <el-page-header @back="goBack" content="详情页面" style="margin-bottom: 2%">
+        </el-page-header>
+        <div style="margin-left: 10%">
           <el-col :span="8">
             <div style="display: flex;flex-direction: column;justify-content: center">
               <div>
-                <el-image style="width: 300px;height: 300px" :src="require('./qll.jpg')" v-if="this.$store.state.userinfo.isAdmin==='1'"></el-image>
-                <el-image style="width: 300px;height: 300px" :src="require('./ymr.jpg')" v-if="this.$store.state.userinfo.isAdmin==='0'"></el-image>
+                <el-image style="width: 300px;height: 300px" :src="require('/src/avatar/ymr.jpg')"></el-image>
               </div>
               <div>
                 <el-card class="box-card" style="width: 300px">
@@ -27,54 +28,16 @@
                       <div class="user-school">学校：{{ userinfo.school }}</div><br>
                     </div>
                   </div>
-                  <template style=" display:flex;justify-content: center;align-text:center;">
-                    <el-button size="small" type="info" round style="margin-top: 0px;margin-left: 90px"
-                               @click="showEditDialog()">修改信息
-                    </el-button>
-                  </template>
                 </el-card>
               </div>
               <div>
 
               </div>
-              <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
-                <el-dialog
-                    title="修改用户"
-                    :visible.sync="editDialogVisible"
-                    width="50%" @close="editDialogClosed">
-                  <el-form :model="userinfo" :rules="editFormRules" ref="editFormRef" label-width="70px">
-                    <!--     disabled表示禁用状态     -->
-
-                    <el-form-item label="真实姓名" prop="name">
-                      <el-input v-model="userinfo.name" disabled></el-input>
-                    </el-form-item>
-                    <el-form-item label="身份" prop="isAdmin">
-                      <el-input v-model="showAdmin" disabled></el-input>
-                    </el-form-item>
-                    <el-form-item label="邮箱" prop="email">
-                      <el-input v-model="userinfo.email" disabled></el-input>
-                    </el-form-item>
-                    <el-form-item label="用户名" prop="username">
-                      <el-input v-model="userinfo.username"></el-input>
-                    </el-form-item>
-                    <el-form-item label="电话号码" prop="phone">
-                      <el-input v-model="userinfo.phone"></el-input>
-                    </el-form-item>
-                    <el-form-item label="学校" prop="school">
-                      <el-input v-model="userinfo.school"></el-input>
-                    </el-form-item>
-                  </el-form>
-                  <span slot="footer" class="dialog-footer">
-                <el-button @click="editDialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="editUserInfo">确 定</el-button>
-              </span>
-                </el-dialog>
-              </el-card>
             </div>
           </el-col>
           <el-col :span="16" >
             <el-row>
-              <el-descriptions :column="1" border class="grid-content2" v-if="this.$store.state.userinfo.isAdmin==='0'">
+              <el-descriptions :column="1" border class="grid-content2">
                 <el-descriptions-item
                     content-class-name="my-content"
                     label="上传总分数">
@@ -95,30 +58,24 @@
               </el-descriptions>
             </el-row>
             <el-row>
-              <div v-if="this.$store.state.userinfo.isAdmin == 1" style="width: 650px;height: 540px" id="main">
-              </div>
-              <div v-else style="width: 600px;height: 300px" id='main'>
+              <div style="width: 600px;height: 300px" id='main'>
               </div>
             </el-row>
           </el-col>
         </div>
-
-
       </el-main>
-      <!--        <el-footer>Footer</el-footer>-->
     </el-container>
   </el-container>
 </template>
 
 <script>
 import axios from "axios";
-import store from "../vuex/store.js"
-import CommonAside from "../component/CommonAside"
+import store from "../../vuex/store.js"
+import CommonAside from "../../component/CommonAside"
 import CommonHeader from "@/component/CommonHeader";
-// import StatisticalSubmissionInformation from "@/component/StatisticalSubmissionInformation";
 
 export default {
-  name: "HomePage",
+  name: "userHome",
   store,
   data() {
     return {
@@ -142,23 +99,11 @@ export default {
         "code": "",
         "name": ""
       },
-      editFormRules: {
-        email: [
-          {
-            required: true,
-            message: '请输入邮箱',
-            trigger: 'blur'
-          },
-          {
-            trigger: 'blur'
-          }
-        ],
-      },
       thesisMonth: [0, 0, 0, 0, 0, 0],
       projectMonth: [0, 0, 0, 0, 0, 0],
       option: {
         title: {
-          text: '你的近半年提交数据统计！'
+          text: '该用户近半年提交数据统计！'
         },
         tooltip: {
           trigger: 'axis'
@@ -189,13 +134,13 @@ export default {
           {
             name: '论文',
             type: 'line',
-            stack: 'thesisData',
+            stack: 'thesis',
             data: [0, 0, 0, 0, 0, 0]
           },
           {
             name: '项目',
             type: 'line',
-            stack: 'projectData',
+            stack: 'project',
             data: [0, 0, 0, 0, 0, 0]
           },
         ]
@@ -215,7 +160,7 @@ export default {
     // console.log(this.$route.query.email)
     // this.email1 = this.$route.query.email;
     console.log(this.$store.state.userinfo.email)
-    this.email1 = this.$store.state.userinfo.email;
+    this.email1 = this.$store.state.userEmail;
     GetUser(this.email1);
 
     function GetUser(MyEmail) {
@@ -223,15 +168,10 @@ export default {
         email: MyEmail,
       }).then(res => {
         console.log(res.data);
-        if (res.data.isAdmin === "1") {
-          that.$data.showAdmin = "管理员";
-        } else {
-          that.$data.showAdmin = "用户";
-        }
+        that.$data.showAdmin = "用户";
         that.$data.userinfo.id = res.data.id;
         that.$data.userinfo.username = res.data.username;
         that.$data.userinfo.isAdmin = res.data.isAdmin;
-        // that.$store.state.userinfo.isAdmin = res.data.isAdmin;
         that.$data.userinfo.name = res.data.name;
         that.$data.userinfo.phone = res.data.phone;
         that.$data.userinfo.email = res.data.email;
@@ -241,7 +181,7 @@ export default {
       });
     }
 
-    this.email = this.$store.state.userinfo.email
+    this.email = this.$store.state.userEmail
     // this.$message.success(this.email)
     axios.get(`mu/project/getScoreByEmail?email=${this.email}`).then(res => {
       if (res.status === 200) {
@@ -289,8 +229,8 @@ export default {
     })
   },
   methods: {
-    StatisticalSubmissionInformation() {
-      this.$router.push({path: '/StatisticalSubmissionInformation'})
+    goBack() {
+      this.$router.push({path: '/UserManagement'})
     },
     ViewProjectsAndPapers() {
       this.$store.state.userinfo.isAdmin = this.userinfo.isAdmin
@@ -302,15 +242,10 @@ export default {
         email: MyEmail,
       }).then(res => {
         console.log(res.data);
-        if (res.data.isAdmin === "1") {
-          that.$data.showAdmin = "管理员";
-        } else {
-          that.$data.showAdmin = "用户";
-        }
+        that.$data.showAdmin = "用户";
         that.$data.userinfo.id = res.data.id;
         that.$data.userinfo.username = res.data.username;
         that.$data.userinfo.isAdmin = res.data.isAdmin;
-        this.$store.state.userinfo.isAdmin = res.data.isAdmin;
         that.$data.userinfo.name = res.data.name;
         that.$data.userinfo.phone = res.data.phone;
         that.$data.userinfo.email = res.data.email;
@@ -319,59 +254,8 @@ export default {
         that.$data.userinfo.code = res.data.code;
       });
     },
-    showEditDialog() {
-      this.editDialogVisible = true;
-    },
-    editDialogClosed() {
-      this.$refs.editFormRef.resetFields()
-    },
-    editUserInfo() {
-      // 将修改数据传送到后端，并接收修改后的返回数据
-      console.log("正在修改用户信息")
-
-      let fulluser = this.$data.userinfo;
-      console.log(fulluser);
-      axios({
-        method: 'post',
-        url: `mu/updateUser`,
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        data: fulluser,
-      }).then(res => {
-        console.log(res);
-        console.log("修改成功");
-      })
-      //关闭会话框
-      this.editDialogVisible = false
-      //重新获取列表
-      this.methods.GetUser(this.userinfo.email);
-      //提示修改成功
-      // })
-    },
-    usermanagement() {
-      if (this.$data.userinfo.isAdmin === "1") {
-        this.$router.push({path: '/UserManagement'})
-      } else {
-        this.$message({
-          message: "没有权限！",
-          type: 'warning'
-        })
-      }
-    },
-    logout() {
-      axios.get('mu/logout').then(res => {
-        this.$message({
-          message: "注销登录成功！",
-          type: 'success'
-        })
-        return res;
-      })
-      this.$router.push({path: '/'})
-    },
     echartsInit: function () {
-      if(this.$store.state.userinfo.isAdmin==='0') {
-        this.email = this.$store.state.userinfo.email
+        this.email = this.$store.state.userEmail
         let myChart = this.$echarts.init(document.getElementById('main'), 'white');
         let nowDate = new Date();
         let date = {
@@ -512,151 +396,6 @@ export default {
             this.$message.error("连接服务器失败！")
           }
         })
-      }else if(this.$store.state.userinfo.isAdmin==='1') {
-        this.option.title.text='近半年所有用户提交数据统计！'
-        this.email = this.$store.state.userinfo.email
-        let myChart = this.$echarts.init(document.getElementById('main'), 'dark');
-        let nowDate = new Date();
-        let date = {
-          year: nowDate.getFullYear(),
-          month: nowDate.getMonth() + 1,
-          date: nowDate.getDate(),
-        }
-        this.option.xAxis.data[5] = date.month + '月'
-        this.option.xAxis.data[4] = date.month - 1 + '月'
-        this.option.xAxis.data[3] = date.month - 2 + '月'
-        this.option.xAxis.data[2] = date.month - 3 + '月'
-        this.option.xAxis.data[1] = date.month - 4 + '月'
-        this.option.xAxis.data[0] = date.month - 5 + '月'
-
-        axios.get((`mu/project/queryAll`)).then(res => {
-          if (res.status === 200) {
-            console.log("project 200")
-            for (let i = 0; i < res.data.length; i++) {
-              let projectDate = new Date(res.data[i].setTime)
-              this.month = projectDate.getMonth() + 1
-              if (date.month == this.month) {
-                this.projectMonth[5]++
-              } else if (date.month - 1 == this.month) {
-                this.projectMonth[4]++
-              } else if (date.month - 2 == this.month) {
-                this.projectMonth[3]++
-              } else if (date.month - 3 == this.month) {
-                this.projectMonth[2]++
-              } else if (date.month - 4 == this.month) {
-                this.projectMonth[1]++
-              } else if (date.month - 5 == this.month) {
-                this.projectMonth[0]++
-              }
-            }
-            this.option.series[1].data = this.projectMonth
-            axios.get((`mu/thesis/queryAll`)).then(res0 => {
-              if (res0.status === 200) {
-                console.log("thesis 200")
-                for (let i = 0; i < res0.data.length; i++) {
-                  let thesisDate = new Date(res0.data[i].submitTime)
-                  this.month = thesisDate.getMonth() + 1
-                  if (date.month == this.month) {
-                    this.thesisMonth[5]++
-                  } else if (date.month - 1 == this.month) {
-                    this.thesisMonth[4]++
-                  } else if (date.month - 2 == this.month) {
-                    this.thesisMonth[3]++
-                  } else if (date.month - 3 == this.month) {
-                    this.thesisMonth[2]++
-                  } else if (date.month - 4 == this.month) {
-                    this.thesisMonth[1]++
-                  } else if (date.month - 5 == this.month) {
-                    this.thesisMonth[0]++
-                  }
-                }
-                this.option.series[0].data = this.thesisMonth
-                myChart.setOption(this.option);
-              }
-            },error=>{
-              console.log(error)
-              if (error && error.response) {
-                switch (error.response.status) {
-                  case 400: this.$message.error("400")
-                    break;
-                  case 403: this.$message.error("没有权限！");
-                    break;
-                  case 420: {
-                    this.$message.error("没有找到用户论文！")
-                    this.option.series[0].data = this.thesisMonth
-                    myChart.setOption(this.option);
-                  }
-                    break;
-                  default: this.$message.error("连接错误！")
-                }
-              }else{
-                this.$message.error("连接服务器失败！")
-              }
-            })
-          }
-        },error=>{
-          console.log(error)
-          if (error && error.response) {
-            switch (error.response.status) {
-              case 400: this.$message.error("400")
-                break;
-              case 403: this.$message.error("没有权限！");
-                break;
-              case 420: {
-                this.$message.error("没有找到用户项目！")
-                this.option.series[1].data = this.projectMonth
-                axios.get((`mu/thesis/queryAll`)).then(res0 => {
-                  if (res0.status === 200) {
-                    console.log("thesis 200")
-                    for (let i = 0; i < res0.data.length; i++) {
-                      let thesisDate = new Date(res0.data[i].submitTime)
-                      this.month = thesisDate.getMonth() + 1
-                      if (date.month == this.month) {
-                        this.thesisMonth[5]++
-                      } else if (date.month - 1 == this.month) {
-                        this.thesisMonth[4]++
-                      } else if (date.month - 2 == this.month) {
-                        this.thesisMonth[3]++
-                      } else if (date.month - 3 == this.month) {
-                        this.thesisMonth[2]++
-                      } else if (date.month - 4 == this.month) {
-                        this.thesisMonth[1]++
-                      } else if (date.month - 5 == this.month) {
-                        this.thesisMonth[0]++
-                      }
-                    }
-                    this.option.series[0].data = this.thesisMonth
-                    myChart.setOption(this.option);
-                  }
-                },error0=>{
-                  console.log(error0)
-                  if (error0 && error0.response) {
-                    switch (error0.response.status) {
-                      case 400: this.$message.error("400")
-                        break;
-                      case 403: this.$message.error("没有权限！");
-                        break;
-                      case 420: {
-                        this.$message.error("没有找到用户论文！")
-                        this.option.series[0].data = this.thesisMonth
-                        myChart.setOption(this.option);
-                      }
-                        break;
-                      default: this.$message.error("连接错误！")
-                    }
-                  }else{
-                    this.$message.error("连接服务器失败！")
-                  }
-                })
-              }
-                break;
-              default: this.$message.error("连接错误！")
-            }
-          }else{
-            this.$message.error("连接服务器失败！")
-          }
-        })
-      }
     }
   }
 }
@@ -684,6 +423,17 @@ export default {
 ////.bg-purple-light {
 ////  background: #e5e9f2;
 ////}
+
+.grid-content1 {
+  border-radius: 4px;
+  min-height: 36px;
+  padding: 0;
+}
+.grid-content2 {
+  border-radius: 4px;
+  width: 600px;
+  min-height: 36px;
+}
 
 .el-main{
   display: flex;

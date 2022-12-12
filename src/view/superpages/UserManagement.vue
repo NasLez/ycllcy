@@ -87,9 +87,9 @@
                         :default-sort="{prop: 'id', order: 'ascending'}">
                 <el-table-column prop="date" label="用户头像" align="center">
                   <template slot-scope="scope">
-                    <el-image style="width: 50px;height: 50px" :src="require('./qll.jpg')"
+                    <el-image style="width: 50px;height: 50px" :src="require('/src/avatar/qll.jpg')"
                               v-if="scope.row.isAdmin==='1'"></el-image>
-                    <el-image style="width: 50px;height: 50px" :src="require('./ymr.jpg')"
+                    <el-image style="width: 50px;height: 50px" :src="require('/src/avatar/ymr.jpg')"
                               v-if="scope.row.isAdmin==='0'"></el-image>
                   </template>
                 </el-table-column>
@@ -155,7 +155,7 @@
 <script>
 import axios from "axios";
 import store from "@/vuex/store";
-import CommonAside from "../component/CommonAside"
+import CommonAside from "../../component/CommonAside"
 import CommonHeader from "@/component/CommonHeader";
 
 export default {

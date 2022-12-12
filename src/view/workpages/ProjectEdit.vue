@@ -94,7 +94,7 @@
 
 import axios from "axios";
 import store from "@/vuex/store";
-import CommonAside from "../component/CommonAside"
+import CommonAside from "../../component/CommonAside"
 import CommonHeader from "@/component/CommonHeader";
 
 export default {
