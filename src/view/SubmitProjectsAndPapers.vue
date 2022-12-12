@@ -20,8 +20,8 @@
               <el-table :data="thesisData"
                         :default-sort = "{prop: 'due', order: 'descending'}"
                         border style="width: 100%" @row-click="clickThesis">
-                <el-table-column label="研究方向"  prop="name"></el-table-column>
-                <el-table-column label="提交截止日期"  prop="due" sortable>
+                <el-table-column label="研究方向"  prop="name" align="center"></el-table-column>
+                <el-table-column label="提交截止日期"  prop="due" sortable align="center">
                   <template slot-scope="scope">
                     {{parseTime(scope.row.due)}}
                   </template>
@@ -32,8 +32,8 @@
               <el-table :data="projectData"
                         :default-sort = "{prop: 'due', order: 'descending'}"
                         border style="width: 100%" @row-click="clickProject">
-                <el-table-column  label="所属类别" prop="name"></el-table-column>
-                <el-table-column label="提交截止日期" prop="due" sortable>
+                <el-table-column  label="所属类别" prop="name" align="center"></el-table-column>
+                <el-table-column label="提交截止日期" prop="due" sortable align="center">
                   <template slot-scope="scope">
                     {{parseTime(scope.row.due)}}
                   </template>
@@ -93,7 +93,7 @@ export default {
         y: date.getFullYear(),
         m: date.getMonth() + 1,
         d: date.getDate(),
-        h: date.getHours(),
+        h: date.getHours()-8,
         i: date.getMinutes(),
         s: date.getSeconds(),
         a: date.getDay()

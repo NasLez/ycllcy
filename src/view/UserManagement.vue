@@ -8,6 +8,7 @@
         <CommonAside/>
       </el-aside>
       <el-main>
+<!--        添加注册码-->
         <div style="width: 300px;position: absolute;left: 10px;top: 10px;height: 300px;">
           <el-form :label-position="labelPosition" label-width="80px" :model="ActivationCode">
             <el-form-item label="激活码">
@@ -24,6 +25,7 @@
             </el-form-item>
           </el-form>
         </div>
+<!--        注册码列表-->
         <div style="width: 500px;position: absolute;left: 320px;top: 10px;">
           <el-table :data="code_data"
                     stripe="true"
@@ -55,6 +57,7 @@
             </el-pagination>
           </div>
         </div>
+<!--        用户列表-->
         <div style="width: 800px;position:relative;top: 250px;">
           <el-table :data="userData"
                     stripe="true"
@@ -70,14 +73,22 @@
                           v-if="scope.row.isAdmin==='0'"></el-image>
               </template>
             </el-table-column>
+            <el-table-column prop="username" label="用户名" align="center">
+            </el-table-column>
             <el-table-column prop="name" label="真实姓名" align="center">
             </el-table-column>
             <el-table-column prop="isAdmin" label="权限"
                              :filters="[{text: '1', value: '1'}, {text: '0', value: '0'}]"
                              :filter-method="filterHandler"
                              align="center">
+              <template slot-scope="scope">
+                <el-tag v-if="scope.row.isAdmin==='1'" >管理员</el-tag>
+                <el-tag v-if="scope.row.isAdmin==='0'" type="success">用户</el-tag>
+              </template>
             </el-table-column>
             <el-table-column prop="email" label="邮箱" align="center">
+            </el-table-column>
+            <el-table-column prop="code" label="注册码" align="center">
             </el-table-column>
             <el-table-column prop="id" label="注册顺序" sortable align="center">
             </el-table-column>

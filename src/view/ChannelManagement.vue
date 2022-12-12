@@ -19,7 +19,9 @@
           <div class="box-block-content">
             <el-tabs type="border-card" v-model="activeName" stretch @tab-click="handleClick">
               <el-tab-pane label="论文" name="thesis">
-                <el-table :data="thesisData" stripe border style="width: 100%" @row-click="clickData">
+                <el-table
+                    max-height="400"
+                    :data="thesisData" stripe border style="width: 100%" @row-click="clickData">
                   <el-table-column label="研究方向" prop="name" align="center"></el-table-column>
                   <el-table-column label="提交截止日期" prop="due" align="center">
                     <template slot-scope="scope">
@@ -29,7 +31,7 @@
                 </el-table>
               </el-tab-pane>
               <el-tab-pane label="项目" name="project">
-                <el-table :data="projectData" stripe border style="width: 100%" @row-click="clickData">
+                <el-table max-height="400" :data="projectData" stripe border style="width: 100%" @row-click="clickData">
                   <el-table-column label="所属类别" prop="name" align="center"></el-table-column>
                   <el-table-column label="提交截止日期" prop="due" align="center">
                     <template slot-scope="scope">
@@ -150,7 +152,7 @@ export default {
         y: date.getFullYear(),
         m: date.getMonth() + 1,
         d: date.getDate(),
-        h: date.getHours(),
+        h: date.getHours()-8,
         i: date.getMinutes(),
         s: date.getSeconds(),
         a: date.getDay()
