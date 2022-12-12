@@ -14,79 +14,103 @@
           <el-breadcrumb-item>项目详情</el-breadcrumb-item>
         </el-breadcrumb>
         <br>
-        <el-card>
-          <a style="font-size: 40px;color: lightskyblue;text-align: center">
-            {{ project.name }}
-          </a>
-          <el-tag size="200px"
-                  v-if="project.status==='Waiting'"
-                  style="font-size: 15px">
-            审核中
-          </el-tag>
-          <el-tag size="large"
-                  v-if="project.status==='Accept'"
-                  style="color: yellowgreen;font-size: 15px">
-            审核通过
-          </el-tag>
-          <el-tag size="large"
-                  v-if="project.status==='Reject'"
-                  style="color: crimson;font-size: 15px">
-            审核驳回
-          </el-tag>
-          <br>
-          <a style="font-weight: bold;text-align: left">作者：</a>
-          <a >
-            {{ project.maintainer }}，
-          </a><br>
-          <a style="font-weight: bold;text-align: left">所属单位：</a>
-          <a >
-            {{ project.company }}
-          </a><br>
-          <a style="font-weight: bold;text-align: left">项目所属类别：</a>
-          <a style="text-align: left">
-            {{ showChannel }}
-          </a><br>
-          <a style="font-weight: bold;text-align: left">上传者邮箱：</a>
-          <a style="text-align: left">{{ project.uploaderEmail }}</a><br>
-          <a style="font-weight: bold;text-align: left">上传时间：</a>
-          <a style="text-align: left">{{ project.setTime }}</a><br>
-          <a style="font-weight: bold;text-align: left">项目金额：</a>
-          <a style="text-align: left">{{ project.money }}，</a>
-          <a style="font-weight: bold;text-align: left">项目开始年份：</a>
-          <a style="text-align: left">{{ project.startYear }}</a>
-          <div style="position: absolute;right: 50px;">
-            <el-button @click="edit" type="text" icon="el-icon-edit" style="color: lightskyblue" v-if="this.$store.state.userinfo.isAdmin==='0'">修改</el-button>
-            <el-button @click="deleteProject" type="text" style="color: #99a9bf" icon="el-icon-delete-solid">删除</el-button>
-            <el-button @click="downloadProfile" type="text" icon="el-icon-download">下载项目</el-button>
-            <el-button @click="downloadPic" type="text" icon="el-icon-download">下载凭证</el-button>
-          </div>
-            <br><br>
+        <div style="display: flex;justify-content: center">
+          <el-card style="width: 85%;padding-bottom: 0">
+            <div>
+              <div style="text-align: center">
+                <a style="font-size: 25px;color: #005EC1;font-weight: bold">
+                  {{ project.name }}
+                </a>
+                <el-tag size="small"
+                        style="font-size: 15px"
+                        v-if="project.status==='Waiting'">
+                  审核中
+                </el-tag>
+                <el-tag size="small" type="info"
+                        v-if="project.status==='Accept'"
+                        style="font-size: 15px">
+                  审核通过
+                </el-tag>
+                <el-tag size="small" type="danger"
+                        v-if="project.status==='Reject'"
+                        style="color: crimson;font-size: 15px">
+                  审核驳回
+                </el-tag>
+              </div>
+            </div>
+            <br>
+            <div>
+              <div style="margin: 10px 0">
+                <a style="font-weight: bold;text-align: left">作者：</a>
+                <a>
+                  {{ project.maintainer }}
+                </a>
+              </div>
+              <div  style="margin: 10px 0">
+                <a style="font-weight: bold;text-align: left">所属单位：</a>
+                <a >
+                  {{ project.company }}
+                </a>
+              </div>
+              <div  style="margin: 10px 0">
+                <a style="font-weight: bold;text-align: left">项目所属类别：</a>
+                <a style="text-align: left">
+                  {{ showChannel }}
+                </a>
+              </div>
+              <div  style="margin: 10px 0">
+                <a style="font-weight: bold;text-align: left">上传者邮箱：</a>
+                <a style="text-align: left">{{ project.uploaderEmail }}</a>
+              </div>
+              <div  style="margin: 10px 0">
+                <a style="font-weight: bold;text-align: left">项目开始年份：</a>
+                <a style="text-align: left">{{ project.startYear }}</a>
+              </div>
+              <div  style="margin: 10px 0">
+                <a style="font-weight: bold;text-align: left">项目金额：</a>
+                <a style="text-align: left">{{ project.money }}</a>
+              </div>
+              <div  style="margin: 10px 0">
+                <a style="font-weight: bold;text-align: left">上传时间：</a>
+                <a style="text-align: left">{{ project.setTime }}</a>
+              </div>
+              <div style="text-align: right;padding-right: 50px">
+                <el-button @click="edit" type="text" icon="el-icon-edit" style="color: lightskyblue" v-if="this.$store.state.userinfo.isAdmin==='0'">修改</el-button>
+                <el-button @click="deleteProject" type="text" style="color: #99a9bf" icon="el-icon-delete-solid">删除</el-button>
+                <el-button @click="downloadProfile" type="text" icon="el-icon-download">下载项目</el-button>
+                <el-button @click="downloadPic" type="text" icon="el-icon-download">下载凭证</el-button>
+              </div>
+            </div>
             <el-divider></el-divider>
-            <a style="font-weight: bold;text-align: left">简介：</a>
-            <a style="text-align: left">
-              {{ project.description }}
-            </a>
-            <el-divider></el-divider>
-          <div v-if="this.$store.state.userinfo.isAdmin==='1'">
-            <el-button @click="showEditDialog" icon="el-icon-edit-outline"
-                       style="position: absolute;right: 500px;color: crimson"
-                       >审核
-            </el-button>
-            <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
-              <el-dialog
-                  title="请问您的审核结果是？"
-                  :visible.sync="editDialogVisible"
-                  width="50%" @close="editDialogClosed">
-                <el-radio v-model="editStatus" label="Accept">审核通过</el-radio>
-                <el-radio v-model="editStatus" label="Reject">审核驳回</el-radio>
-                <span slot="footer" class="dialog-footer">
-        <el-button @click="editDialogVisible = false; editStatus ='Waiting' ">取 消</el-button>
-        <el-button type="primary" @click="changeStatus">确 定</el-button>
-      </span>
-              </el-dialog>
-            </el-card>
-          </div><br><br>
+            <div style="padding-bottom: 0">
+              <div style="font-weight: bold;text-align: left;color:#005EC1;margin: 10px 0 ">简介：</div>
+              <a style="text-align: left;line-height:2">
+                {{ project.description }}
+              </a>
+            </div>
+            <div v-if="this.$store.state.userinfo.isAdmin==='1'" style="padding-bottom: 0">
+              <el-divider></el-divider>
+              <div style="display: flex;justify-content: center;">
+                <el-button @click="showEditDialog" icon="el-icon-edit-outline"
+                           style="position: absolute;color: crimson">审核
+                </el-button>
+              </div>
+              <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
+                <el-dialog
+                    title="请问您的审核结果是？"
+                    :visible.sync="editDialogVisible"
+                    width="50%" @close="editDialogClosed">
+                  <el-radio v-model="editStatus" label="Accept">审核通过</el-radio>
+                  <el-radio v-model="editStatus" label="Reject">审核驳回</el-radio>
+                  <span slot="footer" class="dialog-footer">
+                    <el-button @click="editDialogVisible = false; editStatus ='Waiting' ">取 消</el-button>
+                    <el-button type="primary" @click="changeStatus">确 定</el-button>
+                  </span>
+                </el-dialog>
+              </el-card>
+            </div><br><br>
           </el-card>
+        </div>
       </el-main>
     </el-container>
   </el-container>
