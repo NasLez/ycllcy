@@ -14,72 +14,78 @@
             <el-breadcrumb-item>通道详情</el-breadcrumb-item>
           </el-breadcrumb>
           <br>
-          <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick"  stretch>
+          <el-tabs type="border-card" v-model="activeName" @tab-click="handleClick" stretch>
             <el-tab-pane label="通道信息" name="look">
-              <el-descriptions :column="1" border >
-                <el-descriptions-item label="通道id">
-                  <el-tag size="small" style="color: crimson">{{ userinfo.id }}</el-tag>
-                </el-descriptions-item>
-                <el-descriptions-item label="通道名称">
-                  {{ userinfo.name }}
-                </el-descriptions-item>
-                <el-descriptions-item label="通道类型">
-                  <el-tag size="small">{{ userinfo.type }}</el-tag>
-                </el-descriptions-item>
-                <el-descriptions-item label="通道创建者">
-                  {{ userinfo.creator }}
-                </el-descriptions-item>
-                <el-descriptions-item label="通道创建者邮箱">
-                  {{ userinfo.creatorEmail }}
-                </el-descriptions-item>
-                <el-descriptions-item label="通道分数">
-                  {{userinfo.score }}
-                </el-descriptions-item>
-                <el-descriptions-item label="通道截止日期">
-                  {{ parseTime(userinfo.due) }}
-                </el-descriptions-item>
-              </el-descriptions>
+              <div style="position: relative;left: 170px;">
+                <el-descriptions :column="1" border style="width: 700px">
+                  <el-descriptions-item label="通道id">
+                    <el-tag type="info" style="font-size: 15px;">{{ userinfo.id }}</el-tag>
+                  </el-descriptions-item>
+                  <el-descriptions-item label="通道名称">
+                    <el-tag type="warning" style="font-size: 15px;">{{ userinfo.name }}</el-tag>
+                  </el-descriptions-item>
+                  <el-descriptions-item label="通道类型">
+                    <el-tag style="font-size: 15px;">{{ userinfo.type }}</el-tag>
+                  </el-descriptions-item>
+                  <el-descriptions-item label="通道创建者">
+                    {{ userinfo.creator }}
+                  </el-descriptions-item>
+                  <el-descriptions-item label="通道创建者邮箱">
+                    {{ userinfo.creatorEmail }}
+                  </el-descriptions-item>
+                  <el-descriptions-item label="通道分数">
+                    {{ userinfo.score }}
+                  </el-descriptions-item>
+                  <el-descriptions-item label="通道截止日期">
+                    {{ parseTime(userinfo.due) }}
+                  </el-descriptions-item>
+                </el-descriptions>
+              </div>
             </el-tab-pane>
             <el-tab-pane label="修改通道信息" name="update">
-              <el-form :label-position="labelPosition" label-width="120px" :model="updateChannel">
-                <el-form-item label="通道名称">
-                  <el-input type="string" v-model="userinfo.name" style="width:225px"
-                            placeholder="请输入新的通道名称"></el-input>
-                </el-form-item>
-                <el-form-item label="通道类型">
-                  <el-select v-model="updateChannel.type" placeholder="请选择新的通道类型">
-                    <el-option
-                        v-for="item in options"
-                        :key="item.value"
-                        :label="item.label"
-                        :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-                <el-form-item label="通道创建者">
-                  <el-input type="string" v-model="userinfo.creator" style="width:225px"
-                            placeholder="请输入新的通道创建者"></el-input>
-                </el-form-item>
-                <el-form-item label="通道创建者邮箱">
-                  <el-input type="email" v-model="userinfo.creatorEmail" style="width:225px"
-                            placeholder="请输入新的通道创建者邮箱"></el-input>
-                </el-form-item>
-                <el-form-item label="通道得分">
-                  <el-input type="string" v-model="userinfo.score" style="width:225px"
-                            placeholder="请输入新的通道得分"></el-input>
-                </el-form-item>
-                <el-form-item label="通道截止时间">
-                  <el-date-picker
-                      v-model="updateChannel.due"
-                      type="datetime"
-                      placeholder="请选择新的通道截止时间"
-                      value-format="yyyy-MM-dd HH:mm:ss">
-                  </el-date-picker>
-                </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" @click="updateChannelNow">修改通道信息</el-button>
-                </el-form-item>
-              </el-form>
+              <div style="position: relative;left: 270px;">
+                <el-form ref="refName" :label-position="labelPosition" label-width="120px" :model="updateChannel">
+                  <el-form-item label="通道名称" prop="name">
+                    <el-input type="string" v-model="userinfo.name" style="width:225px"
+                              placeholder="请输入新的通道名称"></el-input>
+                  </el-form-item>
+                  <el-form-item label="通道类型" prop="type">
+                    <el-select v-model="updateChannel.type" placeholder="请选择新的通道类型">
+                      <el-option
+                          v-for="item in options"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="通道创建者" prop="creator">
+                    <el-input type="string" v-model="userinfo.creator" style="width:225px"
+                              placeholder="请输入新的通道创建者"></el-input>
+                  </el-form-item>
+                  <el-form-item label="通道创建者邮箱" prop="creatorEmail">
+                    <el-input type="email" v-model="userinfo.creatorEmail" style="width:225px"
+                              placeholder="请输入新的通道创建者邮箱"></el-input>
+                  </el-form-item>
+                  <el-form-item label="通道得分" prop="score">
+                    <el-input type="string" v-model="userinfo.score" style="width:225px"
+                              placeholder="请输入新的通道得分"></el-input>
+                  </el-form-item>
+                  <el-form-item label="通道截止时间" prop="due">
+                    <el-date-picker
+                        v-model="updateChannel.due"
+                        type="datetime"
+                        placeholder="请选择新的通道截止时间"
+                        value-format="yyyy-MM-dd HH:mm:ss">
+                    </el-date-picker>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="info" plain round @click="updateChannelNow('refName')" icon="el-icon-edit">
+                      修改通道信息
+                    </el-button>
+                  </el-form-item>
+                </el-form>
+              </div>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -187,41 +193,26 @@ export default {
     handleClick(tab, event) {
       console.log(tab, event);
     },
-    updateChannelNow() {
+    updateChannelNow(refName) {
       this.look = this.$store.state.channel.id
       this.due = this.$data.updateChannel.due.toString()
       axios.post(`mu/updateChannel?id=${this.look}&name=${this.userinfo.name}&type=${this.updateChannel.type}&creator=${this.userinfo.creator}&creatorEmail=${this.userinfo.creatorEmail}&score=${this.userinfo.score}&due=${this.$data.updateChannel.due}`).then(res => {
-        if (res.status === 400) {
-          this.$message({
-            message: "serve error",
-            type: 'warning'
-          })
-        } else if (res.status === 403) {
-          this.$message({
-            message: "Unauthorized",
-            type: 'warning'
-          })
-        } else if (res.status === 404) {
-          this.$message({
-            message: "Name Not Found",
-            type: 'warning'
-          })
-        } else if (res.status === 200) {
-          this.channelid = this.$store.state.channel.id
-          axios.get(`mu/getChannelById?id=${this.channelid}`).then(res => {
-            this.userinfo.id = res.data.id
-            this.userinfo.name = res.data.name
-            if (res.data.type === "Thesis") {
-              this.userinfo.type = "论文"
-            } else if (res.data.type === "Project") {
-              this.userinfo.type = "项目"
-            }
-            this.userinfo.creator = res.data.creator
-            this.userinfo.creatorEmail = res.data.creatorEmail
-            this.userinfo.score = res.data.score
-            this.userinfo.due = res.data.due
-          })
-        }
+        this.channelid = this.$store.state.channel.id
+        this.$message.success("修改成功！")
+        this.$refs[refName].resetFields()
+        axios.get(`mu/getChannelById?id=${this.channelid}`).then(res => {
+          this.userinfo.id = res.data.id
+          this.userinfo.name = res.data.name
+          if (res.data.type === "Thesis") {
+            this.userinfo.type = "论文"
+          } else if (res.data.type === "Project") {
+            this.userinfo.type = "项目"
+          }
+          this.userinfo.creator = res.data.creator
+          this.userinfo.creatorEmail = res.data.creatorEmail
+          this.userinfo.score = res.data.score
+          this.userinfo.due = res.data.due
+        })
       })
     }
   }

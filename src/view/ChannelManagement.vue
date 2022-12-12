@@ -21,9 +21,10 @@
               <el-tab-pane label="论文" name="thesis">
                 <el-table
                     max-height="400"
+                    :default-sort = "{prop: 'due', order: 'descending'}"
                     :data="thesisData" stripe border style="width: 100%" @row-click="clickData">
                   <el-table-column label="研究方向" prop="name" align="center"></el-table-column>
-                  <el-table-column label="提交截止日期" prop="due" align="center">
+                  <el-table-column label="提交截止日期" prop="due" align="center" sortable>
                     <template slot-scope="scope">
                       {{ parseTime(scope.row.due) }}
                     </template>
@@ -31,9 +32,11 @@
                 </el-table>
               </el-tab-pane>
               <el-tab-pane label="项目" name="project">
-                <el-table max-height="400" :data="projectData" stripe border style="width: 100%" @row-click="clickData">
+                <el-table max-height="400"
+                          :default-sort = "{prop: 'due', order: 'descending'}"
+                          :data="projectData" stripe border style="width: 100%" @row-click="clickData">
                   <el-table-column label="所属类别" prop="name" align="center"></el-table-column>
-                  <el-table-column label="提交截止日期" prop="due" align="center">
+                  <el-table-column label="提交截止日期" prop="due" align="center" sortable>
                     <template slot-scope="scope">
                       {{ parseTime(scope.row.due) }}
                     </template>
@@ -41,7 +44,7 @@
                 </el-table>
               </el-tab-pane>
               <el-tab-pane label="添加通道" name="addChannel" >
-                <div style="position: relative;left: 300px;">
+                <div style="position: relative;left: 270px;">
                   <el-form  ref="addChannelDelete" :label-position="labelPosition" label-width="120px" :model="addChannel">
                     <el-form-item label="通道名称" prop="name">
                       <el-input type="string" v-model="addChannel.name" style="width:225px"
@@ -132,6 +135,25 @@ export default {
       value: ''
     };
   },
+  created:function () {
+    axios.get((`mu/listChannel`)).then(res => {
+      this.tableData = res.data;
+      for (let i = 0, j = 0, k = 0; i < this.tableData.length; i++) {
+        if (res.data[i].type === "Thesis") {
+          this.$data.thesisData1[j] = res.data[i]
+          console.log(this.thesisData1[j].name)
+          j++
+        } else {
+          this.$data.projectData1[k] = res.data[i]
+          console.log(this.projectData1[k].name)
+          k++
+        }
+      }
+      this.$data.thesisData = this.$data.thesisData1
+      this.$data.projectData = this.$data.projectData1
+      // this.$data.thesisData = res.data;
+    })
+  },
   methods: {
     parseTime(time, cFormat) {
       if (arguments.length === 0) {
@@ -206,17 +228,15 @@ export default {
         axios.put(`mu/addChannel?name=${this.$data.addChannel.name}&type=${this.$data.addChannel.type}&creator=${this.$data.addChannel.creator}&creatorEmail=${this.$data.addChannel.creatorEmail}&score=${this.$data.addChannel.score}&due=${this.$data.addChannel.due}`).then(res => {
           console.log(res)
           this.$refs[addChannelDelete].resetFields()
-          this.$message.success("添加成功！")
-          axios.get((`mu/listChannel`)).then(res => {
-            this.tableData = res.data;
-            this.$message.success(this.tableData.length)
+          axios.get((`mu/listChannel`)).then(res0 => {
+            this.tableData = res0.data;
             for (let i = 0, j = 0, k = 0; i < this.tableData.length; i++) {
-              if (res.data[i].type === "Thesis") {
-                this.$data.thesisData1[j] = res.data[i]
+              if (res0.data[i].type === "Thesis") {
+                this.$data.thesisData1[j] = res0.data[i]
                 console.log(this.thesisData1[j].name)
                 j++
               } else {
-                this.$data.projectData1[k] = res.data[i]
+                this.$data.projectData1[k] = res0.data[i]
                 console.log(this.projectData1[k].name)
                 k++
               }
@@ -226,27 +246,12 @@ export default {
             console.log(this.thesisData);
             console.log(this.projectData)
           })
+          this.$message.success("添加成功！")
         })
       }
     },
     handleClick(tab, event) {
       console.log(tab, event);
-      axios.get((`mu/listChannel`)).then(res => {
-        this.tableData = res.data;
-        for (let i = 0, j = 0, k = 0; i < this.tableData.length; i++) {
-          if (res.data[i].type === "Thesis") {
-            this.$data.thesisData1[j] = res.data[i]
-            console.log(this.thesisData1[j].name)
-            j++
-          } else {
-            this.$data.projectData1[k] = res.data[i]
-            console.log(this.projectData1[k].name)
-            k++
-          }
-        }
-        this.$data.thesisData = this.$data.thesisData1
-        this.$data.projectData = this.$data.projectData1
-      })
     },
     clickData(row, event, column) {
       console.log(row, event, column)

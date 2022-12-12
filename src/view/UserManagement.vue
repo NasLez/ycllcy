@@ -169,7 +169,7 @@ export default {
         value: '1',
         label: '管理员'
       }, {
-        value: 'Project',
+        value: '0',
         label: '用户'
       }],
       value: '',
