@@ -40,46 +40,48 @@
                   </el-table-column>
                 </el-table>
               </el-tab-pane>
-              <el-tab-pane label="添加通道" name="addChannel">
-                <el-form ref="addChannelDelete" :label-position="labelPosition" label-width="120px" :model="addChannel">
-                  <el-form-item label="通道名称" prop="name">
-                    <el-input type="string" v-model="addChannel.name" style="width:225px"
-                              placeholder="请输入通道名称"></el-input>
-                  </el-form-item>
-                  <el-form-item label="通道类型" prop="type">
-                    <el-select v-model="addChannel.type" placeholder="请选择通道类型">
-                      <el-option
-                          v-for="item in options"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
-                      </el-option>
-                    </el-select>
-                  </el-form-item>
-                  <el-form-item label="通道创建者" prop="creator">
-                    <el-input type="string" v-model="addChannel.creator" style="width:225px"
-                              placeholder="请输入通道创建者"></el-input>
-                  </el-form-item>
-                  <el-form-item label="通道创建者邮箱" prop="creatorEmail">
-                    <el-input type="email" v-model="addChannel.creatorEmail" style="width:225px"
-                              placeholder="请输入通道创建者邮箱"></el-input>
-                  </el-form-item>
-                  <el-form-item label="通道得分" prop="score">
-                    <el-input type="string" v-model="addChannel.score" style="width:225px"
-                              placeholder="请输入通道得分"></el-input>
-                  </el-form-item>
-                  <el-form-item label="通道截止时间" prop="due">
-                    <el-date-picker
-                        v-model="addChannel.due"
-                        type="datetime"
-                        placeholder="请选择通道截止时间"
-                        value-format="yyyy-MM-dd HH:mm:ss">
-                    </el-date-picker>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button type="success" icon="el-icon-plus" @click="add('addChannelDelete')">添加通道信息</el-button>
-                  </el-form-item>
-                </el-form>
+              <el-tab-pane label="添加通道" name="addChannel" >
+                <div style="position: relative;left: 300px;">
+                  <el-form  ref="addChannelDelete" :label-position="labelPosition" label-width="120px" :model="addChannel">
+                    <el-form-item label="通道名称" prop="name">
+                      <el-input type="string" v-model="addChannel.name" style="width:225px"
+                                placeholder="请输入通道名称"></el-input>
+                    </el-form-item>
+                    <el-form-item label="通道类型" prop="type">
+                      <el-select v-model="addChannel.type" placeholder="请选择通道类型">
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                      </el-select>
+                    </el-form-item>
+                    <el-form-item label="通道创建者" prop="creator">
+                      <el-input type="string" v-model="addChannel.creator" style="width:225px"
+                                placeholder="请输入通道创建者"></el-input>
+                    </el-form-item>
+                    <el-form-item label="通道创建者邮箱" prop="creatorEmail">
+                      <el-input type="email" v-model="addChannel.creatorEmail" style="width:225px"
+                                placeholder="请输入通道创建者邮箱"></el-input>
+                    </el-form-item>
+                    <el-form-item label="通道得分" prop="score">
+                      <el-input type="string" v-model="addChannel.score" style="width:225px"
+                                placeholder="请输入通道得分"></el-input>
+                    </el-form-item>
+                    <el-form-item label="通道截止时间" prop="due">
+                      <el-date-picker
+                          v-model="addChannel.due"
+                          type="datetime"
+                          placeholder="请选择通道截止时间"
+                          value-format="yyyy-MM-dd HH:mm:ss">
+                      </el-date-picker>
+                    </el-form-item>
+                    <el-form-item>
+                      <el-button type="success" icon="el-icon-plus" @click="add('addChannelDelete')">添加通道信息</el-button>
+                    </el-form-item>
+                  </el-form>
+                </div>
               </el-tab-pane>
             </el-tabs>
           </div>
