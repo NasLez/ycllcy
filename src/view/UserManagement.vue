@@ -69,11 +69,16 @@
           </div>
         </div>
 <!--        用户列表-->
-        <div style="width: 800px;position:relative;top: 250px;">
+        <div style="width: 900px;position:relative;top: 250px;">
+
+          <el-input
+              v-model="usersearch"
+              style="position: relative;left: 105px;width: 100px"
+              placeholder="输入姓名搜索用户"/>
           <el-table :data="user_data"
                     stripe="true"
                     border="true"
-                    style="width: 800px"
+                    style="width: 900px"
                     :default-sort="{prop: 'id', order: 'ascending'}">
             <el-table-column prop="date" label="用户头像" align="center">
               <template slot-scope="scope">
@@ -101,12 +106,7 @@
             <el-table-column prop="id" label="注册顺序" sortable align="center">
             </el-table-column>
             <el-table-column fixed="right" label="操作" align="center">
-              <template slot="header" slot-scope="scope">
-                <el-input
-                    v-model="usersearch"
-                    size="mini"
-                    placeholder="输入姓名搜索用户"/>
-              </template>
+
               <template slot-scope="scope">
                 <el-popconfirm
                     title="确定删除此账号吗？"
@@ -120,6 +120,9 @@
                              style="color: #B70031;">删除
                   </el-button>
                 </el-popconfirm>
+                <el-button slot="reference" type="text" size="small" icon="el-icon-view"
+                           v-if="scope.row.isAdmin==='0'" @click="clickUser(scope.row)">查看
+                </el-button>
                 <a  v-if="scope.row.isAdmin==='1'">——</a>
               </template>
             </el-table-column>
@@ -325,6 +328,11 @@ export default {
       })
     },
     clickData() {
+    },
+    clickUser(row) {
+      console.log(row)
+      this.$store.state.userEmail= row.email
+      this.$router.push({path: '/userHome'})
     },
     AddActivationCode(refName) {
       if (this.$data.ActivationCode.code === '') {
