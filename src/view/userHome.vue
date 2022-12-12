@@ -129,13 +129,13 @@ export default {
           {
             name: '论文',
             type: 'line',
-            stack: 'Total',
+            stack: 'thesis',
             data: [0, 0, 0, 0, 0, 0]
           },
           {
             name: '项目',
             type: 'line',
-            stack: 'Total',
+            stack: 'project',
             data: [0, 0, 0, 0, 0, 0]
           },
         ]
