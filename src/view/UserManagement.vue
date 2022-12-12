@@ -73,8 +73,8 @@
 
           <el-input
               v-model="usersearch"
-              style="position: relative;left: 105px;width: 100px"
-              placeholder="输入姓名搜索用户"/>
+              style="position: relative;left: 125px;width: 120px"
+              placeholder="输入姓名搜索"/>
           <el-table :data="user_data"
                     stripe="true"
                     border="true"
@@ -110,8 +110,8 @@
               <template slot-scope="scope">
                 <el-popconfirm
                     title="确定删除此账号吗？"
-                    confirm-button-text='好的'
-                    cancel-button-text='不用了'
+                    confirm-button-text='是'
+                    cancel-button-text='否'
                     icon="el-icon-info"
                     icon-color="red"
                     @confirm="deleteRow(scope.$index, scope.row)">

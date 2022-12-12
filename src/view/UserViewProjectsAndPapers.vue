@@ -62,7 +62,7 @@
                     prop="status">
                   <template slot-scope="scope">
                     <el-tag v-if="scope.row.status==='Waiting'">审核中</el-tag>
-                    <el-tag v-if="scope.row.status==='Accept'" type="success">审核通过</el-tag>
+                    <el-tag v-if="scope.row.status==='Accept'" type="info">审核通过</el-tag>
                     <el-tag v-if="scope.row.status==='Reject'" type="danger">审核驳回</el-tag>
                   </template>
                 </el-table-column>
@@ -109,7 +109,7 @@
                     :filter-method="filterStatus">
                   <template slot-scope="scope">
                     <el-tag v-if="scope.row.status==='Waiting'" >审核中</el-tag>
-                    <el-tag v-if="scope.row.status==='Accept'" type="success">审核通过</el-tag>
+                    <el-tag v-if="scope.row.status==='Accept'" type="info">审核通过</el-tag>
                     <el-tag v-if="scope.row.status==='Reject'" type="danger">审核驳回</el-tag>
                   </template>
                 </el-table-column>

@@ -26,14 +26,14 @@
                         v-if="thesis.status==='Waiting'">
                   审核中
                 </el-tag>
-                <el-tag size="small" type="success"
+                <el-tag size="small" type="info"
                         v-if="thesis.status==='Accept'"
-                        style="color: yellowgreen;font-size: 15px">
+                        style="font-size: 15px">
                   审核通过
                 </el-tag>
                 <el-tag size="small" type="danger"
                         v-if="thesis.status==='Reject'"
-                        style="color: crimson;font-size: 15px">
+                        style="font-size: 15px">
                   审核驳回
                 </el-tag>
               </div>
@@ -76,9 +76,16 @@
                 <!--            </el-button>-->
                 <el-button @click="edit" type="text" icon="el-icon-edit" style="color: lightskyblue"
                            v-if="this.$store.state.userinfo.isAdmin==='0'">修改
+                </el-button><el-popconfirm
+                  title="确定删除此论文吗？"
+                  confirm-button-text='是'
+                  cancel-button-text='否'
+                  icon="el-icon-info"
+                  icon-color="red"
+                  @confirm="deleteProject">
+                <el-button slot="reference" type="text" style="color: #99a9bf" icon="el-icon-delete-solid">删除
                 </el-button>
-                <el-button @click="deleteProject" type="text" style="color: #99a9bf" icon="el-icon-delete-solid">删除
-                </el-button>
+              </el-popconfirm>
                 <el-button @click="downloadProfile" type="text" icon="el-icon-download">下载论文</el-button>
                 <el-button @click="downloadPic" type="text" icon="el-icon-download">下载凭证</el-button>
               </div>
@@ -93,8 +100,8 @@
             <div v-if="this.$store.state.userinfo.isAdmin==='1'" style="padding-bottom: 0">
               <el-divider></el-divider>
               <div style="display: flex;justify-content: center;">
-                <el-button @click="showEditDialog" icon="el-icon-edit-outline"
-                           style="position: absolute;color: crimson">审核
+                <el-button type="info" @click="showEditDialog" icon="el-icon-edit-outline"
+                           style="position: absolute;">审核
                 </el-button>
               </div>
               <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">

@@ -233,7 +233,6 @@ export default {
       console.log(tab, event);
       axios.get((`mu/listChannel`)).then(res => {
         this.tableData = res.data;
-        this.$message.success(this.tableData.length)
         for (let i = 0, j = 0, k = 0; i < this.tableData.length; i++) {
           if (res.data[i].type === "Thesis") {
             this.$data.thesisData1[j] = res.data[i]
@@ -245,10 +244,8 @@ export default {
             k++
           }
         }
-        this.$data.thesisData = this.$data.thesisData1;
+        this.$data.thesisData = this.$data.thesisData1
         this.$data.projectData = this.$data.projectData1
-        console.log(this.thesisData);
-        console.log(this.projectData)
       })
     },
     clickData(row, event, column) {
