@@ -10,18 +10,25 @@
       <el-main>
 <!--        添加注册码-->
         <div style="width: 300px;position: absolute;left: 10px;top: 10px;height: 300px;">
-          <el-form :label-position="labelPosition" label-width="80px" :model="ActivationCode">
-            <el-form-item label="激活码">
+          <el-form ref="refName" :label-position="labelPosition" label-width="80px" :model="ActivationCode">
+            <el-form-item label="激活码" prop="code">
               <el-input v-model="ActivationCode.code"></el-input>
             </el-form-item>
-            <el-form-item label="真实姓名">
+            <el-form-item label="真实姓名" prop="name">
               <el-input v-model="ActivationCode.name"></el-input>
             </el-form-item>
-            <el-form-item label="权限">
-              <el-input v-model="ActivationCode.isAdmin"></el-input>
+            <el-form-item label="权限" prop="isAdmin">
+              <el-select v-model="ActivationCode.isAdmin" placeholder="请选择权限">
+                <el-option
+                    v-for="item in options"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                </el-option>
+              </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button type="success" @click="AddActivationCode" icon="el-icon-plus">添加激活码</el-button>
+              <el-button type="success" @click="AddActivationCode('refName')" icon="el-icon-plus">添加激活码</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -30,12 +37,16 @@
           <el-table :data="code_data"
                     stripe="true"
                     border="true"
-                    height="200"
                     style="width: 100%" @row-click="clickData">
             <el-table-column label="注册码" prop="code" align="center"></el-table-column>
             <el-table-column label="姓名" prop="name" align="center">
             </el-table-column>
-            <el-table-column label="权限" prop="isAdmin" align="center"></el-table-column>
+            <el-table-column label="权限" prop="isAdmin" align="center">
+              <template slot-scope="scope">
+                <el-tag v-if="scope.row.isAdmin==='1'" >管理员</el-tag>
+                <el-tag v-if="scope.row.isAdmin==='0'" type="success">用户</el-tag>
+              </template>
+            </el-table-column>
             <el-table-column>
               <template slot="header" slot-scope="scope">
                 <el-input
@@ -59,11 +70,10 @@
         </div>
 <!--        用户列表-->
         <div style="width: 800px;position:relative;top: 250px;">
-          <el-table :data="userData"
+          <el-table :data="user_data"
                     stripe="true"
                     border="true"
                     style="width: 800px"
-                    max-height="400"
                     :default-sort="{prop: 'id', order: 'ascending'}">
             <el-table-column prop="date" label="用户头像" align="center">
               <template slot-scope="scope">
@@ -73,12 +83,10 @@
                           v-if="scope.row.isAdmin==='0'"></el-image>
               </template>
             </el-table-column>
-            <el-table-column prop="username" label="用户名" align="center">
-            </el-table-column>
             <el-table-column prop="name" label="真实姓名" align="center">
             </el-table-column>
             <el-table-column prop="isAdmin" label="权限"
-                             :filters="[{text: '1', value: '1'}, {text: '0', value: '0'}]"
+                             :filters="[{text: '管理员', value: '1'}, {text: '用户', value: '0'}]"
                              :filter-method="filterHandler"
                              align="center">
               <template slot-scope="scope">
@@ -86,7 +94,7 @@
                 <el-tag v-if="scope.row.isAdmin==='0'" type="success">用户</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="email" label="邮箱" align="center">
+            <el-table-column prop="email" label="邮箱" align="center" width="180">
             </el-table-column>
             <el-table-column prop="code" label="注册码" align="center">
             </el-table-column>
@@ -108,23 +116,25 @@
                     icon-color="red"
                     @confirm="deleteRow(scope.$index, scope.row)">
                   <el-button slot="reference" type="text" size="small" icon="el-icon-delete-solid"
+                             v-if="scope.row.isAdmin==='0'"
                              style="color: #B70031;">删除
                   </el-button>
                 </el-popconfirm>
+                <a  v-if="scope.row.isAdmin==='1'">——</a>
               </template>
             </el-table-column>
           </el-table>
-          <!--          <div class="pagination">-->
-          <!--            <el-pagination-->
-          <!--                @size-change="handleSizeChangeUser"-->
-          <!--                @current-change="handleCurrentChangeUSer"-->
-          <!--                :current-page.sync="currentPageUser"-->
-          <!--                :page-sizes="[5]"-->
-          <!--                :page-size="pagesizeUser"-->
-          <!--                layout="total, sizes, prev, pager, next, jumper"-->
-          <!--                :total="UserTotal">-->
-          <!--            </el-pagination>-->
-          <!--          </div>-->
+                    <div class="pagination">
+                      <el-pagination
+                          @size-change="handleSizeChangeUser"
+                          @current-change="handleCurrentChangeUSer"
+                          :current-page.sync="currentPageUser"
+                          :page-sizes="[5]"
+                          :page-size="pagesizeUser"
+                          layout="total, sizes, prev, pager, next, jumper"
+                          :total="UserTotal">
+                      </el-pagination>
+                    </div>
         </div>
       </el-main>
     </el-container>
@@ -152,6 +162,14 @@ export default {
         name: '',
         isAdmin: ''
       },
+      options: [{
+        value: '1',
+        label: '管理员'
+      }, {
+        value: 'Project',
+        label: '用户'
+      }],
+      value: '',
       codeData: [],
       userData: [],
       codesearch: '',
@@ -181,9 +199,9 @@ export default {
       let search = this.usersearch;
       // 搜索功能
       if (search) {
-        let list = this.userData.filter(data => !search || data.username.toLowerCase().includes(search.toLowerCase()) || data.username.toLowerCase().includes(search.toLowerCase()));
-        let fenYe = list.slice((this.currentPageUser - 1) * this.pagesizeUser, this.currentPageUser * this.pagesizeUser);
-        return list, fenYe
+        let list = (this.userData.filter(data => !search || data.username.toLowerCase().includes(search.toLowerCase()) || data.username.toLowerCase().includes(search.toLowerCase()))).slice((this.currentPageUser - 1) * this.pagesizeUser, this.currentPageUser * this.pagesizeUser);
+        // let fenYe = list.slice((this.currentPageUser - 1) * this.pagesizeUser, this.currentPageUser * this.pagesizeUser);
+        return list
       } else {
         let fenYe = this.userData.slice((this.currentPageUser - 1) * this.pagesizeUser, this.currentPageUser * this.pagesizeUser)
         return fenYe
@@ -308,7 +326,7 @@ export default {
     },
     clickData() {
     },
-    AddActivationCode() {
+    AddActivationCode(refName) {
       if (this.$data.ActivationCode.code === '') {
         this.$message({
           message: '请输入激活码！',
@@ -330,6 +348,7 @@ export default {
             message: '添加注册码成功！',
             type: 'success'
           })
+          this.$refs[refName].resetFields()
           axios.get(`mu/showActivationCode`).then(res => {
             if (res.status === 403) {
               this.$message({
