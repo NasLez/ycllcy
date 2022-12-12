@@ -18,6 +18,7 @@
           <el-tabs type="border-card" v-model="activeName" stretch @tab-click="handleClick" ref="tabs">
             <el-tab-pane label="论文" name="thesis">
               <el-table :data="thesisData"
+                        max-height="400"
                         :default-sort = "{prop: 'due', order: 'descending'}"
                         border style="width: 100%" @row-click="clickThesis">
                 <el-table-column label="研究方向"  prop="name" align="center"></el-table-column>
@@ -30,6 +31,7 @@
             </el-tab-pane>
             <el-tab-pane label="项目" name="project">
               <el-table :data="projectData"
+                        max-height="400"
                         :default-sort = "{prop: 'due', order: 'descending'}"
                         border style="width: 100%" @row-click="clickProject">
                 <el-table-column  label="所属类别" prop="name" align="center"></el-table-column>
