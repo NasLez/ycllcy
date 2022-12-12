@@ -199,7 +199,7 @@ export default {
       let search = this.usersearch;
       // 搜索功能
       if (search) {
-        let list = (this.userData.filter(data => !search || data.username.toLowerCase().includes(search.toLowerCase()) || data.username.toLowerCase().includes(search.toLowerCase()))).slice((this.currentPageUser - 1) * this.pagesizeUser, this.currentPageUser * this.pagesizeUser);
+        let list = (this.userData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()) || data.name.toLowerCase().includes(search.toLowerCase()))).slice((this.currentPageUser - 1) * this.pagesizeUser, this.currentPageUser * this.pagesizeUser);
         // let fenYe = list.slice((this.currentPageUser - 1) * this.pagesizeUser, this.currentPageUser * this.pagesizeUser);
         return list
       } else {
