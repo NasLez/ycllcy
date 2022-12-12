@@ -182,13 +182,13 @@ export default {
           {
             name: '论文',
             type: 'line',
-            stack: 'Total',
+            stack: 'thesisData',
             data: [0, 0, 0, 0, 0, 0]
           },
           {
             name: '项目',
             type: 'line',
-            stack: 'Total',
+            stack: 'projectData',
             data: [0, 0, 0, 0, 0, 0]
           },
         ]
