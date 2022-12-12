@@ -17,10 +17,12 @@
           <br>
           <el-tabs type="border-card" v-model="activeName"  stretch @tab-click="handleClick">
             <el-tab-pane label="论文" name="thesis">
-              <el-input
-                  v-model="thesisSearch"
-                  style="width: 200px;position: relative;left: 745px"
-                  placeholder="输入论文名称查询"/>
+              <div>
+                <el-input
+                    v-model="thesisSearch"
+                    style="width: 350px;position: relative;left:70%;padding-bottom: 1%"
+                    placeholder="输入论文名称查询"/>
+              </div>
               <el-table
                   :data="thesisData.filter(data => !thesisSearch || data.name.toLowerCase().includes(thesisSearch.toLowerCase()) || data.name.toLowerCase().includes(thesisSearch.toLowerCase()))"
                   border
@@ -71,8 +73,8 @@
             <el-tab-pane label="项目" name="project">
               <el-input
                   v-model="projectSearch"
-                  style="width: 200px;position: relative;left: 745px"
-                  placeholder="输入论文名称查询"/>
+                  style="width: 350px;position: relative;left:70%;padding-bottom: 1%"
+                  placeholder="输入项目名称查询"/>
               <el-table
                   :data="projectData.filter(data => !projectSearch || data.name.toLowerCase().includes(projectSearch.toLowerCase()) || data.name.toLowerCase().includes(projectSearch.toLowerCase()))"
                   border

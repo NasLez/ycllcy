@@ -8,29 +8,36 @@
         <CommonAside/>
       </el-aside>
       <el-main>
-        <el-page-header @back="goBack" content="详情页面">
+        <el-page-header @back="goBack" content="详情页面" style="margin-bottom: 2%">
         </el-page-header>
-        <div>
+        <div style="margin-left: 10%">
           <el-col :span="8">
-            <div class="grid-content1">
-              <el-image style="width: 300px;height: 300px" :src="require('./ymr.jpg')" ></el-image>
-              <el-card class="box-card" style="position: absolute;left: 20px;width: 300px;margin-top: 0">
-                <div class="user">
-                  <div class="user-info">
-                    <div class="user-nickname">{{ userinfo.username }}</div><br>
-                    <div class="user-name">{{ userinfo.name }}</div><br>
-                    <div class="user-access">{{ showAdmin }}</div><br>
-                    <div class="user-phone">电话：{{ userinfo.phone }}</div><br>
-                    <div class="user-email">邮箱：{{ userinfo.email }}</div><br>
-                    <div class="user-school">学校：{{ userinfo.school }}</div><br>
+            <div style="display: flex;flex-direction: column;justify-content: center">
+              <div>
+                <el-image style="width: 300px;height: 300px" :src="require('./ymr.jpg')"></el-image>
+              </div>
+              <div>
+                <el-card class="box-card" style="width: 300px">
+                  <div class="user">
+                    <div class="user-info">
+                      <div class="user-nickname">{{ userinfo.username }}</div><br>
+                      <div class="user-name">{{ userinfo.name }}</div><br>
+                      <div class="user-access">{{ showAdmin }}</div><br>
+                      <div class="user-phone">电话：{{ userinfo.phone }}</div><br>
+                      <div class="user-email">邮箱：{{ userinfo.email }}</div><br>
+                      <div class="user-school">学校：{{ userinfo.school }}</div><br>
+                    </div>
                   </div>
-                </div>
-              </el-card>
+                </el-card>
+              </div>
+              <div>
+
+              </div>
             </div>
           </el-col>
           <el-col :span="16" >
             <el-row>
-              <el-descriptions :column="1" border class="grid-content2" >
+              <el-descriptions :column="1" border class="grid-content2">
                 <el-descriptions-item
                     content-class-name="my-content"
                     label="上传总分数">
@@ -56,8 +63,6 @@
             </el-row>
           </el-col>
         </div>
-
-
       </el-main>
     </el-container>
   </el-container>

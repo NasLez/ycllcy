@@ -7,29 +7,36 @@
       <el-aside width="200px">
         <CommonAside/>
       </el-aside>
-      <el-main>
+      <el-main style="padding-left: 8%">
         <div>
           <el-col :span="8">
-            <div class="grid-content1">
-              <el-image style="width: 300px;height: 300px" :src="require('./qll.jpg')" v-if="this.$store.state.userinfo.isAdmin==='1'"></el-image>
-              <el-image style="width: 300px;height: 300px" :src="require('./ymr.jpg')" v-if="this.$store.state.userinfo.isAdmin==='0'"></el-image>
-              <el-card class="box-card" style="position: absolute;left: 20px;width: 300px;margin-top: 0">
-                <div class="user">
-                  <div class="user-info">
-                    <div class="user-nickname">{{ userinfo.username }}</div><br>
-                    <div class="user-name">{{ userinfo.name }}</div><br>
-                    <div class="user-access">{{ showAdmin }}</div><br>
-                    <div class="user-phone">电话：{{ userinfo.phone }}</div><br>
-                    <div class="user-email">邮箱：{{ userinfo.email }}</div><br>
-                    <div class="user-school">学校：{{ userinfo.school }}</div><br>
+            <div style="display: flex;flex-direction: column;justify-content: center">
+              <div>
+                <el-image style="width: 300px;height: 300px" :src="require('./qll.jpg')" v-if="this.$store.state.userinfo.isAdmin==='1'"></el-image>
+                <el-image style="width: 300px;height: 300px" :src="require('./ymr.jpg')" v-if="this.$store.state.userinfo.isAdmin==='0'"></el-image>
+              </div>
+              <div>
+                <el-card class="box-card" style="width: 300px">
+                  <div class="user">
+                    <div class="user-info">
+                      <div class="user-nickname">{{ userinfo.username }}</div><br>
+                      <div class="user-name">{{ userinfo.name }}</div><br>
+                      <div class="user-access">{{ showAdmin }}</div><br>
+                      <div class="user-phone">电话：{{ userinfo.phone }}</div><br>
+                      <div class="user-email">邮箱：{{ userinfo.email }}</div><br>
+                      <div class="user-school">学校：{{ userinfo.school }}</div><br>
+                    </div>
                   </div>
-                </div>
-                <template style=" display:flex;justify-content: center;align-text:center;">
-                  <el-button size="small" type="info" round style="margin-top: 0px;margin-left: 90px"
-                             @click="showEditDialog()">修改信息
-                  </el-button>
-                </template>
-              </el-card>
+                  <template style=" display:flex;justify-content: center;align-text:center;">
+                    <el-button size="small" type="info" round style="margin-top: 0px;margin-left: 90px"
+                               @click="showEditDialog()">修改信息
+                    </el-button>
+                  </template>
+                </el-card>
+              </div>
+              <div>
+
+              </div>
               <el-card class="box-card" style="position: absolute;left: 400px" v-if="editDialogVisible">
                 <el-dialog
                     title="修改用户"
@@ -677,17 +684,6 @@ export default {
 ////.bg-purple-light {
 ////  background: #e5e9f2;
 ////}
-
-.grid-content1 {
-  border-radius: 4px;
-  min-height: 36px;
-  padding: 0;
-}
-.grid-content2 {
-  border-radius: 4px;
-  width: 600px;
-  min-height: 36px;
-}
 
 .el-main{
   display: flex;

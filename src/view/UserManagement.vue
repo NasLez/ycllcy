@@ -8,136 +8,144 @@
         <CommonAside/>
       </el-aside>
       <el-main>
-<!--        添加注册码-->
-        <div style="width: 300px;position: absolute;left: 10px;top: 10px;height: 300px;">
-          <el-form ref="refName" :label-position="labelPosition" label-width="80px" :model="ActivationCode">
-            <el-form-item label="激活码" prop="code">
-              <el-input v-model="ActivationCode.code"></el-input>
-            </el-form-item>
-            <el-form-item label="真实姓名" prop="name">
-              <el-input v-model="ActivationCode.name"></el-input>
-            </el-form-item>
-            <el-form-item label="权限" prop="isAdmin">
-              <el-select v-model="ActivationCode.isAdmin" placeholder="请选择权限">
-                <el-option
-                    v-for="item in options"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="success" @click="AddActivationCode('refName')" icon="el-icon-plus">添加激活码</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-<!--        注册码列表-->
-        <div style="width: 500px;position: absolute;left: 320px;top: 10px;">
-          <el-table :data="code_data"
-                    stripe="true"
-                    border="true"
-                    style="width: 100%" @row-click="clickData">
-            <el-table-column label="注册码" prop="code" align="center"></el-table-column>
-            <el-table-column label="姓名" prop="name" align="center">
-            </el-table-column>
-            <el-table-column label="权限" prop="isAdmin" align="center">
-              <template slot-scope="scope">
-                <el-tag v-if="scope.row.isAdmin==='1'" >管理员</el-tag>
-                <el-tag v-if="scope.row.isAdmin==='0'" type="success">用户</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column>
-              <template slot="header" slot-scope="scope">
-                <el-input
-                    v-model="codesearch"
-                    size="mini"
-                    placeholder="输入真实姓名搜索邀请码"/>
-              </template>
-            </el-table-column>
-          </el-table>
-          <div class="pagination">
-            <el-pagination
-                @size-change="handleSizeChangeCode"
-                @current-change="handleCurrentChangeCode"
-                :current-page.sync="currentPageCode"
-                :page-sizes="[3]"
-                :page-size="pagesizeCode"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="total">
-            </el-pagination>
+        <div style="padding-left: 10%">
+          <div style="display: flex;flex-direction: row;justify-content: center;padding: 10% 0">
+            <div style="width: 40%;margin-right:7%;justify-content: center">
+              <el-form ref="refName" :label-position="labelPosition" label-width="80px" :model="ActivationCode" style="border-right:1px solid #b9b9b9">
+                <el-form-item label="激活码" prop="code" style="width: 80%">
+                  <el-input v-model="ActivationCode.code"></el-input>
+                </el-form-item>
+                <el-form-item label="真实姓名" prop="name" style="width: 80%">
+                  <el-input v-model="ActivationCode.name"></el-input>
+                </el-form-item>
+                <el-form-item label="权限" prop="isAdmin">
+                  <el-select v-model="ActivationCode.isAdmin" placeholder="请选择权限">
+                    <el-option
+                        v-for="item in options"
+                        :key="item.value"
+                        :label="item.label"
+                        :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="success" @click="AddActivationCode('refName')" icon="el-icon-plus">添加激活码</el-button>
+                </el-form-item>
+              </el-form>
+            </div>
+            <div style="width: 70%">
+              <div style="width: 80%">
+                <el-table :data="code_data"
+                          stripe="true"
+                          border="true"
+                          style="width: 100%" @row-click="clickData">
+                  <el-table-column label="注册码" prop="code" align="center"></el-table-column>
+                  <el-table-column label="姓名" prop="name" align="center">
+                  </el-table-column>
+                  <el-table-column label="权限" prop="isAdmin" align="center">
+                    <template slot-scope="scope">
+                      <el-tag v-if="scope.row.isAdmin==='1'" >管理员</el-tag>
+                      <el-tag v-if="scope.row.isAdmin==='0'" type="success">用户</el-tag>
+                    </template>
+                  </el-table-column>
+                  <el-table-column>
+                    <template slot="header" slot-scope="scope">
+                      <el-input
+                          v-model="codesearch"
+                          size="mini"
+                          placeholder="输入真实姓名搜索邀请码"/>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <div class="pagination">
+                  <el-pagination
+                      @size-change="handleSizeChangeCode"
+                      @current-change="handleCurrentChangeCode"
+                      :current-page.sync="currentPageCode"
+                      :page-sizes="[3]"
+                      :page-size="pagesizeCode"
+                      layout="total, sizes, prev, pager, next, jumper"
+                      :total="total">
+                  </el-pagination>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-<!--        用户列表-->
-        <div style="width: 900px;position:relative;top: 250px;">
+          <el-devider></el-devider>
+          <div style="padding-left:2%;margin-bottom: 5% ">
+            <div style="text-align: right;padding-right: 15%;margin-bottom: 2%">
+              <el-input
+                  style="width: 30%"
+                  v-model="usersearch"
+                  placeholder="输入姓名搜索"/>
+            </div>
+            <div>
+              <el-table :data="user_data"
+                        stripe="true"
+                        border="true"
+                        style="width: 900px"
+                        :default-sort="{prop: 'id', order: 'ascending'}">
+                <el-table-column prop="date" label="用户头像" align="center">
+                  <template slot-scope="scope">
+                    <el-image style="width: 50px;height: 50px" :src="require('./qll.jpg')"
+                              v-if="scope.row.isAdmin==='1'"></el-image>
+                    <el-image style="width: 50px;height: 50px" :src="require('./ymr.jpg')"
+                              v-if="scope.row.isAdmin==='0'"></el-image>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="name" label="真实姓名" align="center">
+                </el-table-column>
+                <el-table-column prop="isAdmin" label="权限"
+                                 :filters="[{text: '管理员', value: '1'}, {text: '用户', value: '0'}]"
+                                 :filter-method="filterHandler"
+                                 align="center">
+                  <template slot-scope="scope">
+                    <el-tag v-if="scope.row.isAdmin==='1'" >管理员</el-tag>
+                    <el-tag v-if="scope.row.isAdmin==='0'" type="success">用户</el-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="email" label="邮箱" align="center" width="250">
+                </el-table-column>
+                <el-table-column prop="code" label="注册码" align="center">
+                </el-table-column>
+                <el-table-column prop="id" label="注册顺序" sortable align="center">
+                </el-table-column>
+                <el-table-column fixed="right" label="操作" align="center">
 
-          <el-input
-              v-model="usersearch"
-              style="position: relative;left: 125px;width: 120px"
-              placeholder="输入姓名搜索"/>
-          <el-table :data="user_data"
-                    stripe="true"
-                    border="true"
-                    style="width: 900px"
-                    :default-sort="{prop: 'id', order: 'ascending'}">
-            <el-table-column prop="date" label="用户头像" align="center">
-              <template slot-scope="scope">
-                <el-image style="width: 50px;height: 50px" :src="require('./qll.jpg')"
-                          v-if="scope.row.isAdmin==='1'"></el-image>
-                <el-image style="width: 50px;height: 50px" :src="require('./ymr.jpg')"
-                          v-if="scope.row.isAdmin==='0'"></el-image>
-              </template>
-            </el-table-column>
-            <el-table-column prop="name" label="真实姓名" align="center">
-            </el-table-column>
-            <el-table-column prop="isAdmin" label="权限"
-                             :filters="[{text: '管理员', value: '1'}, {text: '用户', value: '0'}]"
-                             :filter-method="filterHandler"
-                             align="center">
-              <template slot-scope="scope">
-                <el-tag v-if="scope.row.isAdmin==='1'" >管理员</el-tag>
-                <el-tag v-if="scope.row.isAdmin==='0'" type="success">用户</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column prop="email" label="邮箱" align="center" width="180">
-            </el-table-column>
-            <el-table-column prop="code" label="注册码" align="center">
-            </el-table-column>
-            <el-table-column prop="id" label="注册顺序" sortable align="center">
-            </el-table-column>
-            <el-table-column fixed="right" label="操作" align="center">
+                  <template slot-scope="scope">
+                    <el-popconfirm
+                        title="确定删除此账号吗？"
+                        confirm-button-text='是'
+                        cancel-button-text='否'
+                        icon="el-icon-info"
+                        icon-color="red"
+                        @confirm="deleteRow(scope.$index, scope.row)">
+                      <el-button slot="reference" type="text" size="small" icon="el-icon-delete-solid"
+                                 v-if="scope.row.isAdmin==='0'"
+                                 style="color: #B70031;">删除
+                      </el-button>
+                    </el-popconfirm>
+                    <el-button slot="reference" type="text" size="small" icon="el-icon-view"
+                               v-if="scope.row.isAdmin==='0'" @click="clickUser(scope.row)">查看
+                    </el-button>
+                    <a  v-if="scope.row.isAdmin==='1'">——</a>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <div class="pagination">
+                <el-pagination
+                    @size-change="handleSizeChangeUser"
+                    @current-change="handleCurrentChangeUSer"
+                    :current-page.sync="currentPageUser"
+                    :page-sizes="[5]"
+                    :page-size="pagesizeUser"
+                    layout="total, sizes, prev, pager, next, jumper"
+                    :total="UserTotal">
+                </el-pagination>
+              </div>
+            </div>
 
-              <template slot-scope="scope">
-                <el-popconfirm
-                    title="确定删除此账号吗？"
-                    confirm-button-text='是'
-                    cancel-button-text='否'
-                    icon="el-icon-info"
-                    icon-color="red"
-                    @confirm="deleteRow(scope.$index, scope.row)">
-                  <el-button slot="reference" type="text" size="small" icon="el-icon-delete-solid"
-                             v-if="scope.row.isAdmin==='0'"
-                             style="color: #B70031;">删除
-                  </el-button>
-                </el-popconfirm>
-                <el-button slot="reference" type="text" size="small" icon="el-icon-view"
-                           v-if="scope.row.isAdmin==='0'" @click="clickUser(scope.row)">查看
-                </el-button>
-                <a  v-if="scope.row.isAdmin==='1'">——</a>
-              </template>
-            </el-table-column>
-          </el-table>
-                    <div class="pagination">
-                      <el-pagination
-                          @size-change="handleSizeChangeUser"
-                          @current-change="handleCurrentChangeUSer"
-                          :current-page.sync="currentPageUser"
-                          :page-sizes="[5]"
-                          :page-size="pagesizeUser"
-                          layout="total, sizes, prev, pager, next, jumper"
-                          :total="UserTotal">
-                      </el-pagination>
-                    </div>
+          </div>
         </div>
       </el-main>
     </el-container>
