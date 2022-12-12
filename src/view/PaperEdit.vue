@@ -16,54 +16,65 @@
         <el-breadcrumb separator="/" v-else>
           <el-breadcrumb-item :to="{ path: '/UserViewProjectsAndPapers' }">查看提交</el-breadcrumb-item>
           <el-breadcrumb-item>论文提交</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: '/ProjectDetail' }">论文详情</el-breadcrumb-item>
+          <el-breadcrumb-item :to="{ path: '/PaperDetail' }">论文详情</el-breadcrumb-item>
           <el-breadcrumb-item>编辑论文</el-breadcrumb-item>
         </el-breadcrumb>
         <br>
-        <el-form ref="form" :model="thesis" label-width="80px" style="width: 500px;">
-          <el-form-item label="论文名称">
-            <el-input v-model="thesis.name" style="width: 200px;" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="负责人">
-            <el-input v-model="thesis.maintainer" style="width: 200px;" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="论文类别">
-            <el-tag style="font-size: 15px">{{ showChannel }}</el-tag>
-          </el-form-item>
-          <el-form-item label="负责单位">
-            <el-input v-model="thesis.company" style="width: 200px;" clearable></el-input>
-          </el-form-item>
-          <el-form-item label="论文描述">
-            <el-input type="textarea" v-model="thesis.description" :rows="3"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" plain round icon="el-icon-check" @click="onSubmit" v-if="this.$store.state.thesis.id==='0'">提交</el-button>
-            <el-button type="primary" icon="el-icon-edit" plain round @click="edit" v-if="this.$store.state.thesis.id!=='0'">修改</el-button>
-            <el-button type="info" icon="el-icon-close" plain round @click="back">取消</el-button>
-          </el-form-item>
-        </el-form>
-        <el-upload
-            action=""
-            :auto-upload="false"
-            accept=".zip"
-            :on-change="handleChangezip"
-            :headers="headers"
-            style="position: absolute;left: 700px;top: 150px"
-            :file-list="fileListzip">
-          <el-button size="small" type="primary"  icon="el-icon-upload2">上传论文</el-button>
-          <div slot="tip" class="el-upload__tip" style="color: grey;">只能上传zip文件，且不超过50M</div>
-        </el-upload>
-        <el-upload
-            action=""
-            accept=".jpg"
-            :on-change="handleChangejpg"
-            :auto-upload="false"
-            :headers="headers"
-            style="position: absolute;left: 700px;top: 250px"
-            :file-list="fileListjpg">
-          <el-button size="small" type="primary"  icon="el-icon-upload2">上传凭证</el-button>
-          <div slot="tip" class="el-upload__tip" style="color: gray;">只能上传jpg文件，且不超过16MB</div>
-        </el-upload>
+        <div style="justify-content: center;padding-top: 5%">
+          <div style="display: flex;justify-content: center">
+            <div style="width: 55%">
+              <el-form ref="ruleForm" :rules="rules" :model="thesis" label-width="80px" style="width: 400px;">
+                <el-form-item label="论文名称" prop="name">
+                  <el-input v-model="thesis.name" style="width: 400px;" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="负责人" prop="maintainer">
+                  <el-input v-model="thesis.maintainer" style="width: 400px;" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="论文类别">
+                  <el-tag style="font-size: 15px">{{ showChannel }}</el-tag>
+                </el-form-item>
+                <el-form-item label="负责单位" prop="company">
+                  <el-input v-model="thesis.company" style="width: 400px;" clearable></el-input>
+                </el-form-item>
+                <el-form-item label="论文描述" prop="description">
+                  <el-input type="textarea" v-model="thesis.description" :rows="3" style="width: 600px;"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" plain round icon="el-icon-check" @click="onSubmit" v-if="this.$store.state.thesis.id==='0'">提交</el-button>
+                  <el-button type="primary" icon="el-icon-edit" plain round @click="edit" v-if="this.$store.state.thesis.id!=='0'">修改</el-button>
+                  <el-button type="info" icon="el-icon-close" plain round @click="back">取消</el-button>
+                </el-form-item>
+              </el-form>
+            </div>
+            <div style="width: 30%;text-align: center;margin-left: 0">
+              <div style="padding: 30px;margin-top: 10%">
+                <el-upload
+                    action=""
+                    :auto-upload="false"
+                    accept=".zip"
+                    :on-change="handleChangezip"
+                    :headers="headers"
+                    :file-list="fileListzip">
+                  <el-button size="small" type="primary"  icon="el-icon-upload2">上传论文</el-button>
+                  <div slot="tip" class="el-upload__tip" style="color: grey;">只能上传zip文件，且不超过50M</div>
+                </el-upload>
+              </div>
+              <div style="padding: 30px">
+                <el-upload
+                    action=""
+                    accept=".jpg"
+                    :on-change="handleChangejpg"
+                    :auto-upload="false"
+                    :headers="headers"
+                    :file-list="fileListjpg">
+                  <el-button size="small" type="primary"  icon="el-icon-upload2">上传凭证</el-button>
+                  <div slot="tip" class="el-upload__tip" style="color: gray;">只能上传jpg文件，且不超过16MB</div>
+                </el-upload>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </el-main>
     </el-container>
   </el-container>
@@ -87,6 +98,31 @@ export default {
       showChannel: "",
       fileListjpg: [],
       fileListzip: [],
+      ruleForm: {
+        name: '',
+        maintainer: '',
+        company: '',
+        description: '',
+        channel: '',
+      },
+      rules: {
+        name: [
+          {required: true, message: '请输入论文名称', trigger: 'blur'},
+          {min: 3,max:30, message: '长度请在3-30之间', trigger: 'blur'}
+        ],
+        maintainer: [
+          {required: true, message: '请输入负责人', trigger: 'blur'},
+          {max:20, message: '长度请在20以内', trigger: 'blur'}
+        ],
+        company: [
+          {required: true, message: '请输入负责单位', trigger: 'blur'},
+          {max:30, message: '长度请在30以内', trigger: 'blur'}
+        ],
+        description: [
+          {required: true, message: '请输入论文描述', trigger: 'blur'},
+          {max: 200, message: '长度请在200字以内', trigger: 'blur'}
+        ],
+      },
       userinfo: {
         "id": "",
         "username": "",
@@ -200,7 +236,9 @@ export default {
         } else {
           this.$message.warning("others")
         }
-        this.$router.push({path: '/UserViewProjectsAndPapers'})
+        this.$store.state.menuIndex = '5';
+        this.$router.push({path: '/PaperDetail'})
+        // this.$router.push({path: '/UserViewProjectsAndPapers'})
       })
     },
     handleChangezip(file, fileList) { //文件数量改变
@@ -244,6 +282,7 @@ export default {
       ).then(res => {
         console.log(res.data);
         this.$message.success("创建成功")
+        this.$store.state.menuIndex = '5';
         this.$router.push({path: '/UserViewProjectsAndPapers'})
       })
     }
