@@ -171,10 +171,8 @@ export default {
   },
   created() {
     let that = this;
-    // this.project.id = this.$route.query.id
     this.project.id = this.$store.state.project.id
     console.log(this.project.id)
-    // this.userinfo.email = this.$route.query.email
     this.userinfo.email = this.$store.state.userinfo.email
     console.log(this.userinfo.email)
     console.log("到达详情页面")

@@ -167,9 +167,7 @@ export default {
         that.$data.thesis.maintainer = res.data.maintainer;
         that.$data.thesis.description = res.data.description;
         that.$data.thesis.company = res.data.company;
-        axios.get(`mu/getChannelById?id=${that.$data.project.channelId}`, {
-          id: that.$data.project.channelId
-        }).then(res => {
+        axios.get(`mu/getChannelById?id=${that.$data.thesis.channelId}`).then(res => {
           console.log(res.data);
           console.log("打印通道信息")
           that.$data.showChannel = res.data.name;
