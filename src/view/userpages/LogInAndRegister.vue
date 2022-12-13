@@ -160,19 +160,21 @@ export default {
 <style>
 @import '../../component/reset.css';
 #body{
-  height: 100%;
+  height: 585px;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   display: -webkit-flex;
+  background-image: url("/src/avatar/login.jpg");
 }
 .block1{
-  margin-top: 180px;
+  /*margin-top: 180px;*/
   background-color: rgba(0, 0, 0, 0.81);
 }
 page { background: #ebecee; }
 html {
+
   /*background: -webkit-linear-gradient(top, #EAF2F5, rgba(234, 87, 127, 0.99));*/
 }
 
