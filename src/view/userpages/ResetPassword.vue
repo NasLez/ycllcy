@@ -1,43 +1,46 @@
 <template>
 <!--  <el-tab-pane label="注册" name="register">-->
-  <div class="mybody">
-    <el-form :label-position="labelPosition" label-width="80px" :model="yclRegister" class="myForm" border>
-      <el-form-item label="用户名">
-        <el-input type="string" v-model="yclRegister.username" style="width:225px"
-                  placeholder="请输入用户名"></el-input>
-      </el-form-item>
-      <el-form-item label="电话号码">
-        <el-input type="string" v-model="yclRegister.phone" style="width:225px"
-                  placeholder="请输入电话号码"></el-input>
-      </el-form-item>
-      <el-form-item label="邮箱">
-        <el-input type="string" v-model="yclRegister.email" style="width:225px"
-                  placeholder="请输入邮箱"></el-input>
-      </el-form-item>
-      <el-form-item label="学校">
-        <el-input type="string" v-model="yclRegister.school" style="width:225px"
-                  placeholder="请输入学校"></el-input>
-      </el-form-item>
-      <el-form-item label="密码">
-        <el-input type="password" v-model="yclRegister.password" style="width:225px"
-                  placeholder="请输入密码"></el-input>
-      </el-form-item>
-      <el-form-item label="确认密码">
-        <el-input type="password" v-model="yclRegister.retPassword" style="width:225px"
-                  placeholder="请重新输入密码"></el-input>
-      </el-form-item>
-      <el-form-item label="邀请码">
-        <el-input type="password" v-model="yclRegister.code" style="width:225px"
-                  placeholder="请输入邀请码"></el-input>
-      </el-form-item>
-      <el-form-item label="真实姓名">
-        <el-input type="string" v-model="yclRegister.name" style="width:225px"
-                  placeholder="请输入真实姓名"></el-input>
-      </el-form-item>
-      <el-form-item style="margin-left: 40px;margin-bottom: 10px">
-        <el-button type="primary" @click="register">注册</el-button>
-      </el-form-item>
-    </el-form>
+  <div id="body">
+
+    <div class="mybody">
+      <el-form :label-position="labelPosition" label-width="80px" :model="yclRegister" class="myForm" border>
+        <el-form-item label="用户名">
+          <el-input type="string" v-model="yclRegister.username" style="width:225px"
+                    placeholder="请输入用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="电话号码">
+          <el-input type="string" v-model="yclRegister.phone" style="width:225px"
+                    placeholder="请输入电话号码"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱">
+          <el-input type="string" v-model="yclRegister.email" style="width:225px"
+                    placeholder="请输入邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="学校">
+          <el-input type="string" v-model="yclRegister.school" style="width:225px"
+                    placeholder="请输入学校"></el-input>
+        </el-form-item>
+        <el-form-item label="密码">
+          <el-input type="password" v-model="yclRegister.password" style="width:225px"
+                    placeholder="请输入密码"></el-input>
+        </el-form-item>
+        <el-form-item label="确认密码">
+          <el-input type="password" v-model="yclRegister.retPassword" style="width:225px"
+                    placeholder="请重新输入密码"></el-input>
+        </el-form-item>
+        <el-form-item label="邀请码">
+          <el-input type="password" v-model="yclRegister.code" style="width:225px"
+                    placeholder="请输入邀请码"></el-input>
+        </el-form-item>
+        <el-form-item label="真实姓名">
+          <el-input type="string" v-model="yclRegister.name" style="width:225px"
+                    placeholder="请输入真实姓名"></el-input>
+        </el-form-item>
+        <el-form-item style="margin-left: 40px;margin-bottom: 10px">
+          <el-button type="primary" @click="register">注册</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 <!--  </el-tab-pane>-->
 </template>
@@ -145,5 +148,14 @@ export default {
   margin: auto;
   margin-top: 40px;
   border: 1px solid #c5c5c5;
+}
+#body{
+  height: 630px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: -webkit-flex;
+  background-image: url("/src/avatar/login.jpg");
 }
 </style>
